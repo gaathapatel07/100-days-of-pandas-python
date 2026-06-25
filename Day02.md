@@ -424,6 +424,283 @@ By now, you've learned how to:
 > **"Choosing the right data is just as important as analyzing it. Mastering `loc` and `iloc` gives you precise control over every row and column in your dataset."**
 
 ---
+---
+
+# 13. Filtering Data with Conditions
+
+In real-world data analysis, you rarely need to work with an entire dataset. Instead, you focus on records that satisfy specific conditions.
+
+For example:
+
+* Customers who spent more than ₹10,000
+* Employees earning above ₹75,000
+* Orders placed in the South region
+* Products with negative profit
+* Students scoring above 90%
+
+Filtering allows you to retrieve only the rows that meet your criteria.
+
+---
+
+## Basic Filtering
+
+Suppose we have the following dataset:
+
+| Employee | Department | Salary | Experience |
+| -------- | ---------- | -----: | ---------: |
+| Alice    | HR         |  50000 |          3 |
+| Rahul    | Sales      |  62000 |          5 |
+| Emma     | IT         |  71000 |          4 |
+| David    | Finance    |  68000 |          6 |
+| Sophia   | IT         |  85000 |          8 |
+
+Let's filter employees earning more than ₹65,000.
+
+```python
+df[df["Salary"] > 65000]
+```
+
+Output:
+
+| Employee | Department | Salary | Experience |
+| -------- | ---------- | -----: | ---------: |
+| Emma     | IT         |  71000 |          4 |
+| David    | Finance    |  68000 |          6 |
+| Sophia   | IT         |  85000 |          8 |
+
+The expression:
+
+```python
+df["Salary"] > 65000
+```
+
+returns a Boolean Series.
+
+Example:
+
+```text
+0    False
+1    False
+2     True
+3     True
+4     True
+```
+
+Pandas then keeps only the rows where the condition evaluates to **True**.
+
+---
+
+# Comparison Operators
+
+The following operators are commonly used while filtering:
+
+| Operator | Meaning                  | Example              |
+| -------- | ------------------------ | -------------------- |
+| `>`      | Greater than             | `Salary > 50000`     |
+| `<`      | Less than                | `Age < 25`           |
+| `>=`     | Greater than or equal to | `Marks >= 90`        |
+| `<=`     | Less than or equal to    | `Profit <= 0`        |
+| `==`     | Equal to                 | `Department == "IT"` |
+| `!=`     | Not equal to             | `Region != "East"`   |
+
+---
+
+# Filtering Text Values
+
+You can also filter categorical columns.
+
+Example:
+
+```python
+df[df["Department"] == "IT"]
+```
+
+Output:
+
+| Employee | Department | Salary |
+| -------- | ---------- | -----: |
+| Emma     | IT         |  71000 |
+| Sophia   | IT         |  85000 |
+
+This returns only employees from the IT department.
+
+---
+
+# Multiple Conditions
+
+Often, business problems involve more than one condition.
+
+Example:
+
+Find employees working in IT **and** earning more than ₹70,000.
+
+```python
+df[(df["Department"] == "IT") & (df["Salary"] > 70000)]
+```
+
+Output:
+
+| Employee | Department | Salary |
+| -------- | ---------- | -----: |
+| Sophia   | IT         |  85000 |
+
+Notice that each condition is enclosed within parentheses.
+
+---
+
+# Logical Operators
+
+Pandas supports three logical operators.
+
+## AND (`&`)
+
+Both conditions must be True.
+
+```python
+df[(df["Department"] == "IT") & (df["Salary"] > 70000)]
+```
+
+---
+
+## OR (`|`)
+
+At least one condition must be True.
+
+```python
+df[(df["Department"] == "HR") | (df["Department"] == "Finance")]
+```
+
+---
+
+## NOT (`~`)
+
+Reverses the condition.
+
+Example:
+
+Return everyone except the IT department.
+
+```python
+df[~(df["Department"] == "IT")]
+```
+
+---
+
+# Using `isin()`
+
+Instead of writing multiple OR conditions, use `isin()`.
+
+Without `isin()`:
+
+```python
+df[(df["Department"] == "HR") | (df["Department"] == "Finance")]
+```
+
+With `isin()`:
+
+```python
+df[df["Department"].isin(["HR", "Finance"])]
+```
+
+Cleaner and easier to read.
+
+---
+
+# Filtering Missing Values
+
+Return rows where Salary is missing.
+
+```python
+df[df["Salary"].isnull()]
+```
+
+Return rows where Salary is available.
+
+```python
+df[df["Salary"].notnull()]
+```
+
+---
+
+# Business Scenario
+
+Imagine you work as a Data Analyst for an e-commerce company.
+
+Your manager asks you to identify:
+
+* Customers who spent more than ₹15,000.
+* Orders placed in the West region.
+* Products generating negative profit.
+* Customers eligible for premium membership.
+
+Each of these questions can be answered by applying filters to the dataset instead of manually searching through thousands of records.
+
+---
+
+# Best Practices
+
+✔ Keep filtering expressions readable.
+
+✔ Use descriptive column names.
+
+✔ Prefer `isin()` when checking multiple values.
+
+✔ Break long filtering conditions into multiple lines for better readability.
+
+✔ Verify your filters by checking the number of returned rows.
+
+---
+
+# Common Mistakes
+
+❌ Missing parentheses
+
+```python
+df["Salary"] > 50000 & df["Department"] == "IT"
+```
+
+This produces unexpected results.
+
+---
+
+✅ Correct
+
+```python
+df[(df["Salary"] > 50000) & (df["Department"] == "IT")]
+```
+
+---
+
+❌ Using `and` instead of `&`
+
+```python
+df[(df["Salary"] > 50000) and (df["Department"] == "IT")]
+```
+
+This raises an error because `and` works with single Boolean values, not Pandas Series.
+
+---
+
+✅ Correct
+
+```python
+df[(df["Salary"] > 50000) & (df["Department"] == "IT")]
+```
+
+---
+
+# Key Takeaways
+
+After this section, you should be able to:
+
+* Filter rows using comparison operators.
+* Apply multiple conditions using `&` and `|`.
+* Exclude data using `~`.
+* Use `isin()` for cleaner code.
+* Filter missing and non-missing values.
+* Solve common business queries using Boolean indexing.
+
+> **"Filtering transforms raw data into meaningful subsets, allowing analysts to answer focused business questions quickly and efficiently."**
 
 # Key Takeaways
 
