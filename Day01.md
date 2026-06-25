@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Learn Pandas?
@@ -60,14 +60,14 @@ With Pandas, you can:
 
 Pandas is commonly used for:
 
-* 📈 Sales Analysis
-* 💳 Financial Reporting
-* 🏥 Healthcare Analytics
-* 🛒 E-commerce Analytics
-* 📱 Social Media Analytics
-* 🚚 Supply Chain Optimization
-* 🎬 Streaming Platform Analysis
-* 🤖 Machine Learning Preprocessing
+*  Sales Analysis
+*  Financial Reporting
+*  Healthcare Analytics
+*  E-commerce Analytics
+*  Social Media Analytics
+*  Supply Chain Optimization
+*  Streaming Platform Analysis
+*  Machine Learning Preprocessing
 
 ---
 
