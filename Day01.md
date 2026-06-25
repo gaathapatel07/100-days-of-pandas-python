@@ -33,6 +33,7 @@
 
 ---
 
+
 # 1. Introduction
 
 Welcome to **Day 01** of the **100 Days of Pandas** challenge.
