@@ -890,7 +890,7 @@ df[["Sales"]]
 
 # 18. Summary
 
-Congratulations! 🎉
+Congratulations! 
 
 Today you learned one of the most fundamental concepts in Pandas—**data selection and filtering**.
 
@@ -944,13 +944,13 @@ These concepts will prepare you for the upcoming sections on data cleaning and e
 
 <div align="center">
 
-## ⭐ Great work!
+##  Great work!
 
 You've completed **Day 02** of the **100 Days of Pandas** challenge.
 
 **Next Stop → Day 03: Sorting, Ranking & Working with Indexes**
 
-Happy Coding! 🐼
+Happy Coding! 
 
 </div>
 
