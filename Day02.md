@@ -158,6 +158,273 @@ Unlike selecting a single column, this returns a **DataFrame**.
 
 ---
 
+# 7. Understanding Indexing in Pandas
+
+Before learning how to filter data efficiently, it's important to understand **indexing**.
+
+An **index** is a unique label assigned to each row in a DataFrame. By default, Pandas automatically creates a numerical index starting from `0`.
+
+Example:
+
+| Index | Name  | Department | Salary |
+| ----: | ----- | ---------- | -----: |
+|     0 | Alice | HR         |  50000 |
+|     1 | Rahul | Sales      |  62000 |
+|     2 | Emma  | IT         |  71000 |
+|     3 | David | Finance    |  68000 |
+
+The numbers in the first column (`0, 1, 2, 3`) are called the **index**.
+
+You can think of the index as the "address" of each row, allowing Pandas to quickly locate and retrieve records.
+
+---
+
+# 8. Selecting Rows Using `loc`
+
+The `loc` accessor is used to retrieve rows and columns **based on labels**.
+
+### Syntax
+
+```python
+df.loc[row_label, column_label]
+```
+
+### Example
+
+```python
+import pandas as pd
+
+df = pd.read_csv("employees.csv")
+
+df.loc[2]
+```
+
+Output:
+
+| Name | Department | Salary |
+| ---- | ---------- | -----: |
+| Emma | IT         |  71000 |
+
+Since the index label is `2`, Pandas returns the third row.
+
+---
+
+### Selecting Specific Columns with `loc`
+
+```python
+df.loc[:, ["Name", "Salary"]]
+```
+
+Output:
+
+| Name  | Salary |
+| ----- | -----: |
+| Alice |  50000 |
+| Rahul |  62000 |
+| Emma  |  71000 |
+| David |  68000 |
+
+Here:
+
+* `:` means **all rows**
+* `["Name", "Salary"]` selects only those columns
+
+---
+
+### Selecting Specific Rows and Columns
+
+```python
+df.loc[1:3, ["Name", "Department"]]
+```
+
+Output:
+
+| Name  | Department |
+| ----- | ---------- |
+| Rahul | Sales      |
+| Emma  | IT         |
+| David | Finance    |
+
+**Note:** Unlike normal Python slicing, `loc` includes the ending label.
+
+---
+
+# 9. Selecting Rows Using `iloc`
+
+The `iloc` accessor retrieves data using **integer positions** rather than labels.
+
+### Syntax
+
+```python
+df.iloc[row_position, column_position]
+```
+
+### Example
+
+```python
+df.iloc[2]
+```
+
+Output:
+
+| Name | Department | Salary |
+| ---- | ---------- | -----: |
+| Emma | IT         |  71000 |
+
+Although the output looks the same as `loc`, `iloc` identifies rows based on **position**, not labels.
+
+---
+
+### Selecting Multiple Rows
+
+```python
+df.iloc[0:3]
+```
+
+Output:
+
+| Name  | Department | Salary |
+| ----- | ---------- | -----: |
+| Alice | HR         |  50000 |
+| Rahul | Sales      |  62000 |
+| Emma  | IT         |  71000 |
+
+Unlike `loc`, the ending position is **excluded**, just like standard Python slicing.
+
+---
+
+### Selecting Rows and Columns Together
+
+```python
+df.iloc[0:3, 0:2]
+```
+
+Output:
+
+| Name  | Department |
+| ----- | ---------- |
+| Alice | HR         |
+| Rahul | Sales      |
+| Emma  | IT         |
+
+---
+
+# 10. `loc` vs `iloc`
+
+Understanding the difference between these two accessors is essential.
+
+| Feature                    | `loc`  | `iloc`            |
+| -------------------------- | ------ | ----------------- |
+| Uses                       | Labels | Integer Positions |
+| Includes End Value         | ✅ Yes  | ❌ No              |
+| Select Columns by Name     | ✅ Yes  | ❌ No              |
+| Select Columns by Position | ❌ No   | ✅ Yes             |
+
+### Example
+
+```python
+df.loc[1:3]
+```
+
+Returns rows **1, 2, and 3**.
+
+```python
+df.iloc[1:3]
+```
+
+Returns rows **1 and 2**.
+
+This difference is one of the most common interview questions about Pandas.
+
+---
+
+# 11. Best Practices
+
+✔ Use **`loc`** when your dataset has meaningful row labels or when selecting columns by name.
+
+✔ Use **`iloc`** when working with row or column positions.
+
+✔ Avoid hardcoding column positions in large projects, as datasets may change over time.
+
+✔ Prefer descriptive column names instead of relying on numerical indexes.
+
+---
+
+# 12. Common Mistakes
+
+### Mistake 1 — Mixing Labels and Positions
+
+❌ Incorrect
+
+```python
+df.loc[:, 0]
+```
+
+`loc` expects **column labels**, not column positions.
+
+---
+
+✅ Correct
+
+```python
+df.iloc[:, 0]
+```
+
+or
+
+```python
+df.loc[:, "Name"]
+```
+
+---
+
+### Mistake 2 — Forgetting That `iloc` Excludes the End Position
+
+```python
+df.iloc[0:3]
+```
+
+Returns:
+
+Rows `0`, `1`, and `2`
+
+**Not** row `3`.
+
+---
+
+### Mistake 3 — Using Column Positions Instead of Names
+
+This works:
+
+```python
+df.iloc[:, 2]
+```
+
+But in production code, it's often better to use:
+
+```python
+df["Salary"]
+```
+
+Using column names makes code easier to read and less likely to break if the dataset structure changes.
+
+---
+
+# Quick Recap
+
+By now, you've learned how to:
+
+* Understand the purpose of indexes.
+* Retrieve rows using labels with `loc`.
+* Retrieve rows using positions with `iloc`.
+* Select specific rows and columns.
+* Distinguish between label-based and position-based indexing.
+* Avoid common indexing mistakes.
+
+> **"Choosing the right data is just as important as analyzing it. Mastering `loc` and `iloc` gives you precise control over every row and column in your dataset."**
+
+---
+
 # Key Takeaways
 
 * Every DataFrame consists of rows, columns, and an index.
