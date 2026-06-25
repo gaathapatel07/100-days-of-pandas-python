@@ -688,6 +688,271 @@ df[(df["Salary"] > 50000) & (df["Department"] == "IT")]
 ```
 
 ---
+---
+
+# 14. Real-World Business Case Study
+
+## Scenario
+
+You have recently joined **RetailHub**, an e-commerce company, as a Junior Data Analyst.
+
+The sales team has provided a dataset containing more than **50,000 customer orders**. Before creating dashboards, your manager asks you to answer a few business questions using Pandas.
+
+Your task is to retrieve only the relevant records instead of manually searching through the dataset.
+
+---
+
+### Business Questions
+
+### Question 1
+
+Find all orders where **Sales** are greater than **₹10,000**.
+
+```python
+df[df["Sales"] > 10000]
+```
+
+---
+
+### Question 2
+
+Find all customers from the **West** region.
+
+```python
+df[df["Region"] == "West"]
+```
+
+---
+
+### Question 3
+
+Find products with **negative profit**.
+
+```python
+df[df["Profit"] < 0]
+```
+
+---
+
+### Question 4
+
+Find orders where the discount is greater than **20%**.
+
+```python
+df[df["Discount"] > 0.20]
+```
+
+---
+
+### Question 5
+
+Find customers from the **West** region whose sales exceed **₹10,000**.
+
+```python
+df[(df["Region"] == "West") &
+   (df["Sales"] > 10000)]
+```
+
+---
+
+### Question 6
+
+Display only the following columns:
+
+* Customer Name
+* Region
+* Sales
+
+```python
+df.loc[:, ["Customer Name", "Region", "Sales"]]
+```
+
+---
+
+## Business Insight
+
+Notice how each question can be answered with only one or two lines of code.
+
+This is why Pandas is one of the most widely used tools for business analytics.
+
+---
+
+# 15. Practice Exercises
+
+Use any dataset and solve the following questions.
+
+### Beginner
+
+1. Display only the **Name** column.
+2. Display the first 10 rows.
+3. Display the last 15 rows.
+4. Retrieve rows 5–15 using `iloc`.
+5. Retrieve rows using `loc`.
+
+---
+
+### Intermediate
+
+6. Find employees earning more than ₹50,000.
+
+7. Find employees from the HR department.
+
+8. Display employees from IT with salaries above ₹70,000.
+
+9. Retrieve only Name and Salary columns.
+
+10. Find duplicate rows.
+
+---
+
+### Advanced
+
+11. Find employees whose salary is between ₹40,000 and ₹70,000.
+
+12. Find employees not working in HR.
+
+13. Retrieve employees from either IT or Finance.
+
+14. Count the number of employees in each department.
+
+15. Display employees having missing salaries.
+
+---
+
+# 16. Interview Questions
+
+### Basic
+
+1. What is indexing in Pandas?
+2. Difference between `loc` and `iloc`?
+3. What does Boolean indexing mean?
+4. Difference between selecting one column and multiple columns?
+5. Why do we use filtering?
+
+---
+
+### Intermediate
+
+6. Why does `iloc` exclude the last index?
+
+7. Difference between:
+
+```python
+df["Sales"]
+```
+
+and
+
+```python
+df[["Sales"]]
+```
+
+8. Why should every filtering condition be enclosed in parentheses?
+
+9. Difference between `and` and `&` in Pandas?
+
+10. Explain `isin()` with an example.
+
+---
+
+### Advanced
+
+11. How does Pandas internally filter data?
+
+12. Why is Boolean indexing faster than manually iterating through rows?
+
+13. Which is preferred in production code—column names or column positions?
+
+14. When would you choose `loc` over `iloc`?
+
+15. How can filtering improve business decision-making?
+
+---
+
+# 17. Cheat Sheet
+
+| Operation               | Syntax                   |
+| ----------------------- | ------------------------ |
+| Select one column       | `df["Column"]`           |
+| Select multiple columns | `df[["A","B"]]`          |
+| Select row by label     | `df.loc[3]`              |
+| Select row by position  | `df.iloc[3]`             |
+| Select rows and columns | `df.loc[1:5, ["A","B"]]` |
+| Filter values           | `df[df["Sales"] > 1000]` |
+| AND condition           | `&`                      |
+| OR condition            | `\|`                     |
+| NOT condition           | `~`                      |
+| Multiple values         | `isin()`                 |
+| Missing values          | `isnull()`               |
+| Non-missing values      | `notnull()`              |
+
+---
+
+# 18. Summary
+
+Congratulations! 🎉
+
+Today you learned one of the most fundamental concepts in Pandas—**data selection and filtering**.
+
+You explored how to:
+
+* Select rows and columns efficiently.
+* Use `loc` and `iloc`.
+* Understand the difference between labels and positions.
+* Filter data using comparison operators.
+* Combine multiple conditions.
+* Use Boolean indexing.
+* Retrieve meaningful subsets of data.
+* Apply these concepts to real-world business scenarios.
+
+These skills form the backbone of almost every data analysis project. Whether you're analyzing customer behavior, financial transactions, employee records, or sales performance, selecting and filtering data is often the first step toward generating actionable insights.
+
+---
+
+# 19. Mini Project
+
+Using any dataset of your choice:
+
+Create a **Data Selection Report** containing:
+
+* Dataset overview
+* Total records
+* Filter high-value transactions
+* Filter low-performing products
+* Display selected columns
+* Identify missing values
+* Generate at least **five business insights**
+
+Export your notebook and upload it to GitHub.
+
+---
+
+# 20. What's Next?
+
+In **Day 03**, you'll learn how to:
+
+* Sort datasets
+* Rank records
+* Rename columns
+* Create new columns
+* Reset and set indexes
+* Work with indexes like a professional Data Analyst
+
+These concepts will prepare you for the upcoming sections on data cleaning and exploratory data analysis.
+
+---
+
+<div align="center">
+
+## ⭐ Great work!
+
+You've completed **Day 02** of the **100 Days of Pandas** challenge.
+
+**Next Stop → Day 03: Sorting, Ranking & Working with Indexes**
+
+Happy Coding! 🐼
+
+</div>
 
 # Key Takeaways
 
