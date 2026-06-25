@@ -1,4 +1,4 @@
-# 🐼 Day 01 — Introduction to Pandas & Data Exploration
+# Day 01 — Introduction to Pandas & Data Exploration
 
 <div align="center">
 
