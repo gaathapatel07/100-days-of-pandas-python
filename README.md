@@ -1,4 +1,4 @@
-# 🐼 100 Days of Pandas
+# 100 Days of Pandas
 
 <div align="center">
 
@@ -15,7 +15,7 @@
 
 ---
 
-# 📖 About This Repository
+# About This Repository
 
 Welcome to **100 Days of Pandas**, a structured learning journey designed to help you master one of the most important Python libraries for data analysis.
 
@@ -25,7 +25,7 @@ Whether you're preparing for data analytics interviews, transitioning into data 
 
 ---
 
-# 🎯 Goals
+# Goals
 
 By the end of this challenge, you will be able to:
 
@@ -43,7 +43,7 @@ By the end of this challenge, you will be able to:
 
 ---
 
-# 🗂 Repository Structure
+#  Repository Structure
 
 ```text
 100-days-of-pandas/
@@ -68,7 +68,7 @@ By the end of this challenge, you will be able to:
 
 ---
 
-# 🛣 Learning Roadmap
+#  Learning Roadmap
 
 ## Phase 1 — Foundations (Days 1–20)
 
@@ -135,7 +135,7 @@ Work on datasets such as:
 
 ---
 
-# 📚 Daily Format
+#  Daily Format
 
 Each day follows the same structure for a consistent learning experience.
 
@@ -163,7 +163,7 @@ What's Next
 
 ---
 
-# 💻 Technologies Used
+#  Technologies Used
 
 * Python
 * Pandas
@@ -173,7 +173,7 @@ What's Next
 
 ---
 
-# 📂 Recommended Datasets
+#  Recommended Datasets
 
 Throughout this journey, you'll work with real-world datasets, including:
 
@@ -188,7 +188,7 @@ Throughout this journey, you'll work with real-world datasets, including:
 
 ---
 
-# 📅 Progress Tracker
+#  Progress Tracker
 
 | Day | Topic                      | Status |
 | --- | -------------------------- | ------ |
@@ -202,7 +202,7 @@ Throughout this journey, you'll work with real-world datasets, including:
 
 ---
 
-# 💡 Why This Repository?
+#  Why This Repository?
 
 This repository is designed to be more than a collection of notes.
 
@@ -219,7 +219,7 @@ The goal is to build skills that are directly applicable to analytics and data s
 
 ---
 
-# 🤝 Contributing
+#  Contributing
 
 Suggestions, improvements, and corrections are always welcome.
 
@@ -237,8 +237,8 @@ It motivates me to continue building and improving this project.
 
 <div align="center">
 
-## 🚀 One Day. One Challenge. One Step Closer to Mastering Pandas.
+##  One Day. One Challenge. One Step Closer to Mastering Pandas.
 
-**Happy Learning! 🐼**
+**Happy Learning! **
 
 </div>
