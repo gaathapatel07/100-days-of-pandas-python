@@ -1,4 +1,4 @@
-# 🐼 Day 02 — Selecting, Filtering & Indexing Data in Pandas
+# Day 02 — Selecting, Filtering & Indexing Data in Pandas
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+#  Table of Contents
 
 1. Introduction
 2. Why Data Selection Matters
@@ -169,5 +169,5 @@ Unlike selecting a single column, this returns a **DataFrame**.
 
 > **"The value of data lies not in how much you have, but in how effectively you can extract the information you need."**
 
-➡️ In the next section, you'll learn how to retrieve rows using **`loc`** and **`iloc`**, perform conditional filtering, and answer real-world business questions using Pandas.
+ In the next section, you'll learn how to retrieve rows using **`loc`** and **`iloc`**, perform conditional filtering, and answer real-world business questions using Pandas.
 
