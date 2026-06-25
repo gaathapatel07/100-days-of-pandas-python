@@ -231,7 +231,6 @@ Day 01 serves as the foundation for everything that follows. The concepts introd
 
 Continue to the next section, where you'll learn what Pandas is, why it has become the industry standard for data analysis, and how to start working with it in Python.
 
-
 ---
 
 ### Coming Up Next
