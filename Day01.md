@@ -2,7 +2,7 @@
 
 <div align="center">
 
-# 🐼 100 Days of Pandas
+# 100 Days of Pandas
 
 ### Day 01 · Data Loading & Initial Exploration
 
@@ -14,7 +14,7 @@
 
 `read_csv()` • `head()` • `tail()` • `shape` • `columns` • `dtypes` • `info()` • `describe()` • `isnull()`
 
-**Difficulty:** 🟢 Beginner
+**Difficulty:** Beginner
 
 </div>
 
