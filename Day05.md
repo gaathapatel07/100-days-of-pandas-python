@@ -744,14 +744,13 @@ Visualization allows analysts to identify trends, patterns, and anomalies that a
 
 <div align="center">
 
-## 🎉 Day 05 Complete!
+## Day 05 Complete!
 
 You have successfully learned the fundamentals of **Exploratory Data Analysis**—a skill used daily by data analysts, business analysts, and data scientists.
 
 The next chapter introduces **data visualization**, where you'll learn how to communicate insights clearly and effectively using charts.
 
-⭐ Happy Learning and Happy Coding! 🐼
+⭐ Happy Learning and Happy Coding! 
 
-**Next → Day 06: Data Visualization with Matplotlib**
 
 </div>
