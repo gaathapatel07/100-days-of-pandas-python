@@ -242,3 +242,327 @@ After completing this section, you should understand:
 
 > **"The purpose of a visualization is not to impress with complexity, but to communicate information with clarity."**
 
+# 10. Line Chart
+
+A **Line Chart** is used to display trends or changes over time.
+
+It is one of the most common visualizations in business analytics because it clearly shows whether a value is increasing, decreasing, or remaining stable.
+
+### Best Used For
+
+* Monthly Sales
+* Daily Website Visitors
+* Temperature Changes
+* Stock Prices
+* Revenue Growth
+
+---
+
+## Example
+
+```python
+import matplotlib.pyplot as plt
+
+months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]
+sales = [120, 145, 160, 155, 180, 210]
+
+plt.figure(figsize=(8,5))
+plt.plot(months, sales)
+
+plt.title("Monthly Sales")
+plt.xlabel("Month")
+plt.ylabel("Sales")
+
+plt.show()
+```
+
+---
+
+## Business Interpretation
+
+The chart immediately reveals:
+
+* Overall sales trend
+* Peak sales month
+* Sales decline (if any)
+* Seasonal patterns
+
+Instead of reading six numbers individually, the trend becomes obvious.
+
+---
+
+# 11. Bar Chart
+
+A **Bar Chart** compares values across different categories.
+
+Each bar represents a category, and its height corresponds to the value.
+
+### Best Used For
+
+* Sales by Region
+* Profit by Category
+* Students by Grade
+* Revenue by Product
+* Customers by City
+
+---
+
+## Example
+
+```python
+regions = ["North","South","East","West"]
+
+sales = [520,410,630,580]
+
+plt.figure(figsize=(8,5))
+plt.bar(regions, sales)
+
+plt.title("Sales by Region")
+plt.xlabel("Region")
+plt.ylabel("Sales")
+
+plt.show()
+```
+
+---
+
+## Business Interpretation
+
+A manager can quickly identify:
+
+* Best-performing region
+* Lowest-performing region
+* Sales comparison across locations
+
+---
+
+# 12. Histogram
+
+A **Histogram** shows how numerical data is distributed.
+
+Unlike bar charts, histograms group continuous values into intervals called **bins**.
+
+### Best Used For
+
+* Salary Distribution
+* Customer Age Distribution
+* Product Price Distribution
+* Daily Website Visitors
+
+---
+
+## Example
+
+```python
+ages = [18,21,20,19,24,25,30,31,32,35,36,38,40]
+
+plt.figure(figsize=(8,5))
+
+plt.hist(ages,bins=5)
+
+plt.title("Customer Age Distribution")
+plt.xlabel("Age")
+plt.ylabel("Frequency")
+
+plt.show()
+```
+
+---
+
+## Business Interpretation
+
+A histogram helps answer:
+
+* Which age group is most common?
+* Is the data normally distributed?
+* Are there unusually high or low values?
+
+---
+
+# 13. Scatter Plot
+
+Scatter plots show the relationship between two numerical variables.
+
+Each point represents one observation.
+
+### Best Used For
+
+* Sales vs Profit
+* Height vs Weight
+* Advertising Budget vs Revenue
+* Study Hours vs Marks
+
+---
+
+## Example
+
+```python
+sales = [10,20,30,40,50]
+
+profit = [2,5,7,9,11]
+
+plt.figure(figsize=(8,5))
+
+plt.scatter(sales, profit)
+
+plt.title("Sales vs Profit")
+plt.xlabel("Sales")
+plt.ylabel("Profit")
+
+plt.show()
+```
+
+---
+
+## Business Interpretation
+
+Scatter plots help identify:
+
+* Positive relationships
+* Negative relationships
+* Clusters
+* Outliers
+
+---
+
+# 14. Pie Chart
+
+Pie charts display the proportion of different categories within a whole.
+
+### Best Used For
+
+* Market Share
+* Revenue Contribution
+* Product Category Distribution
+
+Use pie charts only when showing **parts of a whole**.
+
+---
+
+## Example
+
+```python
+labels = ["Electronics","Furniture","Clothing"]
+
+sales = [45,30,25]
+
+plt.figure(figsize=(6,6))
+
+plt.pie(
+    sales,
+    labels=labels,
+    autopct="%1.1f%%"
+)
+
+plt.title("Revenue by Category")
+
+plt.show()
+```
+
+---
+
+## Business Interpretation
+
+Managers can instantly understand:
+
+* Which category contributes the most revenue.
+* Percentage contribution of each category.
+* Overall business composition.
+
+---
+
+# 15. Box Plot
+
+A **Box Plot** summarizes the distribution of numerical data and highlights potential outliers.
+
+### Best Used For
+
+* Salary Analysis
+* Exam Scores
+* Delivery Time
+* Product Prices
+
+---
+
+## Example
+
+```python
+salary = [
+42000,
+45000,
+47000,
+50000,
+52000,
+55000,
+58000,
+61000,
+150000
+]
+
+plt.figure(figsize=(6,5))
+
+plt.boxplot(salary)
+
+plt.title("Employee Salary Distribution")
+
+plt.show()
+```
+
+---
+
+## Business Interpretation
+
+A box plot quickly shows:
+
+* Median
+* Quartiles
+* Spread of data
+* Potential outliers
+
+This makes it one of the most useful charts during Exploratory Data Analysis.
+
+---
+
+# 16. Choosing the Right Chart
+
+Selecting the correct chart is just as important as creating one.
+
+| Business Question | Recommended Chart |
+| ----------------- | ----------------- |
+| Sales over time   | Line Chart        |
+| Compare regions   | Bar Chart         |
+| Customer ages     | Histogram         |
+| Sales vs Profit   | Scatter Plot      |
+| Market share      | Pie Chart         |
+| Detect outliers   | Box Plot          |
+
+Choosing the wrong visualization can hide important insights or mislead the audience.
+
+---
+
+# Best Practices
+
+✔ Keep titles short but descriptive.
+
+✔ Always label the X-axis and Y-axis.
+
+✔ Avoid unnecessary colors or decorations.
+
+✔ Choose the visualization that best answers the business question.
+
+✔ Focus on clarity rather than complexity.
+
+---
+
+# Quick Recap
+
+By now, you should be able to:
+
+* Create a Line Chart.
+* Build a Bar Chart.
+* Understand Histograms.
+* Use Scatter Plots for relationships.
+* Represent proportions using Pie Charts.
+* Detect outliers using Box Plots.
+
+> **"The best visualization is the one that answers a business question clearly, accurately, and with the least amount of effort from the viewer."**
