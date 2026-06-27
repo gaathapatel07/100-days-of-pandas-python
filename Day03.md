@@ -1,5 +1,5 @@
 
-# 🐼 Day 03 — Sorting, Renaming & Transforming Data in Pandas
+#  Day 03 — Sorting, Renaming & Transforming Data in Pandas
 
 <div align="center">
 
@@ -17,7 +17,7 @@
 
 ---
 
-# 📚 Table of Contents
+#  Table of Contents
 
 1. Introduction
 2. Why Data Transformation Matters
