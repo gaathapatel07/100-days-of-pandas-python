@@ -1,4 +1,4 @@
-# 🐼 Day 04 — Data Cleaning: Handling Missing Values & Duplicate Data
+# Day 04 — Data Cleaning: Handling Missing Values & Duplicate Data
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Data Cleaning Matters
