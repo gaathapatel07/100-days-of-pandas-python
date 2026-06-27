@@ -218,3 +218,271 @@ These skills are the first step in building clean, reliable datasets.
 
 > **"A dataset is only as valuable as its quality. Before searching for insights, ensure your data can be trusted."**
 
+---
+
+# 8. Understanding `notnull()`
+
+While `isnull()` helps identify missing values, there are many situations where you only want to work with rows that contain valid data.
+
+The `notnull()` function returns **True** for existing values and **False** for missing values.
+
+Consider the following dataset:
+
+| Employee | Salary | Department |
+| -------- | -----: | ---------- |
+| Alice    |  50000 | HR         |
+| Rahul    |    NaN | Sales      |
+| Emma     |  72000 | IT         |
+| David    |  68000 | NaN        |
+
+Using `notnull()`:
+
+```python
+df.notnull()
+```
+
+Output:
+
+| Employee | Salary | Department |
+| -------- | ------ | ---------- |
+| True     | True   | True       |
+| True     | False  | True       |
+| True     | True   | True       |
+| True     | True   | False      |
+
+This function is particularly useful when filtering only complete records.
+
+Example:
+
+```python
+df[df["Salary"].notnull()]
+```
+
+This returns employees whose salary information is available.
+
+---
+
+# 9. Removing Missing Values using `dropna()`
+
+Sometimes a dataset contains only a few missing values, making it easier to remove incomplete records instead of filling them.
+
+Pandas provides the `dropna()` function for this purpose.
+
+## Removing Rows with Missing Values
+
+```python
+df.dropna()
+```
+
+Example Output:
+
+| Employee | Salary | Department |
+| -------- | -----: | ---------- |
+| Alice    |  50000 | HR         |
+| Emma     |  72000 | IT         |
+
+Rows containing at least one missing value are removed.
+
+---
+
+## Removing Columns with Missing Values
+
+```python
+df.dropna(axis=1)
+```
+
+Here:
+
+* `axis=0` → Remove rows *(default)*
+* `axis=1` → Remove columns
+
+Be cautious when dropping columns, as valuable information may be lost.
+
+---
+
+## Removing Rows Only If All Values Are Missing
+
+```python
+df.dropna(how="all")
+```
+
+Only rows where **every column** is missing are removed.
+
+---
+
+## Removing Rows with a Threshold
+
+Suppose you want to keep rows that contain at least **three non-missing values**.
+
+```python
+df.dropna(thresh=3)
+```
+
+This is useful for partially complete datasets where some missing values are acceptable.
+
+---
+
+# 10. Filling Missing Values using `fillna()`
+
+Removing data is not always the best solution.
+
+In many situations, analysts prefer to **replace missing values** instead of deleting records.
+
+The `fillna()` function allows you to substitute missing values with meaningful alternatives.
+
+---
+
+## Filling with a Constant Value
+
+Replace missing salaries with **0**.
+
+```python
+df["Salary"] = df["Salary"].fillna(0)
+```
+
+Example Output:
+
+| Employee | Salary |
+| -------- | -----: |
+| Alice    |  50000 |
+| Rahul    |      0 |
+| Emma     |  72000 |
+
+---
+
+## Filling with Text
+
+Replace missing departments.
+
+```python
+df["Department"] = df["Department"].fillna("Unknown")
+```
+
+Output:
+
+| Employee | Department |
+| -------- | ---------- |
+| Alice    | HR         |
+| Rahul    | Sales      |
+| Emma     | IT         |
+| David    | Unknown    |
+
+Using descriptive labels often makes reports easier to interpret.
+
+---
+
+# 11. Filling with Mean
+
+For numerical data, replacing missing values with the **mean** is a common approach.
+
+```python
+mean_salary = df["Salary"].mean()
+
+df["Salary"] = df["Salary"].fillna(mean_salary)
+```
+
+Suppose the average salary is **₹63,500**.
+
+The missing salary will be replaced with this value.
+
+This method works well when the data is normally distributed and does not contain significant outliers.
+
+---
+
+# 12. Filling with Median
+
+The **median** is often preferred when the dataset contains extreme values.
+
+```python
+median_salary = df["Salary"].median()
+
+df["Salary"] = df["Salary"].fillna(median_salary)
+```
+
+Median is more resistant to unusually high or low values than the mean.
+
+---
+
+# 13. Filling with Mode
+
+For categorical data, the **mode** (most frequent value) is commonly used.
+
+```python
+mode_department = df["Department"].mode()[0]
+
+df["Department"] = df["Department"].fillna(mode_department)
+```
+
+Example:
+
+If most employees belong to the **Sales** department, missing department values will be replaced with **Sales**.
+
+---
+
+# Which Method Should You Choose?
+
+| Situation                             | Recommended Method |
+| ------------------------------------- | ------------------ |
+| Numerical data with no major outliers | Mean               |
+| Numerical data with outliers          | Median             |
+| Categorical data                      | Mode               |
+| Unknown category                      | Constant value     |
+| Very few missing records              | Drop rows          |
+| Mostly empty column                   | Drop column        |
+
+Choosing the right strategy depends on both the data and the business problem.
+
+---
+
+# Best Practices
+
+✔ Always investigate why data is missing before filling or deleting it.
+
+✔ Avoid replacing every missing value with **0**, as it may introduce misleading results.
+
+✔ Use the **median** when dealing with skewed numerical data.
+
+✔ Keep a copy of the original dataset before making changes.
+
+✔ Document every cleaning step for reproducibility.
+
+---
+
+# Common Mistakes
+
+### Filling All Columns with the Same Value
+
+```python
+df.fillna(0)
+```
+
+While this works, replacing text columns with `0` often produces unrealistic data.
+
+It is usually better to fill each column according to its data type.
+
+---
+
+### Dropping Too Many Rows
+
+```python
+df.dropna()
+```
+
+This may remove a large portion of your dataset.
+
+Always check how many records will be lost before using `dropna()`.
+
+---
+
+# Quick Recap
+
+You now know how to:
+
+* Detect valid values using `notnull()`.
+* Remove incomplete rows or columns using `dropna()`.
+* Replace missing values using `fillna()`.
+* Fill numerical data with the mean or median.
+* Fill categorical data with the mode.
+* Select the most appropriate cleaning strategy for different situations.
+
+> **"Cleaning data is not about removing imperfections—it is about making thoughtful decisions that preserve the integrity of your analysis."**
