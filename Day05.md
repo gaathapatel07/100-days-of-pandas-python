@@ -494,3 +494,264 @@ You have now learned how to:
 * Apply statistical reasoning to real-world business data.
 
 > **"Statistics describe the data, but thoughtful interpretation transforms those statistics into meaningful business insights."**
+
+# 16. Correlation Analysis
+
+In data analysis, we often want to understand how two variables are related. This relationship is measured using **correlation**.
+
+Correlation answers questions such as:
+
+* Does higher advertising spending increase sales?
+* Do customers who purchase more frequently spend more money?
+* Does employee experience affect salary?
+* Is there a relationship between study hours and exam scores?
+
+Correlation values range from **-1 to +1**.
+
+| Correlation Value | Interpretation                |
+| ----------------: | ----------------------------- |
+|            **+1** | Perfect positive relationship |
+|             **0** | No relationship               |
+|            **-1** | Perfect negative relationship |
+
+### Positive Correlation
+
+When one variable increases, the other tends to increase.
+
+Example:
+
+* Advertising Budget ↑
+* Sales ↑
+
+---
+
+### Negative Correlation
+
+When one variable increases, the other decreases.
+
+Example:
+
+* Product Price ↑
+* Customer Demand ↓
+
+---
+
+### No Correlation
+
+The variables do not show any consistent relationship.
+
+Example:
+
+* Employee ID and Monthly Sales
+
+---
+
+### Calculating Correlation
+
+```python
+df.corr(numeric_only=True)
+```
+
+Or between two specific columns:
+
+```python
+df["Sales"].corr(df["Profit"])
+```
+
+A correlation value of **0.87** indicates a strong positive relationship, whereas **-0.65** indicates a moderately strong negative relationship.
+
+---
+
+# 17. Business Case Study
+
+## Scenario
+
+You are a Junior Data Analyst at **RetailHub**, an online retail company.
+
+The management team wants to understand sales performance before launching a nationwide marketing campaign.
+
+You receive a dataset containing:
+
+* Customer ID
+* Product Category
+* Region
+* Sales
+* Profit
+* Discount
+* Quantity
+* Order Date
+
+Your objective is to perform an exploratory analysis and summarize your findings.
+
+### Tasks
+
+* Generate descriptive statistics.
+* Calculate the average sales value.
+* Find the median profit.
+* Determine the most common product category.
+* Identify the highest and lowest sales.
+* Detect possible outliers in sales.
+* Study the relationship between Sales and Profit.
+* Write five business insights.
+
+Remember: the goal of EDA is not just to calculate numbers—it is to understand what those numbers mean.
+
+---
+
+# 18. Practice Exercises
+
+## Beginner
+
+1. Generate descriptive statistics using `describe()`.
+2. Find the mean of the Sales column.
+3. Find the median salary.
+4. Determine the mode of the Department column.
+5. Calculate the standard deviation of Profit.
+
+---
+
+## Intermediate
+
+6. Find the variance of Sales.
+7. Calculate the 90th percentile of customer spending.
+8. Determine the first and third quartiles.
+9. Detect outliers using the IQR method.
+10. Calculate the correlation between Sales and Profit.
+
+---
+
+## Advanced
+
+11. Compare mean and median to determine whether a dataset is skewed.
+12. Explain why a high standard deviation may indicate business risk.
+13. Identify variables with the strongest correlation.
+14. Write five business insights from a real dataset.
+15. Suggest three business recommendations based on your findings.
+
+---
+
+# 19. Interview Questions
+
+## Beginner
+
+1. What is Exploratory Data Analysis (EDA)?
+2. Why is EDA important?
+3. What does `describe()` return?
+4. Difference between mean and median?
+5. What is the mode?
+
+---
+
+## Intermediate
+
+6. What is standard deviation?
+7. Difference between variance and standard deviation?
+8. Explain quartiles.
+9. What are percentiles?
+10. What are outliers?
+
+---
+
+## Advanced
+
+11. What is correlation?
+12. Does correlation always imply causation?
+13. How would you detect outliers in a dataset?
+14. When should you use the median instead of the mean?
+15. Describe a complete EDA workflow for a business dataset.
+
+---
+
+# 20. Cheat Sheet
+
+| Function     | Purpose                               |
+| ------------ | ------------------------------------- |
+| `describe()` | Generate descriptive statistics       |
+| `mean()`     | Calculate average                     |
+| `median()`   | Calculate middle value                |
+| `mode()`     | Find the most frequent value          |
+| `var()`      | Calculate variance                    |
+| `std()`      | Calculate standard deviation          |
+| `quantile()` | Calculate quartiles and percentiles   |
+| `corr()`     | Measure correlation between variables |
+
+---
+
+# 21. Mini Project
+
+## Sales Performance Analysis
+
+Using a sales dataset of your choice:
+
+* Load the dataset.
+* Explore its structure.
+* Generate descriptive statistics.
+* Calculate mean, median, and mode.
+* Measure variance and standard deviation.
+* Identify quartiles and the 90th percentile.
+* Detect outliers using the IQR method.
+* Calculate the correlation between Sales and Profit.
+* Summarize your findings with **at least five business insights**.
+
+Example insights:
+
+* Technology products generate the highest average sales.
+* High discounts are associated with lower profit margins.
+* A small number of orders contribute disproportionately to total revenue.
+* Sales vary significantly across different regions.
+* Most customer purchases fall within a predictable spending range.
+
+---
+
+# 22. Summary
+
+Congratulations! 🎉
+
+Today you completed your first comprehensive **Exploratory Data Analysis (EDA)** chapter.
+
+You learned how to:
+
+* Understand the purpose of EDA.
+* Generate descriptive statistics.
+* Interpret measures of central tendency.
+* Measure variability using variance and standard deviation.
+* Understand quartiles and percentiles.
+* Detect outliers using the IQR method.
+* Measure relationships using correlation.
+* Translate statistical findings into business insights.
+
+These concepts form the analytical foundation for every data-driven project.
+
+---
+
+# 23. What's Next?
+
+In **Day 06**, you'll move from numerical summaries to **visual exploration**.
+
+Topics include:
+
+* Histograms
+* Bar Charts
+* Line Charts
+* Scatter Plots
+* Box Plots
+* Pie Charts
+* Distribution Analysis using Matplotlib
+
+Visualization allows analysts to identify trends, patterns, and anomalies that are difficult to spot using numbers alone.
+
+---
+
+<div align="center">
+
+## 🎉 Day 05 Complete!
+
+You have successfully learned the fundamentals of **Exploratory Data Analysis**—a skill used daily by data analysts, business analysts, and data scientists.
+
+The next chapter introduces **data visualization**, where you'll learn how to communicate insights clearly and effectively using charts.
+
+⭐ Happy Learning and Happy Coding! 🐼
+
+**Next → Day 06: Data Visualization with Matplotlib**
+
+</div>
