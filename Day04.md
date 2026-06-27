@@ -762,6 +762,6 @@ The skills learned today form the foundation for accurate reporting, insightful 
 
 ⭐ If you're enjoying this journey, consider starring the repository and following along for the next chapter.
 
-**Next → Day 05: Exploratory Data Analysis (EDA) Fundamentals** 🐼
+
 
 </div>
