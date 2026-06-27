@@ -176,3 +176,304 @@ This technique is frequently used in business reporting and dashboard preparatio
 * Understanding sorting is essential before performing grouping, aggregation, or visualization.
 
 > **"Well-organized data makes patterns easier to discover and decisions easier to make."**
+
+---
+
+# 7. Renaming Columns
+
+As datasets grow larger, column names often become difficult to understand. Many datasets contain abbreviations, inconsistent naming conventions, or spaces that make analysis less intuitive.
+
+Renaming columns improves readability and helps create cleaner, more maintainable code.
+
+Consider the following dataset:
+
+| Cust_ID | Cust_Name | Sales_Amt |
+| ------- | --------- | --------: |
+| 101     | Alice     |      2500 |
+| 102     | Rahul     |      1800 |
+| 103     | Emma      |      3200 |
+
+Although these column names are valid, they are not very descriptive.
+
+To rename them:
+
+```python
+df.rename(columns={
+    "Cust_ID": "Customer ID",
+    "Cust_Name": "Customer Name",
+    "Sales_Amt": "Sales Amount"
+})
+```
+
+### Renaming a Single Column
+
+```python
+df.rename(columns={
+    "Sales_Amt": "Sales"
+})
+```
+
+---
+
+### Saving the Changes
+
+By default, `rename()` does **not** modify the original DataFrame.
+
+```python
+new_df = df.rename(columns={
+    "Sales_Amt": "Sales"
+})
+```
+
+or
+
+```python
+df.rename(
+    columns={"Sales_Amt": "Sales"},
+    inplace=True
+)
+```
+
+---
+
+### Best Practices
+
+✔ Use meaningful column names.
+
+✔ Avoid unnecessary abbreviations.
+
+✔ Maintain consistent naming throughout the project.
+
+✔ Prefer lowercase or snake_case when building production pipelines.
+
+Example:
+
+Instead of
+
+```
+Customer Name
+```
+
+consider
+
+```
+customer_name
+```
+
+---
+
+# 8. Creating New Columns
+
+One of the most powerful features of Pandas is the ability to create new columns from existing data.
+
+Suppose your dataset contains:
+
+| Product  | Price | Quantity |
+| -------- | ----: | -------: |
+| Laptop   | 60000 |        2 |
+| Mouse    |   800 |        5 |
+| Keyboard |  1800 |        3 |
+
+You can calculate the total amount for each order.
+
+```python
+df["Total Amount"] = df["Price"] * df["Quantity"]
+```
+
+Output:
+
+| Product  | Price | Quantity | Total Amount |
+| -------- | ----: | -------: | -----------: |
+| Laptop   | 60000 |        2 |       120000 |
+| Mouse    |   800 |        5 |         4000 |
+| Keyboard |  1800 |        3 |         5400 |
+
+Creating calculated columns is one of the most common tasks in business analytics.
+
+---
+
+### Creating Columns Using Conditions
+
+Suppose you want to classify employees based on salary.
+
+```python
+df["High Salary"] = df["Salary"] > 70000
+```
+
+Output:
+
+| Employee | Salary | High Salary |
+| -------- | -----: | ----------- |
+| Alice    |  50000 | False       |
+| Rahul    |  62000 | False       |
+| Emma     |  71000 | True        |
+| Sophia   |  85000 | True        |
+
+---
+
+# 9. Updating Existing Columns
+
+Sometimes the data already exists but needs modification.
+
+Example:
+
+Increase every employee's salary by 10%.
+
+```python
+df["Salary"] = df["Salary"] * 1.10
+```
+
+Or increase by a fixed amount.
+
+```python
+df["Salary"] = df["Salary"] + 5000
+```
+
+Since DataFrames are mutable, assigning a new value to an existing column replaces the old values.
+
+---
+
+### Updating Text Columns
+
+Convert all employee names to uppercase.
+
+```python
+df["Employee"] = df["Employee"].str.upper()
+```
+
+Convert names to lowercase.
+
+```python
+df["Employee"] = df["Employee"].str.lower()
+```
+
+Capitalize names.
+
+```python
+df["Employee"] = df["Employee"].str.title()
+```
+
+---
+
+# 10. Dropping Columns
+
+Many datasets contain columns that are unnecessary for analysis.
+
+Removing such columns simplifies the dataset and improves readability.
+
+Suppose your dataset contains:
+
+* Customer ID
+* Name
+* Phone Number
+* Address
+* Purchase Amount
+
+If the phone number is not required, remove it.
+
+```python
+df.drop(columns=["Phone Number"])
+```
+
+---
+
+### Removing Multiple Columns
+
+```python
+df.drop(columns=[
+    "Phone Number",
+    "Address"
+])
+```
+
+---
+
+### Saving the Changes
+
+```python
+df.drop(
+    columns=["Phone Number"],
+    inplace=True
+)
+```
+
+---
+
+# Common Mistakes
+
+### Forgetting to Save Changes
+
+```python
+df.rename(columns={
+    "Sales": "Revenue"
+})
+```
+
+The original DataFrame remains unchanged.
+
+---
+
+Correct:
+
+```python
+df.rename(
+    columns={"Sales": "Revenue"},
+    inplace=True
+)
+```
+
+---
+
+### Dropping a Non-Existing Column
+
+```python
+df.drop(columns=["Age"])
+```
+
+If `"Age"` does not exist, Pandas raises a `KeyError`.
+
+Always verify available columns.
+
+```python
+df.columns
+```
+
+---
+
+# Business Scenario
+
+You are preparing a monthly sales report for senior management.
+
+The raw dataset contains technical column names such as:
+
+```
+cust_id
+cust_nm
+prod_qty
+amt
+```
+
+Before presenting the report, you:
+
+* Rename columns to meaningful names.
+* Remove unnecessary fields.
+* Create a **Total Revenue** column.
+* Convert text into a consistent format.
+
+These simple transformations make reports easier to understand and reduce confusion for business stakeholders.
+
+---
+
+# Quick Recap
+
+By now, you should be able to:
+
+* Rename columns using `rename()`.
+* Create calculated columns.
+* Update existing values.
+* Apply basic string transformations.
+* Remove unnecessary columns.
+* Write cleaner and more readable datasets.
+
+> **"Raw data rarely arrives in the perfect format. Transforming it into a clean, meaningful dataset is one of the most valuable skills a data analyst can develop."**
+
