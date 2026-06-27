@@ -477,3 +477,273 @@ By now, you should be able to:
 
 > **"Raw data rarely arrives in the perfect format. Transforming it into a clean, meaningful dataset is one of the most valuable skills a data analyst can develop."**
 
+---
+
+# 11. Understanding Indexes in Pandas
+
+Every DataFrame in Pandas has an **index**, which acts as a unique identifier for each row. By default, Pandas assigns a numerical index starting from `0`.
+
+Example:
+
+| Index | Employee | Department | Salary |
+| ----: | -------- | ---------- | -----: |
+|     0 | Alice    | HR         |  50000 |
+|     1 | Rahul    | Sales      |  62000 |
+|     2 | Emma     | IT         |  71000 |
+|     3 | David    | Finance    |  68000 |
+
+Although the default index works well in many situations, there are times when a more meaningful column—such as **Employee ID**, **Customer ID**, or **Order ID**—should be used as the index.
+
+---
+
+# 12. Setting an Index
+
+The `set_index()` function allows you to replace the default numerical index with one or more columns.
+
+Suppose the dataset contains an `Employee ID` column.
+
+```python
+df.set_index("Employee ID")
+```
+
+Output:
+
+| Employee ID | Employee | Department | Salary |
+| ----------: | -------- | ---------- | -----: |
+|         101 | Alice    | HR         |  50000 |
+|         102 | Rahul    | Sales      |  62000 |
+|         103 | Emma     | IT         |  71000 |
+
+Using meaningful indexes improves readability and makes it easier to retrieve records.
+
+---
+
+### Saving the Changes
+
+```python
+df.set_index("Employee ID", inplace=True)
+```
+
+---
+
+# 13. Resetting the Index
+
+Sometimes you need to restore the default numerical index.
+
+Use `reset_index()`.
+
+```python
+df.reset_index()
+```
+
+Output:
+
+| Index | Employee ID | Employee | Department | Salary |
+| ----: | ----------: | -------- | ---------- | -----: |
+|     0 |         101 | Alice    | HR         |  50000 |
+|     1 |         102 | Rahul    | Sales      |  62000 |
+|     2 |         103 | Emma     | IT         |  71000 |
+
+To update the original DataFrame:
+
+```python
+df.reset_index(inplace=True)
+```
+
+---
+
+# 14. Why Indexes Matter
+
+Indexes make data retrieval faster and more organized.
+
+Examples include:
+
+* Looking up customer records using Customer ID.
+* Finding products using Product ID.
+* Accessing employee information using Employee ID.
+* Working with dates in time-series datasets.
+
+Choosing the right index can improve both code readability and analytical workflows.
+
+---
+
+# 15. Real-World Business Case Study
+
+## Scenario
+
+You are working as a Data Analyst for **RetailHub**, an online retail company.
+
+The management team wants a report showing the company's top-performing products and high-value customers.
+
+The raw dataset contains the following columns:
+
+* Order ID
+* Customer Name
+* Product
+* Category
+* Quantity
+* Price
+* Discount
+* Region
+* Sales
+
+### Tasks
+
+1. Sort products by Sales in descending order.
+2. Rename technical column names for better readability.
+3. Create a **Revenue** column by multiplying Quantity and Price.
+4. Remove unnecessary columns such as Internal Notes.
+5. Set **Order ID** as the index.
+6. Reset the index before exporting the report.
+
+These transformations prepare the dataset for dashboards and business presentations.
+
+---
+
+# 16. Practice Exercises
+
+## Beginner
+
+1. Sort employees by salary in ascending order.
+2. Sort employees by salary in descending order.
+3. Rename the **Salary** column to **Monthly Salary**.
+4. Create a new column called **Annual Salary**.
+5. Drop an unnecessary column.
+
+---
+
+## Intermediate
+
+6. Sort data by Department and Salary.
+7. Create a **Bonus** column equal to 10% of Salary.
+8. Convert employee names to uppercase.
+9. Set Employee ID as the index.
+10. Reset the index.
+
+---
+
+## Advanced
+
+11. Sort by multiple columns with different sort orders.
+12. Rename multiple columns at once.
+13. Remove multiple columns together.
+14. Create a new column using two existing columns.
+15. Build a clean DataFrame ready for reporting.
+
+---
+
+# 17. Interview Questions
+
+### Beginner
+
+1. What is `sort_values()`?
+2. How do you sort data in descending order?
+3. Difference between `rename()` and changing `df.columns`?
+4. Why do we create new columns?
+5. What is an index?
+
+---
+
+### Intermediate
+
+6. Difference between `set_index()` and `reset_index()`?
+7. What happens when `inplace=True` is used?
+8. Why should meaningful indexes be preferred?
+9. Difference between sorting one column and multiple columns?
+10. When would you drop a column?
+
+---
+
+### Advanced
+
+11. Why is data transformation important before visualization?
+12. Can a DataFrame have multiple indexes?
+13. How do indexes improve data retrieval?
+14. When should indexes be reset?
+15. Explain how transformed datasets improve business decision-making.
+
+---
+
+# 18. Cheat Sheet
+
+| Operation             | Syntax                                         |
+| --------------------- | ---------------------------------------------- |
+| Sort ascending        | `df.sort_values("Sales")`                      |
+| Sort descending       | `df.sort_values("Sales", ascending=False)`     |
+| Sort multiple columns | `df.sort_values(["Region","Sales"])`           |
+| Rename column         | `df.rename(columns={"Old":"New"})`             |
+| Create new column     | `df["Revenue"] = df["Price"] * df["Quantity"]` |
+| Update column         | `df["Salary"] *= 1.10`                         |
+| Drop column           | `df.drop(columns=["Phone"])`                   |
+| Set index             | `df.set_index("Employee ID")`                  |
+| Reset index           | `df.reset_index()`                             |
+
+---
+
+# 19. Mini Project
+
+## Employee Performance Report
+
+Using any employee dataset:
+
+Create a clean analytical report by:
+
+* Sorting employees by salary.
+* Renaming all technical column names.
+* Creating **Annual Salary**.
+* Creating a **Bonus** column.
+* Removing unnecessary fields.
+* Setting Employee ID as the index.
+* Resetting the index before exporting.
+* Writing **five business insights** based on the transformed data.
+
+---
+
+# 20. Summary
+
+Congratulations! 
+
+Today you learned how to organize and transform datasets using Pandas.
+
+You explored:
+
+* Sorting datasets efficiently.
+* Sorting by multiple columns.
+* Renaming columns.
+* Creating calculated columns.
+* Updating existing values.
+* Removing unnecessary columns.
+* Working with indexes.
+* Preparing datasets for business reporting.
+
+These are essential preprocessing techniques used in almost every real-world analytics project.
+
+---
+
+# 21. What's Next?
+
+In **Day 04**, you'll learn one of the most important topics in data analysis:
+
+* Missing Values
+* Handling Null Data
+* Filling Missing Values
+* Removing Missing Values
+* Detecting Duplicate Records
+* Data Cleaning Fundamentals
+
+Data cleaning is one of the most time-consuming tasks in analytics, and mastering it will significantly improve the quality of your analyses.
+
+---
+
+<div align="center">
+
+##  Day 03 Complete!
+
+You've now built a strong foundation in **loading, exploring, filtering, sorting, transforming, and indexing data with Pandas**.
+
+⭐ If you're enjoying this series, consider starring the repository and following along as we continue toward mastering Pandas in 100 days.
+
+
+
+</div>
+
