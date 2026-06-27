@@ -566,3 +566,306 @@ By now, you should be able to:
 * Detect outliers using Box Plots.
 
 > **"The best visualization is the one that answers a business question clearly, accurately, and with the least amount of effort from the viewer."**
+
+# 17. Customizing Charts
+
+Creating a chart is only the first step. To make it useful for presentations and business reports, it should be easy to read and visually clear.
+
+Matplotlib provides several customization options that improve readability.
+
+### Changing Figure Size
+
+```python
+plt.figure(figsize=(10, 6))
+```
+
+The `figsize` parameter accepts `(width, height)` in inches.
+
+---
+
+### Changing Line Style
+
+```python
+plt.plot(months, sales, linestyle="--")
+```
+
+Common line styles:
+
+* `"-"` → Solid line
+* `"--"` → Dashed line
+* `":"` → Dotted line
+* `"-."` → Dash-dot line
+
+---
+
+### Changing Marker Style
+
+```python
+plt.plot(months, sales, marker="o")
+```
+
+Common markers:
+
+* `"o"` → Circle
+* `"s"` → Square
+* `"^"` → Triangle
+* `"*"` → Star
+* `"D"` → Diamond
+
+Markers help highlight individual observations.
+
+---
+
+### Adding Grid Lines
+
+```python
+plt.grid(True)
+```
+
+Grid lines make charts easier to interpret, especially when comparing values.
+
+---
+
+### Adding a Legend
+
+```python
+plt.plot(months, sales, label="Sales")
+plt.legend()
+```
+
+Legends are useful when displaying multiple datasets on the same chart.
+
+---
+
+### Saving Charts
+
+Instead of taking screenshots, export the chart directly.
+
+```python
+plt.savefig("sales_chart.png")
+```
+
+Supported formats include:
+
+* PNG
+* JPG
+* PDF
+* SVG
+
+This is the preferred approach when creating reports or presentations.
+
+---
+
+# 18. Business Case Study
+
+## Scenario
+
+You are working as a **Data Analyst at RetailHub**, an online retail company.
+
+The management team wants to understand business performance before planning next quarter's strategy.
+
+You receive a sales dataset containing:
+
+* Order Date
+* Product Category
+* Region
+* Sales
+* Profit
+* Quantity
+* Customer Segment
+
+Your manager asks you to create visualizations that answer the following questions:
+
+### Questions
+
+1. How have monthly sales changed over time?
+2. Which region generates the highest sales?
+3. Which product category contributes the most revenue?
+4. Are there any unusually large transactions?
+5. Is there a relationship between Sales and Profit?
+
+### Suggested Charts
+
+| Business Question   | Recommended Chart |
+| ------------------- | ----------------- |
+| Monthly Sales Trend | Line Chart        |
+| Sales by Region     | Bar Chart         |
+| Revenue by Category | Pie Chart         |
+| Sales Distribution  | Histogram         |
+| Sales vs Profit     | Scatter Plot      |
+| Detect Outliers     | Box Plot          |
+
+The goal is not simply to create charts, but to communicate insights that support better business decisions.
+
+---
+
+# 19. Practice Exercises
+
+## Beginner
+
+1. Create a line chart showing monthly sales.
+2. Create a bar chart comparing four regions.
+3. Plot a histogram of employee salaries.
+4. Build a pie chart showing market share.
+5. Create a scatter plot of sales versus profit.
+
+---
+
+## Intermediate
+
+6. Add titles and axis labels to every chart.
+7. Add markers to a line chart.
+8. Change the figure size.
+9. Add grid lines.
+10. Save a chart as a PNG file.
+
+---
+
+## Advanced
+
+11. Create two line charts on the same figure.
+12. Compare sales from two different years using legends.
+13. Identify outliers using a box plot.
+14. Explain which chart is most appropriate for five different business questions.
+15. Create a complete visual report using multiple charts.
+
+---
+
+# 20. Interview Questions
+
+## Beginner
+
+1. What is Matplotlib?
+2. Why are visualizations important in data analysis?
+3. Difference between a line chart and a bar chart?
+4. What is a histogram?
+5. What is a scatter plot?
+
+---
+
+## Intermediate
+
+6. When should a pie chart be avoided?
+7. What information does a box plot provide?
+8. Why are axis labels important?
+9. Difference between a histogram and a bar chart?
+10. Why should every chart have a title?
+
+---
+
+## Advanced
+
+11. Which visualization would you choose to analyze monthly sales? Why?
+12. Explain the relationship between scatter plots and correlation.
+13. How can poor visualization choices mislead decision-makers?
+14. What are the characteristics of an effective dashboard?
+15. How would you present analytical findings to senior management?
+
+---
+
+# 21. Cheat Sheet
+
+| Chart Type   | Best Used For                      |
+| ------------ | ---------------------------------- |
+| Line Chart   | Trends over time                   |
+| Bar Chart    | Category comparison                |
+| Histogram    | Distribution of numerical data     |
+| Scatter Plot | Relationship between two variables |
+| Pie Chart    | Parts of a whole                   |
+| Box Plot     | Outlier detection and spread       |
+
+### Frequently Used Functions
+
+| Function        | Purpose         |
+| --------------- | --------------- |
+| `plt.plot()`    | Line chart      |
+| `plt.bar()`     | Bar chart       |
+| `plt.hist()`    | Histogram       |
+| `plt.scatter()` | Scatter plot    |
+| `plt.pie()`     | Pie chart       |
+| `plt.boxplot()` | Box plot        |
+| `plt.title()`   | Add chart title |
+| `plt.xlabel()`  | Label x-axis    |
+| `plt.ylabel()`  | Label y-axis    |
+| `plt.legend()`  | Display legend  |
+| `plt.grid()`    | Show grid lines |
+| `plt.savefig()` | Save chart      |
+
+---
+
+# 22. Mini Project
+
+## Sales Dashboard using Matplotlib
+
+Using any sales dataset:
+
+Build a visual report containing:
+
+* Monthly Sales Trend
+* Sales by Region
+* Revenue by Product Category
+* Sales Distribution
+* Sales vs Profit
+* Outlier Detection using Box Plot
+
+### Deliverables
+
+* Well-labeled charts
+* Professional titles
+* Appropriate chart selection
+* At least **five business insights**
+* A Jupyter Notebook uploaded to GitHub
+
+---
+
+# 23. Summary
+
+Congratulations! 🎉
+
+Today you learned how to communicate data through visualization using **Matplotlib**.
+
+You explored:
+
+* The importance of data visualization
+* Line, Bar, Histogram, Scatter, Pie, and Box plots
+* Chart customization
+* Visualization best practices
+* Selecting the right chart for a business problem
+* Presenting analytical insights through visuals
+
+Visualization is one of the most powerful tools in a data analyst's toolkit. Well-designed charts transform complex datasets into clear stories that help organizations make informed decisions.
+
+---
+
+# 24. What's Next?
+
+In **Day 07**, you'll learn **Advanced Data Manipulation with Pandas**.
+
+Topics include:
+
+* `groupby()`
+* Aggregation Functions
+* `agg()`
+* `value_counts()`
+* `unique()`
+* `nunique()`
+* Sorting grouped data
+* Real-world business summaries
+
+These techniques are used extensively in reporting, dashboard creation, and business intelligence workflows.
+
+---
+
+<div align="center">
+
+# 🎉 Day 06 Complete!
+
+You have successfully completed the **Data Visualization** chapter.
+
+You can now transform raw datasets into meaningful visual stories that support business decision-making.
+
+📊 **Next → Day 07: Grouping, Aggregation & Business Summaries**
+
+Keep building. Every day brings you one step closer to mastering Pandas and real-world data analysis. 🐼
+
+</div>
