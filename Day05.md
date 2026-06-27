@@ -1,4 +1,4 @@
-# 🐼 Day 05 — Exploratory Data Analysis (EDA): Understanding Your Data
+# Day 05 — Exploratory Data Analysis (EDA): Understanding Your Data
 
 <div align="center">
 
@@ -16,7 +16,8 @@
 
 ---
 
-# 📚 Table of Contents
+
+#  Table of Contents
 
 1. Introduction to EDA
 2. Why Exploratory Data Analysis Matters
