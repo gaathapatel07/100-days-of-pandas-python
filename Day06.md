@@ -1,4 +1,4 @@
-# 🐼 Day 06 — Data Visualization with Matplotlib
+#  Day 06 — Data Visualization with Matplotlib
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Data Visualization Matters
