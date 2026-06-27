@@ -224,3 +224,273 @@ After completing this section, you should be able to:
 
 > **"Exploratory Data Analysis is not about finding answers immediately—it's about asking better questions and allowing the data to guide your investigation."**
 
+---
+
+# 8. Understanding Variability in Data
+
+While measures like the **mean**, **median**, and **mode** describe the center of a dataset, they do not explain how the data is spread out.
+
+Two datasets can have the same average but completely different distributions.
+
+Consider the following examples:
+
+### Dataset A
+
+```text
+20, 22, 24, 26, 28
+```
+
+### Dataset B
+
+```text
+5, 10, 24, 38, 43
+```
+
+Both datasets have a similar average, but Dataset B is much more spread out.
+
+Understanding variability helps analysts identify consistency, risk, and unusual observations within a dataset.
+
+---
+
+# 9. Variance
+
+Variance measures how far each observation is from the mean.
+
+A **low variance** indicates that values are close to the average.
+
+A **high variance** indicates that values are widely dispersed.
+
+Calculate variance using Pandas:
+
+```python
+df["Salary"].var()
+```
+
+Example:
+
+Suppose two departments have the same average salary of ₹60,000.
+
+Department A:
+
+```text
+59000
+60000
+61000
+60000
+59500
+```
+
+Department B:
+
+```text
+30000
+45000
+60000
+75000
+90000
+```
+
+Although both departments have the same average salary, Department B has significantly higher variance.
+
+This indicates greater inconsistency in salaries.
+
+---
+
+# 10. Standard Deviation
+
+Standard deviation is the square root of variance.
+
+Unlike variance, standard deviation is expressed in the same unit as the original data.
+
+Calculate standard deviation:
+
+```python
+df["Salary"].std()
+```
+
+Interpretation:
+
+* Low standard deviation → Data points are close together.
+* High standard deviation → Data points are spread apart.
+
+Example:
+
+A retail company analyzing daily sales may observe:
+
+| Store   | Average Sales | Standard Deviation |
+| ------- | ------------: | -----------------: |
+| Store A |       ₹50,000 |             ₹2,000 |
+| Store B |       ₹50,000 |            ₹18,000 |
+
+Although both stores have the same average sales, Store B experiences much larger fluctuations.
+
+---
+
+# 11. Understanding Quartiles
+
+Quartiles divide a dataset into four equal parts.
+
+They help analysts understand where observations are concentrated.
+
+The four quartiles are:
+
+* **Q1 (25th Percentile)** → First quarter of the data.
+* **Q2 (50th Percentile)** → Median.
+* **Q3 (75th Percentile)** → Third quarter of the data.
+* **Q4** → Highest values.
+
+Example:
+
+```python
+df["Salary"].describe()
+```
+
+Output:
+
+| Statistic | Salary |
+| --------- | -----: |
+| 25%       | 48,000 |
+| 50%       | 61,000 |
+| 75%       | 73,000 |
+
+Interpretation:
+
+* 25% of employees earn less than ₹48,000.
+* Half of employees earn less than ₹61,000.
+* 75% of employees earn less than ₹73,000.
+
+Quartiles provide more insight than simply knowing the average salary.
+
+---
+
+# 12. Percentiles
+
+Percentiles divide data into one hundred equal parts.
+
+For example:
+
+* 90th percentile
+* 95th percentile
+* 99th percentile
+
+These are widely used in competitive exams, business analytics, and finance.
+
+Example:
+
+```python
+df["Salary"].quantile(0.90)
+```
+
+If the result is:
+
+```text
+₹92,000
+```
+
+It means:
+
+**90% of employees earn ₹92,000 or less, while only 10% earn more.**
+
+---
+
+# 13. Detecting Outliers
+
+Outliers are observations that differ significantly from the rest of the dataset.
+
+Example:
+
+```text
+45000
+47000
+49000
+51000
+53000
+1200000
+```
+
+The salary of **₹12,00,000** is clearly unusual.
+
+Outliers can arise due to:
+
+* Data entry mistakes
+* Fraudulent transactions
+* Exceptional cases
+* Measurement errors
+
+Outliers should always be investigated before analysis.
+
+---
+
+# 14. Using the IQR Method
+
+One common way to detect outliers is the **Interquartile Range (IQR)**.
+
+The IQR is calculated as:
+
+```text
+IQR = Q3 − Q1
+```
+
+Steps:
+
+1. Calculate Q1
+2. Calculate Q3
+3. Compute IQR
+4. Determine the lower and upper bounds
+
+```text
+Lower Bound = Q1 − 1.5 × IQR
+
+Upper Bound = Q3 + 1.5 × IQR
+```
+
+Values outside these bounds are considered potential outliers.
+
+Example in Pandas:
+
+```python
+Q1 = df["Salary"].quantile(0.25)
+Q3 = df["Salary"].quantile(0.75)
+
+IQR = Q3 - Q1
+
+lower = Q1 - 1.5 * IQR
+upper = Q3 + 1.5 * IQR
+
+outliers = df[(df["Salary"] < lower) | (df["Salary"] > upper)]
+```
+
+This method is widely used because it is simple, effective, and resistant to extreme values.
+
+---
+
+# 15. Business Interpretation
+
+Imagine you're analyzing salaries across different departments.
+
+Most employees earn between **₹45,000** and **₹80,000**, but one employee appears to earn **₹12,00,000**.
+
+Possible explanations include:
+
+* Senior executive compensation
+* Data entry error
+* Annual salary recorded instead of monthly salary
+* Incorrect currency conversion
+
+Instead of deleting the value immediately, analysts investigate the reason behind the anomaly.
+
+Understanding context is just as important as identifying statistical outliers.
+
+---
+
+# Key Takeaways
+
+You have now learned how to:
+
+* Measure variability using variance and standard deviation.
+* Interpret quartiles and percentiles.
+* Detect unusual observations.
+* Identify outliers using the IQR method.
+* Apply statistical reasoning to real-world business data.
+
+> **"Statistics describe the data, but thoughtful interpretation transforms those statistics into meaningful business insights."**
