@@ -486,3 +486,282 @@ You now know how to:
 * Select the most appropriate cleaning strategy for different situations.
 
 > **"Cleaning data is not about removing imperfections—it is about making thoughtful decisions that preserve the integrity of your analysis."**
+
+# 14. Understanding Duplicate Data
+
+Another common issue in real-world datasets is the presence of **duplicate records**.
+
+Duplicate records occur when the same observation appears more than once in a dataset. These duplicates can distort calculations, inflate counts, and lead to inaccurate business decisions.
+
+Consider the following employee dataset:
+
+| Employee ID | Name  | Department | Salary |
+| ----------- | ----- | ---------- | -----: |
+| 101         | Alice | HR         |  50000 |
+| 102         | Rahul | Sales      |  62000 |
+| 102         | Rahul | Sales      |  62000 |
+| 103         | Emma  | IT         |  71000 |
+
+In this example, Rahul's record appears twice.
+
+If left untreated, duplicates may cause:
+
+* Incorrect revenue calculations
+* Double counting of customers
+* Misleading reports
+* Poor machine learning performance
+* Incorrect KPIs
+
+---
+
+# 15. Detecting Duplicate Records
+
+Pandas provides the `duplicated()` function to identify duplicate rows.
+
+```python
+df.duplicated()
+```
+
+Example Output
+
+```text
+0    False
+1    False
+2     True
+3    False
+dtype: bool
+```
+
+Every row marked **True** is considered a duplicate.
+
+To display only duplicate rows:
+
+```python
+df[df.duplicated()]
+```
+
+---
+
+# 16. Removing Duplicate Records
+
+Once duplicates have been identified, they can be removed using `drop_duplicates()`.
+
+```python
+df.drop_duplicates()
+```
+
+Output:
+
+| Employee ID | Name  | Department | Salary |
+| ----------- | ----- | ---------- | -----: |
+| 101         | Alice | HR         |  50000 |
+| 102         | Rahul | Sales      |  62000 |
+| 103         | Emma  | IT         |  71000 |
+
+---
+
+### Updating the Original Dataset
+
+```python
+df.drop_duplicates(inplace=True)
+```
+
+---
+
+### Removing Duplicates Based on Specific Columns
+
+Sometimes only certain columns should be checked.
+
+Example:
+
+```python
+df.drop_duplicates(subset=["Employee ID"])
+```
+
+This removes duplicate Employee IDs while ignoring differences in other columns.
+
+---
+
+# 17. Real-World Business Case Study
+
+## Scenario
+
+You are a Data Analyst at **RetailHub**, an e-commerce company.
+
+Before creating the monthly sales dashboard, you inspect the raw sales dataset.
+
+During inspection, you discover:
+
+* Missing customer names
+* Missing sales values
+* Duplicate order IDs
+* Duplicate customer records
+* Blank regions
+
+Your manager asks you to clean the dataset before generating any reports.
+
+### Your Tasks
+
+1. Count missing values.
+2. Fill missing customer names with `"Unknown"`.
+3. Replace missing sales values using the column median.
+4. Detect duplicate rows.
+5. Remove duplicate orders.
+6. Verify that the cleaned dataset contains no duplicate records.
+7. Save the cleaned dataset for reporting.
+
+This mirrors a real-world workflow where data preparation is completed before analysis begins.
+
+---
+
+# 18. Practice Exercises
+
+## Beginner
+
+1. Count missing values in every column.
+2. Display only rows with missing values.
+3. Remove rows containing missing values.
+4. Fill missing numerical values with the mean.
+5. Fill missing categorical values with `"Unknown"`.
+
+---
+
+## Intermediate
+
+6. Replace missing salaries using the median.
+7. Replace missing departments using the mode.
+8. Identify duplicate rows.
+9. Display duplicate records only.
+10. Remove duplicate rows.
+
+---
+
+## Advanced
+
+11. Remove duplicates based on Employee ID.
+12. Count the number of rows removed after cleaning.
+13. Compare the dataset before and after cleaning.
+14. Create a summary of all cleaning operations performed.
+15. Export the cleaned dataset to a new CSV file.
+
+---
+
+# 19. Interview Questions
+
+## Basic
+
+1. What are missing values?
+2. What is the difference between `isnull()` and `notnull()`?
+3. What does `fillna()` do?
+4. What is the purpose of `dropna()`?
+5. What are duplicate records?
+
+---
+
+## Intermediate
+
+6. When should you use the mean instead of the median?
+7. Why is the median preferred for skewed data?
+8. How does `duplicated()` work?
+9. Difference between `drop_duplicates()` and `dropna()`?
+10. What is the purpose of the `subset` parameter?
+
+---
+
+## Advanced
+
+11. Why is data cleaning important in analytics?
+12. What are the risks of removing too many rows?
+13. How can poor-quality data affect machine learning models?
+14. Explain different strategies for handling missing values.
+15. Describe a real-world situation where duplicate records could cause incorrect business decisions.
+
+---
+
+# 20. Cheat Sheet
+
+| Function            | Purpose                  |
+| ------------------- | ------------------------ |
+| `isnull()`          | Detect missing values    |
+| `notnull()`         | Detect available values  |
+| `isnull().sum()`    | Count missing values     |
+| `dropna()`          | Remove missing values    |
+| `fillna()`          | Replace missing values   |
+| `mean()`            | Calculate average        |
+| `median()`          | Calculate median         |
+| `mode()`            | Find most frequent value |
+| `duplicated()`      | Detect duplicate rows    |
+| `drop_duplicates()` | Remove duplicate rows    |
+
+---
+
+# 21. Mini Project
+
+## Customer Data Cleaning Report
+
+Using any customer or sales dataset:
+
+Perform the following tasks:
+
+* Load the dataset.
+* Display dataset information.
+* Count missing values.
+* Fill missing numerical values.
+* Fill missing categorical values.
+* Detect duplicate records.
+* Remove duplicates.
+* Export the cleaned dataset.
+* Write **five business insights** explaining how data cleaning improved the dataset.
+
+---
+
+# 22. Summary
+
+Congratulations! 🎉
+
+Today you learned one of the most valuable skills in data analysis—**data cleaning**.
+
+You explored:
+
+* Identifying missing values
+* Counting missing data
+* Removing incomplete records
+* Filling missing values using different strategies
+* Detecting duplicate records
+* Removing duplicate data
+* Applying cleaning techniques to a real-world business scenario
+
+In practice, data cleaning often consumes the largest portion of an analyst's workflow. Developing strong cleaning habits ensures that your analyses are accurate, reliable, and ready for decision-making.
+
+---
+
+# 23. What's Next?
+
+In **Day 05**, you'll begin **Exploratory Data Analysis (EDA)**, where you'll learn how to understand datasets through statistics and visualizations.
+
+Topics include:
+
+* Understanding Data Distributions
+* Descriptive Statistics
+* Correlation Analysis
+* Outlier Detection
+* Feature Relationships
+* Initial Business Insights
+
+This marks the transition from preparing data to discovering meaningful patterns within it.
+
+---
+
+<div align="center">
+
+## Day 04 Complete!
+
+You've mastered one of the most critical stages of the data analysis workflow: **cleaning and preparing data**.
+
+The skills learned today form the foundation for accurate reporting, insightful dashboards, and successful machine learning projects.
+
+⭐ If you're enjoying this journey, consider starring the repository and following along for the next chapter.
+
+**Next → Day 05: Exploratory Data Analysis (EDA) Fundamentals** 🐼
+
+</div>
