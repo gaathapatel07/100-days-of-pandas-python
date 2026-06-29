@@ -650,3 +650,280 @@ You have now learned how to:
 * Chain multiple cleaning operations together.
 
 > **"Text cleaning is more than formatting—it transforms inconsistent, messy data into reliable information that supports accurate analysis and better business decisions."**
+
+# 15. Real-World Business Case Study
+
+## Scenario
+
+You are working as a **Data Analyst** at **RetailHub**, an e-commerce company.
+
+The marketing department wants to launch a customer segmentation campaign. Before analysis begins, you inspect the customer database and notice several data quality issues.
+
+Examples include:
+
+| Customer Name   | City      | Email             | Department        |
+| --------------- | --------- | ----------------- | ----------------- |
+| `john smith`    | `MUMBAI`  | `John@gmail.com`  | `Human Resources` |
+| `ALICE JOHNSON` | `mumbai`  | `alice@GMAIL.COM` | `HR`              |
+| `emma watson`   | `Mumbai-` | `emma@yahoo.com`  | `Human Resource`  |
+
+These inconsistencies must be resolved before building reports or dashboards.
+
+---
+
+## Business Questions
+
+### Question 1
+
+Standardize customer names.
+
+```python id="a2b7nq"
+df["Customer Name"] = (
+    df["Customer Name"]
+    .str.strip()
+    .str.title()
+)
+```
+
+---
+
+### Question 2
+
+Standardize city names.
+
+```python id="b9m4te"
+df["City"] = (
+    df["City"]
+    .str.strip()
+    .str.replace("-", "")
+    .str.title()
+)
+```
+
+---
+
+### Question 3
+
+Convert email addresses to lowercase.
+
+```python id="c7x5fr"
+df["Email"] = (
+    df["Email"]
+    .str.lower()
+)
+```
+
+---
+
+### Question 4
+
+Standardize department names.
+
+```python id="d8q2hy"
+df["Department"] = (
+    df["Department"]
+    .replace({
+        "Human Resources": "HR",
+        "Human Resource": "HR",
+        "H.R.": "HR",
+        "hr": "HR"
+    })
+)
+```
+
+---
+
+### Question 5
+
+Identify Gmail users.
+
+```python id="e3w6jk"
+gmail_users = df[
+    df["Email"]
+    .str.contains(
+        "gmail",
+        case=False,
+        na=False
+    )
+]
+```
+
+---
+
+## Business Insights
+
+After cleaning the dataset, you discover:
+
+* Customer names now follow a consistent format.
+* Duplicate city names caused by inconsistent capitalization have been eliminated.
+* Department values have been standardized, improving reporting accuracy.
+* Gmail is the most commonly used email provider.
+* Overall data quality has improved significantly, making the dataset suitable for analysis.
+
+---
+
+# 16. Practice Exercises
+
+## Beginner
+
+1. Convert all names to title case.
+2. Convert city names to lowercase.
+3. Remove leading and trailing spaces.
+4. Replace `"Human Resources"` with `"HR"`.
+5. Find all email addresses ending with `.com`.
+
+---
+
+## Intermediate
+
+6. Identify Gmail users.
+7. Split customer names into first and last names.
+8. Extract numeric values from employee codes.
+9. Calculate the length of customer names.
+10. Combine multiple string operations into a single pipeline.
+
+---
+
+## Advanced
+
+11. Standardize three categorical columns.
+12. Clean inconsistent product category names.
+13. Validate email addresses using string methods.
+14. Prepare a customer dataset for dashboard reporting.
+15. Write five recommendations to improve future data collection quality.
+
+---
+
+# 17. Interview Questions
+
+## Beginner
+
+1. What is the purpose of the `.str` accessor?
+2. Difference between `lower()` and `upper()`?
+3. What does `strip()` do?
+4. How does `replace()` work?
+5. What is `contains()` used for?
+
+---
+
+## Intermediate
+
+6. Difference between `startswith()` and `contains()`?
+7. Why should text be standardized before grouping?
+8. How do you split a string into multiple columns?
+9. What is the purpose of `expand=True`?
+10. How do you extract text using regular expressions?
+
+---
+
+## Advanced
+
+11. Explain a real-world string cleaning workflow.
+12. Why are inconsistent text values dangerous in business reporting?
+13. How can regular expressions simplify text extraction?
+14. Describe how you would clean a customer database before analysis.
+15. How do chained string operations improve code readability?
+
+---
+
+# 18. Cheat Sheet
+
+| Operation           | Syntax                    |
+| ------------------- | ------------------------- |
+| Lowercase           | `.str.lower()`            |
+| Uppercase           | `.str.upper()`            |
+| Title Case          | `.str.title()`            |
+| Remove spaces       | `.str.strip()`            |
+| Remove left spaces  | `.str.lstrip()`           |
+| Remove right spaces | `.str.rstrip()`           |
+| Replace text        | `.str.replace()`          |
+| Search text         | `.str.contains()`         |
+| Starts with         | `.str.startswith()`       |
+| Ends with           | `.str.endswith()`         |
+| Split text          | `.str.split(expand=True)` |
+| Extract text        | `.str.extract()`          |
+| String length       | `.str.len()`              |
+
+---
+
+# 19. Mini Project
+
+## Customer Data Standardization
+
+Using any customer dataset:
+
+Perform the following tasks:
+
+* Standardize customer names.
+* Clean city names.
+* Convert all email addresses to lowercase.
+* Standardize department names.
+* Remove extra spaces.
+* Identify Gmail users.
+* Split names into first and last names.
+* Extract employee IDs from employee codes.
+* Export the cleaned dataset.
+* Write **five business insights** explaining how cleaning improved the quality of the data.
+
+Example insights:
+
+* Duplicate city names were reduced after standardization.
+* Department names are now consistent across all records.
+* Gmail accounts represent the majority of customer email addresses.
+* Customer names now follow a uniform format, improving readability.
+* The cleaned dataset is suitable for reporting, visualization, and predictive modeling.
+
+---
+
+# 20. Summary
+
+Congratulations! 🎉
+
+Today you learned how to clean and standardize textual data using Pandas.
+
+You explored:
+
+* Using the `.str` accessor.
+* Standardizing text with `lower()`, `upper()`, and `title()`.
+* Removing unwanted spaces.
+* Replacing inconsistent values.
+* Searching and validating text.
+* Splitting and extracting string data.
+* Building reusable text-cleaning pipelines.
+
+These techniques are used extensively in customer analytics, HR systems, CRM platforms, finance, healthcare, and business intelligence.
+
+---
+
+# 21. What's Next?
+
+In **Day 13**, you'll learn **Working with Missing Data & Advanced Data Quality Techniques**.
+
+Topics include:
+
+* Advanced `fillna()` strategies
+* Forward Fill (`ffill`)
+* Backward Fill (`bfill`)
+* Interpolation
+* Detecting invalid values
+* Data validation
+* Outlier handling
+* Building robust data-cleaning pipelines
+
+These techniques help transform imperfect datasets into reliable, analysis-ready data.
+
+---
+
+<div align="center">
+
+# 🎉 Day 12 Complete!
+
+You've mastered one of the most important parts of real-world data preparation: **cleaning and standardizing text data**.
+
+The skills you've learned today are used daily by data analysts to prepare datasets for reporting, visualization, machine learning, and business intelligence.
+
+⭐ Fantastic progress!
+
+**Next → Day 13: Advanced Missing Data Handling & Data Quality** 🧹📊🐼
+
+</div>
