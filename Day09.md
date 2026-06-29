@@ -801,6 +801,5 @@ From extracting date components to calculating delivery times and identifying se
 
 ⭐ Excellent progress!
 
-**Next → Day 10: Merging, Joining & Concatenating DataFrames** 🔗🐼
 
 </div>
