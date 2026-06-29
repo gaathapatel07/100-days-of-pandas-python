@@ -1,4 +1,4 @@
-# 🐼 Day 11 — Pivot Tables & Cross Tabulations in Pandas
+# Day 11 — Pivot Tables & Cross Tabulations in Pandas
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Pivot Tables Matter
