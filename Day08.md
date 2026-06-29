@@ -1,4 +1,4 @@
-# 🐼 Day 08 — Exploring Categorical Data with `value_counts()`, `unique()` & `nunique()`
+# Day 08 — Exploring Categorical Data with `value_counts()`, `unique()` & `nunique()`
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Categorical Analysis Matters
