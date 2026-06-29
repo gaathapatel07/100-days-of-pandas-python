@@ -864,6 +864,6 @@ You can now integrate multiple datasets, validate relationships, and prepare uni
 
 ⭐ Keep learning, keep building, and keep sharing your progress.
 
-**Next → Day 11: Pivot Tables & Cross Tabulations** 📊🐼
+
 
 </div>
