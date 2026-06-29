@@ -269,3 +269,384 @@ After completing this section, you should understand:
 
 > **"Small inconsistencies in text can lead to large inconsistencies in analysis. Clean your strings before trusting your results."**
 
+# 8. Replacing Text Using `str.replace()`
+
+In real-world datasets, the same information is often represented in multiple ways.
+
+For example:
+
+| Department      |
+| --------------- |
+| HR              |
+| Human Resources |
+| Human Resource  |
+| hr              |
+| H.R.            |
+
+Although these values refer to the same department, Pandas treats them as different categories.
+
+The `str.replace()` method standardizes inconsistent text.
+
+---
+
+## Syntax
+
+```python id="w7n2pa"
+df["Column"].str.replace(
+    "old",
+    "new"
+)
+```
+
+---
+
+## Example
+
+```python id="x4k8me"
+df["Department"] = (
+    df["Department"]
+    .str.replace(
+        "Human Resources",
+        "HR"
+    )
+)
+```
+
+Output:
+
+| Before          | After |
+| --------------- | ----- |
+| Human Resources | HR    |
+| Human Resource  | HR    |
+| HR              | HR    |
+
+Standardizing values improves grouping, filtering, and reporting.
+
+---
+
+# 9. Searching Text with `str.contains()`
+
+Analysts frequently need to search for rows containing specific words or patterns.
+
+Example:
+
+Find all customers whose email contains `"gmail"`.
+
+```python id="u5t9rg"
+df[
+    df["Email"]
+    .str.contains("gmail")
+]
+```
+
+Output:
+
+| Name  | Email                                     |
+| ----- | ----------------------------------------- |
+| Alice | [alice@gmail.com](mailto:alice@gmail.com) |
+| Emma  | [emma@gmail.com](mailto:emma@gmail.com)   |
+
+---
+
+## Case-Insensitive Search
+
+```python id="m6r4wy"
+df[
+    df["Email"]
+    .str.contains(
+        "gmail",
+        case=False
+    )
+]
+```
+
+This matches:
+
+```text id="0bzvqm"
+gmail
+
+Gmail
+
+GMAIL
+```
+
+without requiring identical capitalization.
+
+---
+
+# 10. Finding the Beginning or End of Text
+
+### Starts With
+
+```python id="j9x1hl"
+df["Email"].str.startswith("a")
+```
+
+Example Output:
+
+| Email                                     | Result |
+| ----------------------------------------- | ------ |
+| [alice@gmail.com](mailto:alice@gmail.com) | True   |
+| [rahul@yahoo.com](mailto:rahul@yahoo.com) | False  |
+
+---
+
+### Ends With
+
+```python id="f4z8kc"
+df["Email"].str.endswith(".com")
+```
+
+Useful for:
+
+* Email validation
+* File extensions
+* Website URLs
+* Product codes
+
+---
+
+# 11. Splitting Strings
+
+Many datasets store multiple pieces of information within one column.
+
+Example:
+
+```text id="o8e3ps"
+John Smith
+
+Alice Brown
+
+Emma Watson
+```
+
+Separate first and last names.
+
+```python id="q3v7na"
+df[
+    ["First Name", "Last Name"]
+] = (
+    df["Customer Name"]
+    .str.split(
+        " ",
+        expand=True
+    )
+)
+```
+
+Output:
+
+| Customer Name | First Name | Last Name |
+| ------------- | ---------- | --------- |
+| John Smith    | John       | Smith     |
+| Emma Watson   | Emma       | Watson    |
+
+Splitting text is useful for names, addresses, and product codes.
+
+---
+
+# 12. Extracting Text Using Regular Expressions
+
+Sometimes only a specific part of a string is needed.
+
+Example:
+
+Extract the numeric employee ID.
+
+```text id="o0a2mr"
+EMP-1023
+
+EMP-2045
+
+EMP-3088
+```
+
+```python id="e6k5zt"
+df["Employee ID"] = (
+    df["Employee Code"]
+    .str.extract(
+        r"(\d+)"
+    )
+)
+```
+
+Output:
+
+| Employee Code | Employee ID |
+| ------------- | ----------: |
+| EMP-1023      |        1023 |
+| EMP-2045      |        2045 |
+| EMP-3088      |        3088 |
+
+The regular expression `\d+` matches one or more digits.
+
+---
+
+# 13. Calculating String Length
+
+Sometimes analysts need to measure text length.
+
+Example:
+
+```python id="s8h2qx"
+df["Customer Name"].str.len()
+```
+
+Output:
+
+| Customer Name | Length |
+| ------------- | -----: |
+| John Smith    |     10 |
+| Alice Brown   |     11 |
+| Emma Watson   |     12 |
+
+Applications include:
+
+* Password validation
+* Product code verification
+* Data quality checks
+
+---
+
+# 14. Chaining String Operations
+
+Multiple cleaning operations can be combined into a single statement.
+
+Example:
+
+```python id="r4m9cj"
+df["City"] = (
+    df["City"]
+    .str.strip()
+    .str.lower()
+    .str.replace(
+        "-",
+        " "
+    )
+    .str.title()
+)
+```
+
+This performs:
+
+1. Remove extra spaces.
+2. Convert to lowercase.
+3. Replace hyphens with spaces.
+4. Convert to title case.
+
+Instead of four separate lines, everything is completed in one readable pipeline.
+
+---
+
+# Business Example
+
+Suppose a customer database contains:
+
+```text id="m3u5fr"
+ MUMBAI
+
+mumbai
+
+Mumbai
+
+MUMBAI
+
+mumbai-
+```
+
+After applying a cleaning pipeline:
+
+```python id="v6y1kn"
+(
+    df["City"]
+    .str.strip()
+    .str.lower()
+    .str.replace("-", "")
+    .str.title()
+)
+```
+
+The result becomes:
+
+```text id="y1c7as"
+Mumbai
+
+Mumbai
+
+Mumbai
+
+Mumbai
+
+Mumbai
+```
+
+This ensures accurate reports and eliminates duplicate categories caused by inconsistent formatting.
+
+---
+
+# Best Practices
+
+✔ Clean text before performing `groupby()` or `value_counts()`.
+
+✔ Standardize capitalization across the dataset.
+
+✔ Remove extra spaces before merging DataFrames.
+
+✔ Validate text using `startswith()`, `endswith()`, or `contains()`.
+
+✔ Chain string operations to create clean, readable code.
+
+---
+
+# Common Mistakes
+
+### Forgetting Missing Values
+
+If a column contains `NaN`, some string operations may produce unexpected results.
+
+Safely handle missing values first:
+
+```python id="p8t6lm"
+df["City"] = (
+    df["City"]
+    .fillna("")
+    .str.strip()
+)
+```
+
+---
+
+### Applying String Methods to Numeric Columns
+
+The `.str` accessor only works with string-like data.
+
+Check the data type before applying string operations:
+
+```python id="z2g4qb"
+df.dtypes
+```
+
+Convert if necessary:
+
+```python id="t1w7yd"
+df["Code"] = (
+    df["Code"]
+    .astype(str)
+)
+```
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Replace inconsistent values.
+* Search text using `contains()`.
+* Validate strings using `startswith()` and `endswith()`.
+* Split strings into multiple columns.
+* Extract information using regular expressions.
+* Measure string length.
+* Chain multiple cleaning operations together.
+
+> **"Text cleaning is more than formatting—it transforms inconsistent, messy data into reliable information that supports accurate analysis and better business decisions."**
