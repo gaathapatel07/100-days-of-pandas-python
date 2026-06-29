@@ -1,4 +1,4 @@
-# 🐼 Day 10 — Merging, Joining & Concatenating DataFrames
+# Day 10 — Merging, Joining & Concatenating DataFrames
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Combining Data Matters
