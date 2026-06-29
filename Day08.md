@@ -756,6 +756,6 @@ These techniques are used extensively in customer analytics, HR reporting, sales
 
 ⭐ Keep the momentum going!
 
-**Next → Day 09: Working with Dates & Time in Pandas** 📅🐼
+
 
 </div>
