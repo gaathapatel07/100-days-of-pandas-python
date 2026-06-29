@@ -548,3 +548,259 @@ You have now learned how to:
 * Solve common business problems using datetime operations.
 
 > **"Time-based analysis transforms isolated events into meaningful trends, helping businesses understand not just what happened, but when and why it happened."**
+
+# 14. Real-World Business Case Study
+
+## Scenario
+
+You have recently joined **RetailHub**, an international e-commerce company, as a Data Analyst.
+
+The operations team wants to evaluate order processing efficiency and customer purchasing patterns.
+
+You receive a dataset containing:
+
+* Order ID
+* Customer ID
+* Order Date
+* Ship Date
+* Delivery Date
+* Region
+* Product Category
+* Sales
+
+Your objective is to analyze the time-related aspects of the business and prepare a report for senior management.
+
+---
+
+## Business Questions
+
+### Question 1
+
+How many orders were placed in each month?
+
+```python id="4a1phx"
+df["Order Date"].dt.month_name().value_counts()
+```
+
+---
+
+### Question 2
+
+Which weekday receives the highest number of orders?
+
+```python id="hnw4ek"
+df["Order Date"].dt.day_name().value_counts()
+```
+
+---
+
+### Question 3
+
+Calculate the delivery time for every order.
+
+```python id="trbq6g"
+df["Delivery Days"] = (
+    df["Delivery Date"] -
+    df["Order Date"]
+).dt.days
+```
+
+---
+
+### Question 4
+
+Display all orders placed after **1 July 2025**.
+
+```python id="v3o8zn"
+df[
+    df["Order Date"] >
+    "2025-07-01"
+]
+```
+
+---
+
+### Question 5
+
+Identify weekend orders.
+
+```python id="nxh8yf"
+df[
+    df["Order Date"]
+    .dt.dayofweek >= 5
+]
+```
+
+---
+
+## Business Insights
+
+After analyzing the data, you discover:
+
+* December records the highest number of orders.
+* Weekend purchases contribute nearly 35% of total sales.
+* Average delivery time is **4.8 days**.
+* Certain regions consistently experience longer shipping times.
+* Monthly sales follow a clear seasonal trend.
+
+These findings help optimize staffing, logistics, inventory planning, and promotional campaigns.
+
+---
+
+# 15. Practice Exercises
+
+## Beginner
+
+1. Convert a string column into datetime format.
+2. Extract the year from every order date.
+3. Extract the month name.
+4. Extract the weekday.
+5. Format dates as `DD-MM-YYYY`.
+
+---
+
+## Intermediate
+
+6. Filter orders placed during January.
+7. Filter orders placed after a specific date.
+8. Calculate expected delivery dates.
+9. Determine delivery duration.
+10. Identify weekend transactions.
+
+---
+
+## Advanced
+
+11. Find the busiest month.
+12. Determine average delivery time.
+13. Compare weekday versus weekend orders.
+14. Identify customers inactive for more than 90 days.
+15. Generate a monthly business summary.
+
+---
+
+# 16. Interview Questions
+
+## Beginner
+
+1. Why do we convert strings into datetime objects?
+2. What does `pd.to_datetime()` do?
+3. How do you extract the month from a datetime column?
+4. Difference between `.dt.day` and `.dt.day_name()`?
+5. How do you format dates?
+
+---
+
+## Intermediate
+
+6. What is `Timedelta`?
+7. How do you calculate the number of days between two dates?
+8. How do you identify weekend records?
+9. Why should dates be sorted before trend analysis?
+10. Difference between date filtering and numerical filtering?
+
+---
+
+## Advanced
+
+11. How does datetime analysis improve business reporting?
+12. Explain seasonality with an example.
+13. How would you identify inactive customers using dates?
+14. Why are timezone considerations important?
+15. Describe a complete workflow for analyzing order dates in an e-commerce dataset.
+
+---
+
+# 17. Cheat Sheet
+
+| Operation           | Syntax                   |
+| ------------------- | ------------------------ |
+| Convert to datetime | `pd.to_datetime()`       |
+| Extract year        | `.dt.year`               |
+| Extract month       | `.dt.month`              |
+| Month name          | `.dt.month_name()`       |
+| Extract day         | `.dt.day`                |
+| Weekday name        | `.dt.day_name()`         |
+| Date formatting     | `.dt.strftime()`         |
+| Current timestamp   | `pd.Timestamp.now()`     |
+| Add days            | `+ pd.Timedelta(days=7)` |
+| Subtract dates      | `date2 - date1`          |
+| Difference in days  | `.dt.days`               |
+| Sort dates          | `sort_values()`          |
+
+---
+
+# 18. Mini Project
+
+## Order Timeline Analysis
+
+Using any retail, e-commerce, or logistics dataset:
+
+Perform the following tasks:
+
+* Convert all date columns into datetime format.
+* Extract year, month, and weekday.
+* Identify weekend orders.
+* Calculate delivery time.
+* Determine monthly order counts.
+* Find the busiest weekday.
+* Detect seasonal sales trends.
+* Write **five business insights** based on your findings.
+* Export the final report as a CSV file.
+
+---
+
+# 19. Summary
+
+Congratulations! 🎉
+
+Today you mastered one of the most practical areas of Pandas: **working with dates and time**.
+
+You learned how to:
+
+* Convert text into datetime objects.
+* Extract useful date components.
+* Format dates for reporting.
+* Filter datasets using dates.
+* Perform date arithmetic.
+* Calculate time differences.
+* Analyze weekday and weekend patterns.
+* Apply datetime analysis to real-world business scenarios.
+
+Datetime operations are used extensively in finance, healthcare, logistics, retail, HR, marketing, and business intelligence. Mastering them allows analysts to uncover trends, monitor performance, and build powerful time-based reports.
+
+---
+
+# 20. What's Next?
+
+In **Day 10**, you'll learn how to **combine multiple datasets**—a skill that mirrors SQL joins and is essential for working with real-world data.
+
+Topics include:
+
+* `merge()`
+* `join()`
+* `concat()`
+* Inner Join
+* Left Join
+* Right Join
+* Outer Join
+* Merge on Multiple Columns
+* Handling Duplicate Keys
+
+These operations allow analysts to integrate information from different sources into a single, comprehensive dataset.
+
+---
+
+<div align="center">
+
+# 🎉 Day 09 Complete!
+
+You've successfully mastered **Date & Time Analysis in Pandas**, an essential skill for every data analyst.
+
+From extracting date components to calculating delivery times and identifying seasonal patterns, you're now equipped to analyze the temporal dimension of business data.
+
+⭐ Excellent progress!
+
+**Next → Day 10: Merging, Joining & Concatenating DataFrames** 🔗🐼
+
+</div>
