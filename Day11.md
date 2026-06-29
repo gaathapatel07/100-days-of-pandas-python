@@ -786,7 +786,7 @@ Since text data is rarely clean in real datasets, mastering string operations is
 
 <div align="center">
 
-# 🎉 Day 11 Complete!
+# Day 11 Complete!
 
 You've mastered **Pivot Tables & Cross Tabulations**, one of the most valuable reporting techniques in data analytics.
 
