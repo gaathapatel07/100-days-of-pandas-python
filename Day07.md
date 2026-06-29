@@ -1,4 +1,4 @@
-# 🐼 Day 07 — Grouping & Aggregation with Pandas
+# Day 07 — Grouping & Aggregation with Pandas
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Grouping Matters
