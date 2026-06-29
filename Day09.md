@@ -265,3 +265,286 @@ After completing this section, you should understand:
 
 > **"Dates are more than timestamps—they reveal trends, seasonality, customer behavior, and the timing behind every business decision."**
 
+# 8. Filtering Data Using Dates
+
+One of the biggest advantages of converting a column into a datetime object is the ability to filter records based on specific dates or date ranges.
+
+Suppose you have the following dataset:
+
+| Order ID | Order Date | Sales |
+| -------- | ---------- | ----: |
+| 101      | 2025-01-15 |  2500 |
+| 102      | 2025-02-10 |  3200 |
+| 103      | 2025-03-05 |  4100 |
+| 104      | 2025-04-18 |  1800 |
+
+### Filter Orders After a Specific Date
+
+```python
+df[df["Order Date"] > "2025-02-01"]
+```
+
+Output:
+
+| Order ID | Order Date | Sales |
+| -------- | ---------- | ----: |
+| 102      | 2025-02-10 |  3200 |
+| 103      | 2025-03-05 |  4100 |
+| 104      | 2025-04-18 |  1800 |
+
+---
+
+### Filter Orders Within a Date Range
+
+```python
+df[
+    (df["Order Date"] >= "2025-01-01") &
+    (df["Order Date"] <= "2025-03-31")
+]
+```
+
+This retrieves all orders placed during the first quarter of the year.
+
+Date filtering is commonly used for:
+
+* Monthly reports
+* Quarterly analysis
+* Financial statements
+* Customer activity tracking
+
+---
+
+# 9. Current Date and Time
+
+Sometimes you need to compare data with today's date.
+
+Pandas provides the `Timestamp.now()` function.
+
+```python
+pd.Timestamp.now()
+```
+
+Example Output:
+
+```text
+2026-07-01 10:42:18
+```
+
+Store it in a variable:
+
+```python
+today = pd.Timestamp.now()
+```
+
+This is useful for calculating customer recency, subscription expiry, or delivery delays.
+
+---
+
+# 10. Date Arithmetic
+
+Pandas allows arithmetic operations with dates.
+
+Suppose you want to calculate an expected delivery date that is **7 days** after the order date.
+
+```python
+import pandas as pd
+
+df["Expected Delivery"] = (
+    df["Order Date"] +
+    pd.Timedelta(days=7)
+)
+```
+
+Output:
+
+| Order Date | Expected Delivery |
+| ---------- | ----------------- |
+| 2025-01-15 | 2025-01-22        |
+| 2025-02-10 | 2025-02-17        |
+
+Date arithmetic is widely used in logistics, healthcare, banking, and project management.
+
+---
+
+### Subtracting Days
+
+```python
+df["Reminder Date"] = (
+    df["Order Date"] -
+    pd.Timedelta(days=3)
+)
+```
+
+Useful for sending reminders before appointments or deliveries.
+
+---
+
+# 11. Calculating Time Differences
+
+Another common requirement is determining the number of days between two dates.
+
+Suppose your dataset contains:
+
+* Order Date
+* Delivery Date
+
+```python
+df["Delivery Time"] = (
+    df["Delivery Date"] -
+    df["Order Date"]
+)
+```
+
+Example Output:
+
+| Order Date | Delivery Date | Delivery Time |
+| ---------- | ------------- | ------------- |
+| 2025-01-15 | 2025-01-20    | 5 days        |
+| 2025-02-10 | 2025-02-16    | 6 days        |
+
+To extract only the number of days:
+
+```python
+df["Days"] = (
+    df["Delivery Date"] -
+    df["Order Date"]
+).dt.days
+```
+
+Output:
+
+| Order ID | Days |
+| -------- | ---: |
+| 101      |    5 |
+| 102      |    6 |
+
+---
+
+# 12. Working with Weekends
+
+Many businesses compare weekday and weekend performance.
+
+Identify the day of the week:
+
+```python
+df["Weekday"] = (
+    df["Order Date"]
+    .dt.day_name()
+)
+```
+
+Determine whether an order was placed on a weekend:
+
+```python
+df["Is Weekend"] = (
+    df["Order Date"]
+    .dt.dayofweek >= 5
+)
+```
+
+Output:
+
+| Order Date | Is Weekend |
+| ---------- | ---------- |
+| 2025-01-15 | False      |
+| 2025-02-08 | True       |
+
+Business applications include:
+
+* Weekend sales analysis
+* Customer traffic trends
+* Staffing requirements
+* Delivery planning
+
+---
+
+# 13. Sorting by Date
+
+Chronological ordering is essential for trend analysis.
+
+```python
+df.sort_values("Order Date")
+```
+
+Latest orders first:
+
+```python
+df.sort_values(
+    "Order Date",
+    ascending=False
+)
+```
+
+Sorting by date is often the first step before creating time-series visualizations.
+
+---
+
+# Business Scenario
+
+Imagine you're working for an online marketplace.
+
+Your manager asks:
+
+* Show all orders placed during March.
+* Calculate average delivery time.
+* Identify weekend orders.
+* Find customers who haven't purchased in the last 90 days.
+* Determine monthly order volume.
+
+All of these questions rely on datetime operations rather than simple numerical calculations.
+
+---
+
+# Best Practices
+
+✔ Always convert date columns using `pd.to_datetime()` immediately after loading a dataset.
+
+✔ Store dates using ISO format (`YYYY-MM-DD`) whenever possible.
+
+✔ Sort datetime columns before trend analysis.
+
+✔ Keep datetime values as datetime objects until the final reporting stage.
+
+✔ Use descriptive column names such as `Order Date`, `Ship Date`, and `Invoice Date`.
+
+---
+
+# Common Mistakes
+
+### Treating Dates as Strings
+
+```python
+df["Order Date"] > "01/02/2025"
+```
+
+If the column is stored as text, comparisons may produce incorrect results.
+
+Always convert first:
+
+```python
+df["Order Date"] = pd.to_datetime(df["Order Date"])
+```
+
+---
+
+### Ignoring Time Zones
+
+When analyzing global datasets, timestamps from different countries may use different time zones.
+
+Always verify whether timestamps are timezone-aware before comparing them.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Filter records using dates.
+* Retrieve the current date and time.
+* Add and subtract days.
+* Calculate delivery times.
+* Identify weekends.
+* Sort datasets chronologically.
+* Solve common business problems using datetime operations.
+
+> **"Time-based analysis transforms isolated events into meaningful trends, helping businesses understand not just what happened, but when and why it happened."**
