@@ -733,6 +733,6 @@ These concepts are used daily by data analysts to answer business questions, gen
 
 ⭐ Great job! Keep the momentum going.
 
-**Next → Day 08: Exploring Categorical Data with `value_counts()`, `unique()`, and `nunique()`** 🐼
+
 
 </div>
