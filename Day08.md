@@ -513,3 +513,249 @@ You have now learned how to:
 
 > **"Understanding the categories within your data is often the first step toward understanding the business itself."**
 
+# 14. Real-World Business Case Study
+
+## Scenario
+
+You have recently joined **RetailHub**, a fast-growing e-commerce company, as a Junior Data Analyst.
+
+The marketing team wants to better understand its customer base before launching a nationwide promotional campaign.
+
+You receive a dataset containing:
+
+* Customer ID
+* Region
+* Customer Segment
+* Product Category
+* Payment Method
+* Order Priority
+* Sales
+
+Your task is to analyze the categorical columns and prepare a summary report.
+
+---
+
+## Business Questions
+
+### Question 1
+
+How many unique customer segments are present?
+
+```python id="k0b7xj"
+df["Customer Segment"].nunique()
+```
+
+---
+
+### Question 2
+
+List all available payment methods.
+
+```python id="i9m4fd"
+df["Payment Method"].unique()
+```
+
+---
+
+### Question 3
+
+Which payment method is used most frequently?
+
+```python id="m4qe2r"
+df["Payment Method"].value_counts()
+```
+
+---
+
+### Question 4
+
+Calculate the percentage distribution of customer segments.
+
+```python id="f1vy5m"
+df["Customer Segment"].value_counts(normalize=True) * 100
+```
+
+---
+
+### Question 5
+
+Include missing values while counting regions.
+
+```python id="a6sw9z"
+df["Region"].value_counts(dropna=False)
+```
+
+---
+
+## Business Insights
+
+After performing the analysis, you discover:
+
+* The **Consumer** segment contributes nearly half of all orders.
+* **UPI** is the most frequently used payment method.
+* Most customers belong to the **West** region.
+* A few records contain missing region information that should be cleaned.
+* Certain category names have inconsistent capitalization, indicating data quality issues.
+
+These findings help the marketing and operations teams improve customer targeting, reporting accuracy, and data quality.
+
+---
+
+# 15. Practice Exercises
+
+## Beginner
+
+1. Display all unique departments.
+2. Count the number of unique cities.
+3. Generate a frequency table for the Region column.
+4. Display the top three product categories.
+5. Calculate the percentage distribution of payment methods.
+
+---
+
+## Intermediate
+
+6. Sort category counts alphabetically.
+7. Include missing values in the frequency table.
+8. Identify the least common customer segment.
+9. Convert a frequency table into a DataFrame.
+10. Detect inconsistent category names.
+
+---
+
+## Advanced
+
+11. Analyze three categorical columns and summarize their distributions.
+12. Compare category percentages across different datasets.
+13. Clean inconsistent category labels and regenerate the frequency table.
+14. Create a report highlighting the top five categories in multiple columns.
+15. Write five business recommendations based on the frequency analysis.
+
+---
+
+# 16. Interview Questions
+
+## Beginner
+
+1. What is categorical data?
+2. What does `unique()` return?
+3. What is the purpose of `nunique()`?
+4. How does `value_counts()` work?
+5. Why is categorical analysis important?
+
+---
+
+## Intermediate
+
+6. Why does `value_counts()` ignore missing values by default?
+7. What does `normalize=True` do?
+8. Difference between `unique()` and `nunique()`?
+9. How can `sort_index()` improve reports?
+10. When should percentages be preferred over raw counts?
+
+---
+
+## Advanced
+
+11. How can inconsistent category names affect business analysis?
+12. Describe a real-world use case of `value_counts()`.
+13. How would you analyze customer segments for a marketing campaign?
+14. Explain why data cleaning is important before frequency analysis.
+15. How can categorical analysis support strategic business decisions?
+
+---
+
+# 17. Cheat Sheet
+
+| Function                       | Purpose                            |
+| ------------------------------ | ---------------------------------- |
+| `unique()`                     | Display all unique values          |
+| `nunique()`                    | Count unique values                |
+| `value_counts()`               | Count occurrences of each category |
+| `value_counts(normalize=True)` | Calculate percentage distribution  |
+| `sort_index()`                 | Sort categories alphabetically     |
+| `head()`                       | Display the top records            |
+| `tail()`                       | Display the last records           |
+| `reset_index()`                | Convert results into a DataFrame   |
+| `dropna=False`                 | Include missing values in counts   |
+
+---
+
+# 18. Mini Project
+
+## Customer Segmentation Report
+
+Using any customer or retail dataset:
+
+Perform the following tasks:
+
+* Identify all categorical columns.
+* Count unique values in each categorical column.
+* Generate frequency tables.
+* Calculate percentage distributions.
+* Include missing values where appropriate.
+* Identify inconsistent category names.
+* Create a clean summary report.
+* Write **five business insights** based on your findings.
+
+Example insights:
+
+* The Consumer segment contributes the highest percentage of sales.
+* Credit Card and UPI account for over 80% of transactions.
+* The West region has the largest customer base.
+* Certain categories require standardization due to inconsistent naming.
+* Missing values are concentrated in the Region column.
+
+---
+
+# 19. Summary
+
+Congratulations! 🎉
+
+Today you learned how to analyze categorical data using Pandas.
+
+You explored:
+
+* Understanding categorical variables.
+* Finding unique values with `unique()`.
+* Counting categories with `nunique()`.
+* Generating frequency distributions using `value_counts()`.
+* Calculating percentage distributions.
+* Including missing values in frequency tables.
+* Identifying inconsistencies in categorical data.
+
+These techniques are essential for exploratory data analysis and help analysts quickly understand the composition and quality of a dataset.
+
+---
+
+# 20. What's Next?
+
+In **Day 09**, you'll learn how to work with **dates and time** in Pandas.
+
+Topics include:
+
+* `to_datetime()`
+* Extracting Year, Month, Day
+* Working with Hours and Minutes
+* Filtering by Date
+* Date Arithmetic
+* Time Series Basics
+* Business Calendar Analysis
+
+Dates appear in almost every business dataset, making datetime manipulation one of the most valuable skills for any data analyst.
+
+---
+
+<div align="center">
+
+# 🎉 Day 08 Complete!
+
+You now know how to explore, summarize, and interpret categorical data using Pandas.
+
+These techniques are used extensively in customer analytics, HR reporting, sales analysis, finance, healthcare, and business intelligence.
+
+⭐ Keep the momentum going!
+
+**Next → Day 09: Working with Dates & Time in Pandas** 📅🐼
+
+</div>
