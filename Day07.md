@@ -235,3 +235,261 @@ By now, you should understand:
 
 > **"Individual records tell stories. Grouped summaries reveal business trends."**
 
+# 9. Multiple Aggregations using `agg()`
+
+In business analytics, calculating a single statistic is rarely enough.
+
+Managers often ask questions like:
+
+* What is the **total** sales for each region?
+* What is the **average** order value?
+* What is the **highest** sale?
+* What is the **lowest** sale?
+* How many orders were placed?
+
+Instead of running multiple `groupby()` operations, Pandas allows us to calculate several statistics simultaneously using the `agg()` function.
+
+---
+
+## Syntax
+
+```python
+df.groupby("Column")["Value"].agg(["sum","mean","max","min"])
+```
+
+---
+
+## Example
+
+Suppose we have the following dataset:
+
+| Region | Sales |
+| ------ | ----: |
+| North  |  5000 |
+| South  |  7000 |
+| North  |  6500 |
+| West   |  9000 |
+| South  |  8000 |
+
+```python
+df.groupby("Region")["Sales"].agg(
+    ["sum","mean","max","min","count"]
+)
+```
+
+### Output
+
+| Region |   Sum | Mean |  Max |  Min | Count |
+| ------ | ----: | ---: | ---: | ---: | ----: |
+| North  | 11500 | 5750 | 6500 | 5000 |     2 |
+| South  | 15000 | 7500 | 8000 | 7000 |     2 |
+| West   |  9000 | 9000 | 9000 | 9000 |     1 |
+
+With a single command, we've generated a concise summary that answers multiple business questions.
+
+---
+
+# 10. Custom Aggregation Names
+
+Default column names such as `sum` or `mean` are acceptable, but business reports often require more descriptive labels.
+
+Pandas allows you to rename aggregated columns.
+
+```python
+df.groupby("Region").agg(
+    Total_Sales=("Sales","sum"),
+    Average_Sales=("Sales","mean"),
+    Highest_Sale=("Sales","max"),
+    Orders=("Sales","count")
+)
+```
+
+### Output
+
+| Region | Total Sales | Average Sales | Highest Sale | Orders |
+| ------ | ----------: | ------------: | -----------: | -----: |
+| North  |       11500 |          5750 |         6500 |      2 |
+| South  |       15000 |          7500 |         8000 |      2 |
+| West   |        9000 |          9000 |         9000 |      1 |
+
+This format is cleaner and is commonly used when preparing reports for management.
+
+---
+
+# 11. Grouping by Multiple Columns
+
+Real-world datasets usually contain multiple categories.
+
+Suppose we want to analyze sales by both **Region** and **Category**.
+
+Dataset:
+
+| Region | Category   | Sales |
+| ------ | ---------- | ----: |
+| North  | Furniture  |  5000 |
+| North  | Technology |  6500 |
+| South  | Furniture  |  7000 |
+| South  | Technology |  8000 |
+| West   | Furniture  |  9000 |
+
+Group by two columns:
+
+```python
+df.groupby(["Region","Category"])["Sales"].sum()
+```
+
+### Output
+
+| Region | Category   | Sales |
+| ------ | ---------- | ----: |
+| North  | Furniture  |  5000 |
+| North  | Technology |  6500 |
+| South  | Furniture  |  7000 |
+| South  | Technology |  8000 |
+| West   | Furniture  |  9000 |
+
+Grouping by multiple columns allows analysts to perform much more detailed business analysis.
+
+---
+
+# 12. Resetting the Index
+
+After grouping, Pandas uses the grouped columns as the index.
+
+Sometimes you may want a regular DataFrame instead.
+
+```python
+df.groupby("Region")["Sales"].sum().reset_index()
+```
+
+Output:
+
+| Region | Sales |
+| ------ | ----: |
+| North  | 11500 |
+| South  | 15000 |
+| West   |  9000 |
+
+Using `reset_index()` is especially useful when exporting data or creating visualizations.
+
+---
+
+# 13. Sorting Grouped Results
+
+Once data has been aggregated, it's common to sort it.
+
+For example, display regions with the highest sales first.
+
+```python
+summary = df.groupby("Region")["Sales"].sum()
+
+summary.sort_values(ascending=False)
+```
+
+### Output
+
+| Region | Sales |
+| ------ | ----: |
+| South  | 15000 |
+| North  | 11500 |
+| West   |  9000 |
+
+This immediately highlights the top-performing region.
+
+---
+
+# 14. Business Example
+
+Imagine you're working as a Data Analyst for an online retailer.
+
+Your manager asks:
+
+* Which region generates the highest revenue?
+* Which product category has the highest average profit?
+* Which department receives the most orders?
+
+Instead of manually reviewing thousands of rows, you can answer these questions using a few `groupby()` operations.
+
+For example:
+
+```python
+df.groupby("Category")["Profit"].mean()
+```
+
+or
+
+```python
+df.groupby("Region")["Orders"].sum()
+```
+
+These summaries support faster, data-driven business decisions.
+
+---
+
+# Best Practices
+
+✔ Use meaningful column names after aggregation.
+
+✔ Apply multiple aggregations with `agg()` whenever possible.
+
+✔ Reset the index before exporting grouped data.
+
+✔ Sort summarized results to highlight key insights.
+
+✔ Keep grouped outputs simple and easy to interpret.
+
+---
+
+# Common Mistakes
+
+### Forgetting `reset_index()`
+
+Grouped results often have grouped columns as the index.
+
+```python
+df.groupby("Region")["Sales"].sum()
+```
+
+If you need a standard DataFrame:
+
+```python
+df.groupby("Region")["Sales"].sum().reset_index()
+```
+
+---
+
+### Running Multiple GroupBy Operations
+
+Instead of writing:
+
+```python
+df.groupby("Region")["Sales"].sum()
+
+df.groupby("Region")["Sales"].mean()
+
+df.groupby("Region")["Sales"].count()
+```
+
+Use:
+
+```python
+df.groupby("Region")["Sales"].agg(
+    ["sum","mean","count"]
+)
+```
+
+This is cleaner, faster, and easier to maintain.
+
+---
+
+# Quick Recap
+
+After completing this section, you should be able to:
+
+* Apply multiple aggregation functions.
+* Use the `agg()` method effectively.
+* Group data by multiple columns.
+* Reset indexes after grouping.
+* Sort summarized business reports.
+
+> **"The true power of `groupby()` is revealed when multiple statistics are combined to answer complex business questions in a single operation."**
