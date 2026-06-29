@@ -226,5 +226,290 @@ After completing this section, you should understand:
 * How to generate frequency tables using `value_counts()`.
 * Why categorical analysis is an essential part of exploratory data analysis.
 
+# 8. Understanding Frequency Distribution
+
+A **frequency distribution** shows how often each unique value appears in a dataset.
+
+Instead of reading thousands of rows individually, analysts summarize the occurrence of each category.
+
+Consider the following customer dataset:
+
+| Customer ID | Region |
+| ----------: | ------ |
+|         101 | North  |
+|         102 | South  |
+|         103 | North  |
+|         104 | West   |
+|         105 | East   |
+|         106 | North  |
+
+Using:
+
+```python id="a7t2vr"
+df["Region"].value_counts()
+```
+
+Output:
+
+| Region | Frequency |
+| ------ | --------: |
+| North  |         3 |
+| South  |         1 |
+| West   |         1 |
+| East   |         1 |
+
+This immediately tells us that **North** has the highest number of customers.
+
+---
+
+# 9. Calculating Percentage Distribution
+
+Raw counts are useful, but percentages often provide more meaningful business insights.
+
+Use the `normalize=True` parameter.
+
+```python id="q3mf6k"
+df["Region"].value_counts(normalize=True)
+```
+
+Output:
+
+| Region | Percentage |
+| ------ | ---------: |
+| North  |      50.0% |
+| South  |      16.7% |
+| West   |      16.7% |
+| East   |      16.7% |
+
+Percentages make comparisons easier, especially when datasets differ in size.
+
+---
+
+# 10. Sorting Frequency Tables
+
+By default, `value_counts()` sorts values in descending order.
+
+Example:
+
+```python id="r4je8m"
+df["Department"].value_counts()
+```
+
+If you want alphabetical order instead, use:
+
+```python id="j1vn0x"
+df["Department"].value_counts().sort_index()
+```
+
+Output:
+
+| Department | Count |
+| ---------- | ----: |
+| Finance    |    18 |
+| HR         |    25 |
+| IT         |    42 |
+| Sales      |    31 |
+
+Sorting alphabetically is useful when preparing reports or comparing categories.
+
+---
+
+# 11. Including Missing Values
+
+By default, `value_counts()` ignores missing values.
+
+Suppose the dataset contains:
+
+| Department |
+| ---------- |
+| HR         |
+| IT         |
+| NaN        |
+| Sales      |
+| HR         |
+
+Using:
+
+```python id="u7op2c"
+df["Department"].value_counts()
+```
+
+The missing value is excluded.
+
+To include missing values:
+
+```python id="a8yt4p"
+df["Department"].value_counts(dropna=False)
+```
+
+Output:
+
+| Department | Count |
+| ---------- | ----: |
+| HR         |     2 |
+| IT         |     1 |
+| Sales      |     1 |
+| NaN        |     1 |
+
+This helps analysts understand the completeness of categorical data.
+
+---
+
+# 12. Combining `value_counts()` with Other Functions
+
+You can combine `value_counts()` with other Pandas methods.
+
+### Display the Top Three Categories
+
+```python id="p5x1mr"
+df["Category"].value_counts().head(3)
+```
+
+---
+
+### Display the Least Frequent Categories
+
+```python id="b0lm8s"
+df["Category"].value_counts().tail(3)
+```
+
+---
+
+### Convert Frequency Table into a DataFrame
+
+```python id="c9wa7f"
+df["Region"].value_counts().reset_index()
+```
+
+Output:
+
+| Region | Count |
+| ------ | ----: |
+| West   |   245 |
+| South  |   198 |
+| North  |   176 |
+| East   |   154 |
+
+This format is useful for exporting reports or creating charts.
+
+---
+
+# 13. Business Examples
+
+## Example 1 – Customer Segments
+
+```python id="d6ke9h"
+df["Customer Segment"].value_counts()
+```
+
+Business Question:
+
+**Which customer segment contributes the most orders?**
+
+---
+
+## Example 2 – Payment Methods
+
+```python id="e3tr8n"
+df["Payment Method"].value_counts(normalize=True)
+```
+
+Business Question:
+
+**Which payment method is most preferred by customers?**
+
+---
+
+## Example 3 – Product Categories
+
+```python id="f4yu0q"
+df["Category"].nunique()
+```
+
+Business Question:
+
+**How many product categories does the company offer?**
+
+---
+
+## Example 4 – Sales Regions
+
+```python id="g2nm5w"
+df["Region"].unique()
+```
+
+Business Question:
+
+**Which geographical regions does the business operate in?**
+
+---
+
+# Best Practices
+
+✔ Use `value_counts()` during the early stages of EDA.
+
+✔ Check for inconsistent category names such as:
+
+```text id="q1pf9v"
+North
+north
+NORTH
+```
+
+✔ Use percentages when presenting findings to stakeholders.
+
+✔ Include missing values during data quality assessment.
+
+✔ Convert frequency tables into DataFrames before exporting or visualizing.
+
+---
+
+# Common Mistakes
+
+### Assuming Similar Names Are Different Categories
+
+For example:
+
+```text id="l8xt5y"
+HR
+hr
+Hr
+```
+
+These represent the same department but will be counted separately.
+
+Always clean categorical values before analysis.
+
+---
+
+### Forgetting Missing Values
+
+```python id="s6pw1r"
+df["Department"].value_counts()
+```
+
+This excludes missing entries.
+
+If data completeness is important:
+
+```python id="y7ev2u"
+df["Department"].value_counts(dropna=False)
+```
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Generate frequency distributions.
+* Calculate percentage distributions.
+* Sort category counts.
+* Include missing values.
+* Combine `value_counts()` with other Pandas functions.
+* Interpret categorical summaries for business analysis.
+
+> **"Frequency distributions reveal the structure of a dataset, helping analysts understand what is common, what is rare, and what deserves further investigation."**
+
 > **"Understanding the categories within your data is often the first step toward understanding the business itself."**
 
