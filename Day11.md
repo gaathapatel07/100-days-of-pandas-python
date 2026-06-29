@@ -454,3 +454,17 @@ pd.crosstab(
     df["Region"],
    
 ```
+# 12. Cross Tabulation (Continued)
+
+Cross tabulation helps analysts understand the relationship between two or more categorical variables.
+
+Unlike `pivot_table()`, which summarizes numerical values, `crosstab()` counts occurrences.
+
+### Example
+
+Suppose we have customer data:
+
+| Region | Customer Segment |
+| ------ | ---------------- |
+| North  | Consumer         |
+|        |                  |
