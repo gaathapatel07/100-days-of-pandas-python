@@ -1,4 +1,4 @@
-# 🐼 Day 12 — Advanced String Operations & Data Cleaning
+# Day 12 — Advanced String Operations & Data Cleaning
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why String Cleaning Matters
