@@ -539,3 +539,331 @@ You have now learned how to:
 * Validate merges using the `_merge` indicator.
 
 > **"Successful data integration depends not only on combining tables, but on choosing the correct join strategy to preserve meaningful information."**
+
+# 15. Understanding `join()`
+
+While `merge()` is the most flexible method for combining DataFrames, Pandas also provides the `join()` function.
+
+The primary difference is that `join()` combines DataFrames **based on their indexes**, whereas `merge()` typically combines them using one or more columns.
+
+### Example
+
+Suppose two DataFrames use **Customer ID** as their index.
+
+**Customer Details**
+
+| Customer ID | Customer Name |
+| ----------: | ------------- |
+|         101 | Alice         |
+|         102 | Rahul         |
+|         103 | Emma          |
+
+**Customer Orders**
+
+| Customer ID | Sales |
+| ----------: | ----: |
+|         101 |  2500 |
+|         103 |  4200 |
+
+```python id="1a9kzq"
+customers.join(
+    orders,
+    how="left"
+)
+```
+
+Output:
+
+| Customer ID | Customer Name | Sales |
+| ----------: | ------------- | ----: |
+|         101 | Alice         |  2500 |
+|         102 | Rahul         |   NaN |
+|         103 | Emma          |  4200 |
+
+Use `join()` when indexes already represent the relationship between datasets.
+
+---
+
+# 16. Understanding `concat()`
+
+Unlike `merge()` and `join()`, the `concat()` function **does not match records using keys**.
+
+Instead, it simply combines DataFrames either **vertically (row-wise)** or **horizontally (column-wise)**.
+
+---
+
+## Vertical Concatenation
+
+Suppose two regional sales reports need to be combined.
+
+### North Region
+
+| Order ID | Sales |
+| -------- | ----: |
+| 101      |  2500 |
+| 102      |  1800 |
+
+### South Region
+
+| Order ID | Sales |
+| -------- | ----: |
+| 103      |  3100 |
+| 104      |  2700 |
+
+```python id="7m2cqp"
+pd.concat(
+    [north, south]
+)
+```
+
+Output:
+
+| Order ID | Sales |
+| -------- | ----: |
+| 101      |  2500 |
+| 102      |  1800 |
+| 103      |  3100 |
+| 104      |  2700 |
+
+This is useful when combining datasets that have the same structure.
+
+---
+
+## Horizontal Concatenation
+
+```python id="8y4gwr"
+pd.concat(
+    [customer_details, customer_scores],
+    axis=1
+)
+```
+
+Here, the DataFrames are placed side by side.
+
+---
+
+# 17. `merge()` vs `join()` vs `concat()`
+
+Understanding when to use each function is an essential interview topic.
+
+| Function   | Purpose                      | Common Use Case                 |
+| ---------- | ---------------------------- | ------------------------------- |
+| `merge()`  | Combine using common columns | SQL-style joins                 |
+| `join()`   | Combine using indexes        | Indexed DataFrames              |
+| `concat()` | Stack DataFrames             | Monthly reports, multiple files |
+
+---
+
+# 18. Real-World Business Case Study
+
+## Scenario
+
+You are a Data Analyst at **RetailHub**, where customer information, orders, payments, and shipment details are stored in separate databases.
+
+Your task is to prepare a unified dataset for the Business Intelligence team.
+
+### Available Tables
+
+**Customers**
+
+* Customer ID
+* Customer Name
+* Region
+
+**Orders**
+
+* Order ID
+* Customer ID
+* Product
+* Sales
+
+**Payments**
+
+* Order ID
+* Payment Method
+* Payment Status
+
+**Shipments**
+
+* Order ID
+* Delivery Date
+* Shipping Cost
+
+---
+
+### Tasks
+
+1. Merge customer and order information.
+2. Merge payment details using Order ID.
+3. Merge shipment information.
+4. Identify customers without orders.
+5. Detect orders missing payment records.
+6. Create one master dataset for reporting.
+
+This mirrors how analysts build datasets before creating dashboards or reports.
+
+---
+
+# 19. Practice Exercises
+
+## Beginner
+
+1. Perform an Inner Join on two DataFrames.
+2. Perform a Left Join.
+3. Perform a Right Join.
+4. Perform a Full Outer Join.
+5. Merge using Customer ID.
+
+---
+
+## Intermediate
+
+6. Merge using two columns.
+7. Add custom suffixes.
+8. Use `indicator=True`.
+9. Join two indexed DataFrames.
+10. Concatenate two monthly sales reports.
+
+---
+
+## Advanced
+
+11. Merge customer, order, and payment tables into one dataset.
+12. Detect records that exist only in one table.
+13. Compare `merge()` and `join()` using the same data.
+14. Create a complete master DataFrame from multiple sources.
+15. Write five business insights after merging the datasets.
+
+---
+
+# 20. Interview Questions
+
+## Beginner
+
+1. What is the purpose of `merge()`?
+2. Difference between Inner Join and Left Join?
+3. What is a common key?
+4. What does `concat()` do?
+5. When should you use `join()`?
+
+---
+
+## Intermediate
+
+6. Difference between `merge()` and `join()`?
+7. Difference between `merge()` and `concat()`?
+8. Why are suffixes useful?
+9. What does the `_merge` column indicate?
+10. Why must key columns have matching data types?
+
+---
+
+## Advanced
+
+11. Explain the four join types with examples.
+12. Describe a real-world scenario where multiple DataFrames must be merged.
+13. How would you validate a merged dataset?
+14. What problems arise from duplicate keys?
+15. How does `merge()` in Pandas compare with SQL joins?
+
+---
+
+# 21. Cheat Sheet
+
+| Operation                 | Syntax                            |
+| ------------------------- | --------------------------------- |
+| Inner Join                | `pd.merge(df1, df2, how="inner")` |
+| Left Join                 | `pd.merge(df1, df2, how="left")`  |
+| Right Join                | `pd.merge(df1, df2, how="right")` |
+| Outer Join                | `pd.merge(df1, df2, how="outer")` |
+| Merge on multiple columns | `on=["Region","Product"]`         |
+| Add suffixes              | `suffixes=("_x","_y")`            |
+| Merge indicator           | `indicator=True`                  |
+| Join by index             | `df1.join(df2)`                   |
+| Vertical concat           | `pd.concat([df1, df2])`           |
+| Horizontal concat         | `pd.concat([df1, df2], axis=1)`   |
+
+---
+
+# 22. Mini Project
+
+## Building a Master Sales Dataset
+
+Using four separate CSV files:
+
+* Customers
+* Orders
+* Payments
+* Shipments
+
+Perform the following:
+
+* Import all datasets.
+* Merge customers with orders.
+* Merge payments using Order ID.
+* Merge shipment details.
+* Detect missing relationships using `indicator=True`.
+* Generate a final master dataset.
+* Export the dataset as a CSV file.
+* Write **five business insights** from the combined data.
+
+Example insights:
+
+* Customers in the West region generate the highest average order value.
+* Most delayed shipments occur in the South region.
+* A small percentage of orders are missing payment records.
+* Credit Card is the most commonly used payment method.
+* Premium customers contribute a disproportionately large share of revenue.
+
+---
+
+# 23. Summary
+
+Congratulations! 🎉
+
+Today you mastered one of the most valuable skills in Pandas—**combining multiple datasets**.
+
+You learned how to:
+
+* Merge DataFrames using common keys.
+* Perform Inner, Left, Right, and Outer Joins.
+* Merge using multiple columns.
+* Handle duplicate column names with suffixes.
+* Validate merges using the `_merge` indicator.
+* Join indexed DataFrames.
+* Concatenate DataFrames vertically and horizontally.
+
+These operations are fundamental in data engineering, business intelligence, analytics, and machine learning workflows.
+
+---
+
+# 24. What's Next?
+
+In **Day 11**, you'll explore **Pivot Tables & Cross Tabulations**, where you'll learn how to summarize data in a format similar to Microsoft Excel PivotTables.
+
+Topics include:
+
+* `pivot()`
+* `pivot_table()`
+* `crosstab()`
+* Multiple aggregations
+* Margins and totals
+* Multi-level pivot tables
+
+These tools allow analysts to transform large datasets into concise, decision-ready summaries.
+
+---
+
+<div align="center">
+
+# 🎉 Day 10 Complete!
+
+You've reached an important milestone in your Pandas journey.
+
+You can now integrate multiple datasets, validate relationships, and prepare unified data for analysis—skills that are expected in real-world analytics roles.
+
+⭐ Keep learning, keep building, and keep sharing your progress.
+
+**Next → Day 11: Pivot Tables & Cross Tabulations** 📊🐼
+
+</div>
