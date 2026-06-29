@@ -296,3 +296,161 @@ After completing this section, you should understand:
 
 > **"Pivot Tables transform thousands of rows into a report that decision-makers can understand in seconds."**
 
+# 8. Multi-Level Pivot Tables
+
+Business reports often need to summarize data across more than one dimension.
+
+For example:
+
+* Sales by **Region** and **Customer Segment**
+* Profit by **Category** and **Sub-Category**
+* Revenue by **Year** and **Quarter**
+
+Pandas allows multiple fields in both the **index** and **columns**.
+
+---
+
+## Example
+
+Suppose the dataset contains:
+
+| Region | Segment   | Sales |
+| ------ | --------- | ----: |
+| North  | Consumer  |  5200 |
+| North  | Corporate |  6100 |
+| South  | Consumer  |  7300 |
+| South  | Corporate |  8100 |
+
+Create a pivot table:
+
+```python id="p81wd7"
+pd.pivot_table(
+    df,
+    values="Sales",
+    index=["Region","Segment"],
+    aggfunc="sum"
+)
+```
+
+### Output
+
+| Region | Segment   | Sales |
+| ------ | --------- | ----: |
+| North  | Consumer  |  5200 |
+| North  | Corporate |  6100 |
+| South  | Consumer  |  7300 |
+| South  | Corporate |  8100 |
+
+This hierarchical structure provides more detailed business summaries.
+
+---
+
+# 9. Multiple Aggregation Functions
+
+Often, managers need more than one statistic.
+
+Instead of creating separate reports, Pandas allows multiple aggregations.
+
+```python id="s8av6n"
+pd.pivot_table(
+    df,
+    values="Sales",
+    index="Region",
+    aggfunc=[
+        "sum",
+        "mean",
+        "max",
+        "min"
+    ]
+)
+```
+
+### Output
+
+| Region |   Sum | Mean |  Max |  Min |
+| ------ | ----: | ---: | ---: | ---: |
+| North  | 11300 | 5650 | 6100 | 5200 |
+| South  | 15400 | 7700 | 8100 | 7300 |
+
+This produces a compact summary suitable for business reporting.
+
+---
+
+# 10. Replacing Missing Values
+
+Sometimes certain combinations do not exist.
+
+Example:
+
+| Region | Furniture | Technology |
+| ------ | --------: | ---------: |
+| North  |      5200 |       6100 |
+| South  |      7300 |        NaN |
+
+Instead of displaying `NaN`, replace missing values.
+
+```python id="n6zh1g"
+pd.pivot_table(
+    df,
+    values="Sales",
+    index="Region",
+    columns="Category",
+    fill_value=0
+)
+```
+
+Output:
+
+| Region | Furniture | Technology |
+| ------ | --------: | ---------: |
+| North  |      5200 |       6100 |
+| South  |      7300 |          0 |
+
+This creates cleaner reports and avoids confusion.
+
+---
+
+# 11. Adding Grand Totals
+
+Business reports often include totals.
+
+Enable totals using:
+
+```python id="g7jk4r"
+pd.pivot_table(
+    df,
+    values="Sales",
+    index="Region",
+    aggfunc="sum",
+    margins=True
+)
+```
+
+Output:
+
+| Region  | Sales |
+| ------- | ----: |
+| North   | 11300 |
+| South   | 15400 |
+| West    |  9800 |
+| **All** | 36500 |
+
+The **All** row represents the overall total.
+
+This feature is similar to Excel Pivot Tables.
+
+---
+
+# 12. Cross Tabulation
+
+While Pivot Tables summarize numerical values, **Cross Tabs** summarize the frequency of categorical variables.
+
+Pandas provides the `crosstab()` function.
+
+Example:
+
+```python id="f3g7kh"
+pd.crosstab(
+    df["Region"],
+   
+```
