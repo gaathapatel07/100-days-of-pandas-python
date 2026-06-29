@@ -916,7 +916,7 @@ These techniques help transform imperfect datasets into reliable, analysis-ready
 
 <div align="center">
 
-# 🎉 Day 12 Complete!
+# Day 12 Complete!
 
 You've mastered one of the most important parts of real-world data preparation: **cleaning and standardizing text data**.
 
@@ -924,6 +924,6 @@ The skills you've learned today are used daily by data analysts to prepare datas
 
 ⭐ Fantastic progress!
 
-**Next → Day 13: Advanced Missing Data Handling & Data Quality** 🧹📊🐼
+
 
 </div>
