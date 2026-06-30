@@ -302,3 +302,334 @@ After completing this section, you should understand:
 
 > **"A well-designed chart communicates insights in seconds that might take pages of tables to explain."**
 
+# 8. Bar Charts
+
+A **Bar Chart** is one of the most commonly used visualizations for comparing values across different categories.
+
+Unlike line charts, which emphasize trends over time, bar charts highlight differences between categories.
+
+Typical business use cases include:
+
+* Sales by Product Category
+* Revenue by Region
+* Orders by Customer Segment
+* Employees by Department
+* Profit by Store
+
+---
+
+## Example Dataset
+
+| Category        |  Sales |
+| --------------- | -----: |
+| Furniture       | 125000 |
+| Technology      | 182000 |
+| Office Supplies |  98000 |
+
+Create a vertical bar chart.
+
+```python id="bar01"
+df.plot(
+    x="Category",
+    y="Sales",
+    kind="bar"
+)
+
+plt.show()
+```
+
+This chart makes it easy to compare sales across product categories.
+
+---
+
+## Customizing a Bar Chart
+
+```python id="bar02"
+df.plot(
+    x="Category",
+    y="Sales",
+    kind="bar",
+    figsize=(9,5)
+)
+
+plt.title("Sales by Product Category")
+
+plt.xlabel("Category")
+
+plt.ylabel("Sales (₹)")
+
+plt.grid(axis="y")
+
+plt.show()
+```
+
+Notice that the grid is displayed only on the **Y-axis**, making the chart cleaner.
+
+---
+
+# 9. Horizontal Bar Charts
+
+When category names are long, horizontal bar charts improve readability.
+
+Example:
+
+```python id="bar03"
+df.plot(
+    x="Category",
+    y="Sales",
+    kind="barh"
+)
+
+plt.show()
+```
+
+Horizontal bar charts are widely used for:
+
+* Customer satisfaction surveys
+* Product rankings
+* Department performance
+* KPI dashboards
+
+---
+
+# 10. Pie Charts
+
+Pie charts show the **proportion** of each category relative to the whole.
+
+They are suitable only when the number of categories is small.
+
+Example:
+
+```python id="pie01"
+df.plot(
+    y="Sales",
+    labels=df["Category"],
+    kind="pie",
+    autopct="%1.1f%%",
+    startangle=90
+)
+
+plt.ylabel("")
+
+plt.show()
+```
+
+Output:
+
+* Furniture → 31%
+* Technology → 45%
+* Office Supplies → 24%
+
+---
+
+## When to Use Pie Charts
+
+Suitable for:
+
+* Market Share
+* Expense Distribution
+* Budget Allocation
+* Customer Segments
+
+Avoid pie charts when there are many categories because comparisons become difficult.
+
+---
+
+# 11. Histograms
+
+Histograms display the distribution of numerical values.
+
+Instead of comparing categories, they show how data is spread.
+
+Example:
+
+```python id="hist01"
+df["Sales"].plot(
+    kind="hist",
+    bins=15
+)
+
+plt.show()
+```
+
+The `bins` parameter controls the number of intervals.
+
+---
+
+## Business Applications
+
+Histograms help answer questions such as:
+
+* What is the typical customer purchase amount?
+* Are most salaries concentrated within a certain range?
+* Is revenue evenly distributed?
+
+---
+
+# 12. Box Plots
+
+Box plots summarize a numerical distribution using:
+
+* Minimum
+* First Quartile (Q1)
+* Median
+* Third Quartile (Q3)
+* Maximum
+* Outliers
+
+Example:
+
+```python id="box01"
+df["Sales"].plot(
+    kind="box"
+)
+
+plt.show()
+```
+
+---
+
+## Why Box Plots Matter
+
+Box plots quickly reveal:
+
+* Outliers
+* Data spread
+* Skewness
+* Median value
+* Variability
+
+Business examples:
+
+* Employee salaries
+* Customer spending
+* Delivery times
+* Manufacturing quality control
+
+---
+
+# 13. Scatter Plots
+
+Scatter plots visualize the relationship between two numerical variables.
+
+Example:
+
+| Sales | Profit |
+| ----: | -----: |
+|  5200 |    850 |
+|  6100 |   1200 |
+|  7200 |   1450 |
+|  8300 |   1680 |
+
+Create a scatter plot.
+
+```python id="scatter01"
+df.plot(
+    x="Sales",
+    y="Profit",
+    kind="scatter"
+)
+
+plt.show()
+```
+
+---
+
+## Business Applications
+
+Scatter plots help answer:
+
+* Does higher advertising increase sales?
+* Does customer age affect spending?
+* Does experience influence salary?
+* Is there a relationship between revenue and profit?
+
+---
+
+# 14. Choosing the Right Chart
+
+Selecting the correct visualization is as important as creating it.
+
+| Goal                  | Best Chart   |
+| --------------------- | ------------ |
+| Compare categories    | Bar Chart    |
+| Show trends           | Line Chart   |
+| Show proportions      | Pie Chart    |
+| Display distributions | Histogram    |
+| Detect outliers       | Box Plot     |
+| Show relationships    | Scatter Plot |
+
+Choosing the wrong chart can make insights difficult to interpret.
+
+---
+
+# Business Example
+
+A retail company wants to present quarterly performance.
+
+Different chart types answer different business questions.
+
+| Business Question              | Recommended Chart |
+| ------------------------------ | ----------------- |
+| Monthly Sales Trend            | Line Chart        |
+| Sales by Category              | Bar Chart         |
+| Market Share                   | Pie Chart         |
+| Customer Purchase Distribution | Histogram         |
+| Delivery Time Outliers         | Box Plot          |
+| Sales vs Profit                | Scatter Plot      |
+
+A combination of these visualizations provides a complete picture of business performance.
+
+---
+
+# Best Practices
+
+✔ Choose the simplest chart that communicates the message.
+
+✔ Keep labels readable.
+
+✔ Use descriptive titles.
+
+✔ Avoid unnecessary visual clutter.
+
+✔ Limit pie charts to a small number of categories.
+
+✔ Always label units such as ₹, %, or quantities.
+
+---
+
+# Common Mistakes
+
+### Using Pie Charts with Too Many Categories
+
+A pie chart with ten or more slices becomes difficult to interpret.
+
+Consider using a bar chart instead.
+
+---
+
+### Plotting Unrelated Variables
+
+Scatter plots should only compare variables that may have a meaningful relationship.
+
+---
+
+### Ignoring Outliers
+
+Before drawing conclusions from charts, investigate unusual values that may distort the visualization.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Create Bar Charts.
+* Create Horizontal Bar Charts.
+* Build Pie Charts.
+* Plot Histograms.
+* Visualize Box Plots.
+* Create Scatter Plots.
+* Select the appropriate chart for different business questions.
+
+> **"The most effective visualization is not the most attractive one—it is the one that communicates the right insight with the least effort from the audience."**
