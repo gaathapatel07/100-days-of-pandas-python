@@ -1,4 +1,4 @@
-# 🐼 Day 13 — Advanced Missing Data Handling & Data Quality
+# Day 13 — Advanced Missing Data Handling & Data Quality
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Data Quality Matters
