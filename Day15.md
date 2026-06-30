@@ -294,3 +294,336 @@ After completing this section, you should understand:
 
 > **"Sorting organizes data. Ranking adds meaning by showing the relative position of every observation."**
 
+# 8. Introduction to Window Operations
+
+Traditional aggregation functions such as `sum()` or `mean()` calculate a single value for an entire dataset or group.
+
+Window operations are different.
+
+Instead of reducing the dataset to one result, they calculate statistics **while preserving every row**.
+
+This allows analysts to observe how values evolve over time.
+
+Window operations are extensively used in:
+
+* Financial analysis
+* Sales dashboards
+* Customer behavior analysis
+* Inventory forecasting
+* Time-series analytics
+* KPI monitoring
+
+---
+
+## Example Dataset
+
+| Month    | Sales |
+| -------- | ----: |
+| January  |   100 |
+| February |   120 |
+| March    |   150 |
+| April    |   180 |
+| May      |   170 |
+
+Instead of calculating one average for the entire dataset, analysts often want the average of the most recent observations.
+
+This is where rolling windows become useful.
+
+---
+
+# 9. Rolling Window Calculations
+
+A rolling window performs calculations over a fixed number of consecutive observations.
+
+Suppose we calculate a **3-month moving average**.
+
+```python id="roll01"
+df["Rolling Mean"] = (
+    df["Sales"]
+      .rolling(window=3)
+      .mean()
+)
+```
+
+### Output
+
+| Month    | Sales | Rolling Mean |
+| -------- | ----: | -----------: |
+| January  |   100 |          NaN |
+| February |   120 |          NaN |
+| March    |   150 |       123.33 |
+| April    |   180 |       150.00 |
+| May      |   170 |       166.67 |
+
+The first two rows contain `NaN` because a full three-month window is not yet available.
+
+---
+
+## Rolling Sum
+
+Instead of an average, calculate the cumulative sales for the previous three months.
+
+```python id="roll02"
+df["Rolling Sum"] = (
+    df["Sales"]
+      .rolling(window=3)
+      .sum()
+)
+```
+
+Output:
+
+| Month    | Rolling Sum |
+| -------- | ----------: |
+| January  |         NaN |
+| February |         NaN |
+| March    |         370 |
+| April    |         450 |
+| May      |         500 |
+
+Rolling sums are widely used for revenue tracking and inventory planning.
+
+---
+
+## Rolling Maximum
+
+Find the highest value within each moving window.
+
+```python id="roll03"
+df["Rolling Max"] = (
+    df["Sales"]
+      .rolling(window=3)
+      .max()
+)
+```
+
+This is useful for identifying local peaks over time.
+
+---
+
+# 10. Expanding Window Calculations
+
+Unlike rolling windows, expanding windows include **all previous observations**.
+
+Every new calculation incorporates the complete history.
+
+```python id="expand01"
+df["Expanding Mean"] = (
+    df["Sales"]
+      .expanding()
+      .mean()
+)
+```
+
+Output:
+
+| Month    | Sales | Expanding Mean |
+| -------- | ----: | -------------: |
+| January  |   100 |         100.00 |
+| February |   120 |         110.00 |
+| March    |   150 |         123.33 |
+| April    |   180 |         137.50 |
+| May      |   170 |         144.00 |
+
+Expanding windows help analyze long-term trends.
+
+---
+
+## Expanding Sum
+
+```python id="expand02"
+df["Running Total"] = (
+    df["Sales"]
+      .expanding()
+      .sum()
+)
+```
+
+Output:
+
+| Month    | Running Total |
+| -------- | ------------: |
+| January  |           100 |
+| February |           220 |
+| March    |           370 |
+| April    |           550 |
+| May      |           720 |
+
+Running totals are common in financial and sales reporting.
+
+---
+
+# 11. Cumulative Functions
+
+Pandas also provides cumulative calculations without explicitly using `expanding()`.
+
+---
+
+## Cumulative Sum
+
+```python id="cum01"
+df["Cumulative Sales"] = (
+    df["Sales"]
+      .cumsum()
+)
+```
+
+Output:
+
+| Month    | Cumulative Sales |
+| -------- | ---------------: |
+| January  |              100 |
+| February |              220 |
+| March    |              370 |
+| April    |              550 |
+| May      |              720 |
+
+---
+
+## Cumulative Maximum
+
+```python id="cum02"
+df["Highest Sales"] = (
+    df["Sales"]
+      .cummax()
+)
+```
+
+Output:
+
+| Month    | Highest Sales |
+| -------- | ------------: |
+| January  |           100 |
+| February |           120 |
+| March    |           150 |
+| April    |           180 |
+| May      |           180 |
+
+---
+
+## Cumulative Minimum
+
+```python id="cum03"
+df["Lowest Sales"] = (
+    df["Sales"]
+      .cummin()
+)
+```
+
+---
+
+## Cumulative Product
+
+```python id="cum04"
+df["Growth"] = (
+    df["Sales"]
+      .cumprod()
+)
+```
+
+Although less common, cumulative products are useful in investment return calculations.
+
+---
+
+# 12. Ranking Within Groups
+
+Businesses often compare performance **inside each category** rather than across the entire dataset.
+
+Suppose the dataset contains:
+
+| Region | Salesperson | Sales |
+| ------ | ----------- | ----: |
+| North  | Alice       | 42000 |
+| North  | Rahul       | 51000 |
+| South  | Emma        | 48000 |
+| South  | David       | 52000 |
+
+Rank salespeople within each region.
+
+```python id="grouprank01"
+df["Regional Rank"] = (
+    df.groupby("Region")["Sales"]
+      .rank(
+          ascending=False,
+          method="dense"
+      )
+)
+```
+
+### Output
+
+| Region | Salesperson | Sales | Regional Rank |
+| ------ | ----------- | ----: | ------------: |
+| North  | Alice       | 42000 |             2 |
+| North  | Rahul       | 51000 |             1 |
+| South  | Emma        | 48000 |             2 |
+| South  | David       | 52000 |             1 |
+
+This approach is widely used in performance dashboards and sales competitions.
+
+---
+
+# Business Example
+
+Imagine you're working for an online retailer.
+
+Management asks:
+
+* Show the running total of monthly revenue.
+* Calculate the three-month moving average of sales.
+* Rank stores within each region.
+* Identify the highest revenue achieved so far.
+* Compare current sales with historical trends.
+
+Window functions answer all of these questions while preserving every transaction.
+
+---
+
+# Best Practices
+
+✔ Sort time-series data before applying rolling calculations.
+
+✔ Choose a window size that matches the business problem.
+
+✔ Use cumulative functions for long-term trend analysis.
+
+✔ Rank records within meaningful groups rather than globally when appropriate.
+
+✔ Clearly document the meaning of calculated columns.
+
+---
+
+# Common Mistakes
+
+### Forgetting to Sort Before Rolling
+
+Always sort chronologically before applying rolling windows.
+
+```python id="sortroll01"
+df = df.sort_values("Order Date")
+```
+
+Otherwise, moving averages may be calculated in the wrong order.
+
+---
+
+### Using Rolling Windows on Categorical Data
+
+Rolling calculations are intended for numerical or datetime-based sequences.
+
+Applying them to text columns does not produce meaningful results.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Perform rolling calculations.
+* Calculate moving averages.
+* Create running totals.
+* Apply cumulative functions.
+* Rank observations within groups.
+* Analyze sequential business data using window operations.
+
+> **"Window functions preserve every observation while revealing trends, momentum, and performance over time—making them indispensable for modern business analytics."**
