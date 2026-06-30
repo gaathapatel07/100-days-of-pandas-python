@@ -527,3 +527,270 @@ You have now learned how to:
 * Filter data using datetime indexes.
 
 > **"Time-series analysis is not just about observing the past—it provides the foundation for understanding trends, detecting change, and preparing for the future."**
+
+# 14. Real-World Business Case Study
+
+## Scenario
+
+You are working as a **Senior Data Analyst** at **RetailHub**, an international e-commerce company.
+
+The executive team wants a **Sales Performance Dashboard** that tracks business performance over time.
+
+The company has collected three years of daily sales data containing:
+
+* Order Date
+* Region
+* Product Category
+* Sales
+* Profit
+* Quantity
+
+Management wants to understand long-term trends, seasonal behavior, growth rates, and historical comparisons before planning the next financial year.
+
+---
+
+# Business Questions
+
+### Question 1
+
+Convert the Order Date column into a DateTime index.
+
+```python id="case_ts01"
+df["Order Date"] = pd.to_datetime(
+    df["Order Date"]
+)
+
+df = df.set_index("Order Date")
+```
+
+---
+
+### Question 2
+
+Calculate monthly revenue.
+
+```python id="case_ts02"
+monthly_sales = (
+    df.resample("ME")["Sales"]
+      .sum()
+)
+```
+
+---
+
+### Question 3
+
+Create a 7-day moving average.
+
+```python id="case_ts03"
+df["7-Day Average"] = (
+    df["Sales"]
+      .rolling(7)
+      .mean()
+)
+```
+
+---
+
+### Question 4
+
+Calculate daily sales growth.
+
+```python id="case_ts04"
+df["Growth Rate"] = (
+    df["Sales"]
+      .pct_change()
+)
+```
+
+---
+
+### Question 5
+
+Create a previous-day sales feature.
+
+```python id="case_ts05"
+df["Previous Day"] = (
+    df["Sales"]
+      .shift(1)
+)
+```
+
+---
+
+# Business Insights
+
+After completing the analysis, you observe:
+
+* Sales consistently increase during the fourth quarter each year.
+* The 7-day moving average removes daily fluctuations and highlights long-term growth.
+* Growth rates reveal periods of rapid expansion and temporary decline.
+* Previous-day sales provide valuable context for short-term forecasting.
+* Monthly resampling makes executive reports easier to interpret.
+
+These insights support budgeting, inventory planning, staffing, and forecasting.
+
+---
+
+# 15. Practice Exercises
+
+## Beginner
+
+1. Convert a date column into a DateTime object.
+2. Set the date column as the DataFrame index.
+3. Calculate monthly sales totals.
+4. Create weekly average sales.
+5. Retrieve data for a specific month.
+
+---
+
+## Intermediate
+
+6. Create lag features using `shift()`.
+7. Calculate daily differences.
+8. Calculate percentage growth rates.
+9. Create a rolling average.
+10. Compare monthly and quarterly sales.
+
+---
+
+## Advanced
+
+11. Build a complete monthly KPI report.
+12. Create multiple lag features for forecasting.
+13. Analyze seasonal sales patterns.
+14. Compare rolling averages with expanding averages.
+15. Write five recommendations based on the observed time-series trends.
+
+---
+
+# 16. Interview Questions
+
+## Beginner
+
+1. What is a time series?
+2. Why is a DateTime index important?
+3. What does `resample()` do?
+4. What is the purpose of `shift()`?
+5. What is the difference between `diff()` and `pct_change()`?
+
+---
+
+## Intermediate
+
+6. Why should dates be sorted before analysis?
+7. Difference between upsampling and downsampling?
+8. What is a rolling window?
+9. Why are lag features important?
+10. When should moving averages be used?
+
+---
+
+## Advanced
+
+11. Explain a real-world forecasting workflow using Pandas.
+12. Compare rolling averages and cumulative calculations.
+13. How does time-series analysis support business decisions?
+14. What challenges arise when analyzing irregular time-series data?
+15. How would you prepare sales data for predictive modeling?
+
+---
+
+# 17. Cheat Sheet
+
+| Operation           | Syntax                        |
+| ------------------- | ----------------------------- |
+| Convert to DateTime | `pd.to_datetime()`            |
+| Set DateTime Index  | `df.set_index("Date")`        |
+| Monthly Resample    | `df.resample("ME").sum()`     |
+| Weekly Resample     | `df.resample("W").mean()`     |
+| Shift Values        | `df.shift()`                  |
+| Difference          | `df.diff()`                   |
+| Percentage Change   | `df.pct_change()`             |
+| Rolling Average     | `df.rolling(7).mean()`        |
+| Rolling Sum         | `df.rolling(30).sum()`        |
+| Select by Month     | `df.loc["2025-03"]`           |
+| Select Date Range   | `df.loc["2025-01":"2025-06"]` |
+
+---
+
+# 18. Mini Project
+
+## Sales Trend & Forecast Preparation
+
+Using any retail, stock market, weather, or IoT dataset:
+
+Complete the following tasks:
+
+* Convert the date column into a DateTime object.
+* Set it as the index.
+* Resample the data by week and month.
+* Calculate rolling averages.
+* Create lag features.
+* Compute percentage growth rates.
+* Identify seasonal trends.
+* Compare quarterly performance.
+* Export the processed dataset.
+* Write **five executive-level business insights**.
+
+### Example Business Insights
+
+* Sales peak consistently during the holiday season.
+* Weekly averages reveal stable long-term growth despite daily fluctuations.
+* Growth rates identify periods of exceptional business performance.
+* Lag features indicate strong autocorrelation in sales patterns.
+* Monthly summaries provide clearer insights for executive reporting than daily transaction data.
+
+---
+
+# 19. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Time Series Analysis** in Pandas.
+
+You learned how to:
+
+* Create DateTime indexes.
+* Resample data into different time frequencies.
+* Shift observations.
+* Calculate differences and growth rates.
+* Build rolling averages.
+* Generate lag features.
+* Filter and analyze chronological data.
+
+These techniques form the foundation of forecasting, financial analysis, demand planning, predictive modeling, and operational reporting.
+
+---
+
+# 20. What's Next?
+
+In **Day 17**, you'll explore **Data Visualization with Pandas & Matplotlib**.
+
+Topics include:
+
+* Line Charts
+* Bar Charts
+* Histograms
+* Box Plots
+* Scatter Plots
+* Pie Charts
+* Subplots
+* Figure Customization
+* Business Dashboards
+
+You'll learn how to transform cleaned and analyzed data into clear, compelling visualizations that communicate insights effectively.
+
+---
+
+<div align="center">
+
+# 🎉 Day 16 Complete!
+
+You've now mastered one of the most powerful capabilities of Pandas: **Time Series Analysis**.
+
+From resampling and rolling windows to lag features and growth analysis, you're equipped to analyze temporal data and prepare it for forecasting and strategic decision-making.
+
+⭐ **Next → Day 17: Data Visualization with Pandas & Matplotlib** 📊🐼
+
+</div>
