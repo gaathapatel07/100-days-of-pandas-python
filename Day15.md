@@ -627,3 +627,269 @@ You have now learned how to:
 * Analyze sequential business data using window operations.
 
 > **"Window functions preserve every observation while revealing trends, momentum, and performance over time—making them indispensable for modern business analytics."**
+
+ # 13. Real-World Business Case Study
+
+## Scenario
+
+You are working as a **Business Data Analyst** at **RetailHub**, an international retail company.
+
+The executive leadership team wants a monthly performance dashboard that not only shows sales figures but also tracks trends, rankings, and cumulative business performance.
+
+The dataset contains:
+
+* Order Date
+* Region
+* Store
+* Salesperson
+* Product Category
+* Sales
+* Profit
+
+Your task is to build analytical metrics that help management monitor business performance over time.
+
+---
+
+# Business Questions
+
+### Question 1
+
+Sort the dataset by **Order Date** before analysis.
+
+```python id="case_sort01"
+df = df.sort_values("Order Date")
+```
+
+---
+
+### Question 2
+
+Calculate a **3-month moving average** of sales.
+
+```python id="case_roll01"
+df["3 Month Avg"] = (
+    df["Sales"]
+      .rolling(3)
+      .mean()
+)
+```
+
+---
+
+### Question 3
+
+Calculate the cumulative revenue.
+
+```python id="case_cum01"
+df["Running Revenue"] = (
+    df["Sales"]
+      .cumsum()
+)
+```
+
+---
+
+### Question 4
+
+Rank salespeople within each region.
+
+```python id="case_rank01"
+df["Regional Rank"] = (
+    df.groupby("Region")["Sales"]
+      .rank(
+          method="dense",
+          ascending=False
+      )
+)
+```
+
+---
+
+### Question 5
+
+Calculate percentile rankings for sales.
+
+```python id="case_pct01"
+df["Sales Percentile"] = (
+    df["Sales"]
+      .rank(pct=True)
+)
+```
+
+---
+
+# Business Insights
+
+After completing the analysis, you discover:
+
+* The **West** region consistently achieves the highest cumulative revenue.
+* Sales growth becomes more stable when viewed through a rolling average instead of daily fluctuations.
+* A small number of salespeople consistently rank in the top percentile across multiple months.
+* Running totals clearly highlight seasonal revenue growth.
+* Percentile rankings identify high-performing stores that deserve additional investment.
+
+These insights support executive decision-making in sales planning, staffing, forecasting, and incentive programs.
+
+---
+
+# 14. Practice Exercises
+
+## Beginner
+
+1. Sort a dataset by sales.
+2. Sort by multiple columns.
+3. Rank products by revenue.
+4. Calculate dense rankings.
+5. Compute percentile rankings.
+
+---
+
+## Intermediate
+
+6. Create a rolling average using a 5-row window.
+7. Calculate a rolling sum.
+8. Generate cumulative sales.
+9. Calculate cumulative maximum profit.
+10. Rank employees within departments.
+
+---
+
+## Advanced
+
+11. Compare rolling averages with cumulative averages.
+12. Create regional leaderboards using grouped rankings.
+13. Identify the top 10% of customers based on revenue.
+14. Build a monthly KPI summary using window calculations.
+15. Write five business recommendations based on trend analysis.
+
+---
+
+# 15. Interview Questions
+
+## Beginner
+
+1. What is the difference between sorting and ranking?
+2. What does `sort_values()` do?
+3. What is the purpose of `rank()`?
+4. What is Dense Rank?
+5. What is a rolling window?
+
+---
+
+## Intermediate
+
+6. Difference between rolling and expanding windows?
+7. Why should time-series data be sorted before rolling calculations?
+8. What is a cumulative sum?
+9. How do grouped rankings work?
+10. What is percentile ranking?
+
+---
+
+## Advanced
+
+11. Explain the business value of rolling averages.
+12. Compare cumulative calculations with standard aggregation.
+13. Describe a real-world use case for window functions.
+14. How do Pandas window functions compare with SQL window functions?
+15. How would you build a KPI dashboard using rolling metrics and rankings?
+
+---
+
+# 16. Cheat Sheet
+
+| Operation          | Syntax                      |
+| ------------------ | --------------------------- |
+| Sort values        | `df.sort_values()`          |
+| Sort index         | `df.sort_index()`           |
+| Rank               | `df.rank()`                 |
+| Dense Rank         | `df.rank(method="dense")`   |
+| Percentile Rank    | `df.rank(pct=True)`         |
+| Rolling Mean       | `.rolling(window=3).mean()` |
+| Rolling Sum        | `.rolling(window=3).sum()`  |
+| Expanding Mean     | `.expanding().mean()`       |
+| Running Total      | `.cumsum()`                 |
+| Cumulative Maximum | `.cummax()`                 |
+| Cumulative Minimum | `.cummin()`                 |
+| Group Ranking      | `groupby().rank()`          |
+
+---
+
+# 17. Mini Project
+
+## Sales Performance Dashboard
+
+Using any retail or sales dataset:
+
+Perform the following tasks:
+
+* Sort transactions by date.
+* Calculate a 7-day rolling average of sales.
+* Compute cumulative revenue.
+* Rank products by total sales.
+* Rank salespeople within each region.
+* Identify the top 10% of customers using percentile rankings.
+* Calculate cumulative maximum sales.
+* Compare monthly revenue trends using rolling and expanding averages.
+* Export the enriched dataset.
+* Write **five executive-level business insights**.
+
+### Example Business Insights
+
+* Rolling averages reveal a steady upward sales trend despite short-term fluctuations.
+* The West region contributes the highest cumulative revenue.
+* A small group of salespeople consistently outperform their peers.
+* Running totals highlight strong seasonal growth in the final quarter.
+* Percentile rankings identify premium customers who account for a disproportionate share of total revenue.
+
+---
+
+# 18. Summary
+
+Congratulations! 🎉
+
+Today you explored **Advanced Sorting, Ranking & Window Operations**, which are among the most valuable analytical techniques in Pandas.
+
+You learned how to:
+
+* Sort datasets using one or multiple columns.
+* Rank observations with different ranking methods.
+* Calculate percentile rankings.
+* Apply rolling windows for moving averages and sums.
+* Build cumulative metrics.
+* Rank records within groups.
+
+These techniques are widely used in financial reporting, sales analytics, customer segmentation, forecasting, and executive dashboards.
+
+---
+
+# 19. What's Next?
+
+In **Day 16**, you'll dive into **Time Series Analysis**, one of the most powerful applications of Pandas.
+
+Topics include:
+
+* Datetime Indexes
+* Resampling (`resample()`)
+* Upsampling & Downsampling
+* Frequency Conversion
+* Time Shifting (`shift()`)
+* Lag Features
+* Difference Calculations (`diff()`)
+* Percentage Change (`pct_change()`)
+
+These concepts form the foundation of forecasting, demand planning, stock market analysis, IoT monitoring, and predictive analytics.
+
+---
+
+<div align="center">
+
+# 🎉 Day 15 Complete!
+
+You've now mastered sorting, ranking, and window operations—core techniques used by data analysts, business intelligence professionals, and financial analysts every day.
+
+These concepts bridge the gap between Pandas and SQL window functions, making your analytical skills more versatile across tools and platforms.
+
+⭐ **Next → Day 16: Time Series Analysis with Pandas** 📅📈🐼
+
+</div>
