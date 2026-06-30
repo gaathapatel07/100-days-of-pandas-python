@@ -1,4 +1,4 @@
-# 🐼 Day 17 — Data Visualization with Pandas & Matplotlib
+# Day 17 — Data Visualization with Pandas & Matplotlib
 
 <div align="center">
 
@@ -16,7 +16,8 @@
 
 ---
 
-# 📚 Table of Contents
+
+# Table of Contents
 
 1. Introduction
 2. Why Visualization Matters
