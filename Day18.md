@@ -1023,12 +1023,12 @@ These concepts are essential for preparing datasets for visualization, machine l
 
 <div align="center">
 
-# 🎉 Day 18 Complete!
+# Day 18 Complete!
 
 You've mastered advanced GroupBy operations and can now transform millions of transactional records into meaningful KPIs, executive summaries, and business reports.
 
 These skills are among the most frequently tested in data analyst interviews and are used daily in SQL, Power BI, Tableau, Spark, and enterprise analytics.
 
-⭐ **Next → Day 19: Combining & Reshaping Data in Pandas** 🔄🐼
+
 
 </div>
