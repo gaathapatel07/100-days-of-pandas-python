@@ -1,4 +1,4 @@
-# 🐼 Day 14 — Advanced Indexing & MultiIndex Operations
+# Day 14 — Advanced Indexing & MultiIndex Operations
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Indexing Matters
@@ -28,6 +28,7 @@
 8. Summary
 
 ---
+
 
 # 1. Introduction
 
