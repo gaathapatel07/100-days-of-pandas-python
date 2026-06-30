@@ -633,3 +633,432 @@ You have now learned how to:
 * Select the appropriate chart for different business questions.
 
 > **"The most effective visualization is not the most attractive one—it is the one that communicates the right insight with the least effort from the audience."**
+
+# 15. Working with Multiple Plots (Subplots)
+
+Business reports often compare multiple metrics at once.
+
+Instead of displaying one chart at a time, Matplotlib allows multiple charts to appear within the same figure.
+
+Example:
+
+```python id="subplot01"
+df.plot(
+    subplots=True,
+    figsize=(10,8)
+)
+
+plt.show()
+```
+
+Each numerical column is displayed in its own subplot.
+
+Subplots are commonly used for:
+
+* KPI Dashboards
+* Financial Reports
+* Sales Monitoring
+* Sensor Data Analysis
+
+---
+
+# 16. Plotting Multiple Columns Together
+
+Sometimes different variables should be compared within the same chart.
+
+Example:
+
+```python id="subplot02"
+df.plot(
+    x="Month",
+    y=["Sales", "Profit"],
+    figsize=(10,5),
+    marker="o"
+)
+
+plt.show()
+```
+
+Output:
+
+A single chart containing both Sales and Profit trends.
+
+This allows analysts to compare two business metrics simultaneously.
+
+---
+
+# 17. Adding Legends
+
+Legends identify each plotted variable.
+
+Example:
+
+```python id="legend01"
+df.plot(
+    x="Month",
+    y=["Sales", "Profit"]
+)
+
+plt.legend(
+    ["Sales", "Profit"]
+)
+
+plt.show()
+```
+
+Legends are especially useful when plotting multiple lines or categories.
+
+---
+
+# 18. Saving Charts
+
+Reports often require exporting charts as image files.
+
+Use:
+
+```python id="save01"
+plt.savefig(
+    "monthly_sales.png",
+    dpi=300,
+    bbox_inches="tight"
+)
+```
+
+Parameters:
+
+* `dpi=300` → High-quality output for reports.
+* `bbox_inches="tight"` → Removes unnecessary white space.
+
+Supported formats include:
+
+* PNG
+* JPG
+* PDF
+* SVG
+
+---
+
+# 19. Professional Chart Styling
+
+Well-designed charts improve readability and communication.
+
+Example:
+
+```python id="style01"
+plt.figure(figsize=(10,5))
+
+plt.plot(
+    df["Month"],
+    df["Sales"],
+    marker="o",
+    linewidth=2
+)
+
+plt.title(
+    "Monthly Sales Trend",
+    fontsize=16
+)
+
+plt.xlabel("Month")
+
+plt.ylabel("Sales (₹)")
+
+plt.grid(True)
+
+plt.tight_layout()
+
+plt.show()
+```
+
+### Useful Customization Options
+
+| Function             | Purpose                      |
+| -------------------- | ---------------------------- |
+| `plt.title()`        | Add chart title              |
+| `plt.xlabel()`       | Label X-axis                 |
+| `plt.ylabel()`       | Label Y-axis                 |
+| `plt.legend()`       | Display legend               |
+| `plt.grid()`         | Show grid lines              |
+| `plt.tight_layout()` | Adjust spacing               |
+| `plt.xticks()`       | Rotate or format tick labels |
+
+---
+
+# 20. Real-World Business Case Study
+
+## Scenario
+
+You are working as a **Business Intelligence Analyst** at **RetailHub**.
+
+The executive team wants a monthly dashboard to monitor sales performance.
+
+The dataset contains:
+
+* Order Date
+* Region
+* Product Category
+* Sales
+* Profit
+* Quantity
+
+Management asks you to build visualizations that answer key business questions.
+
+---
+
+## Business Questions
+
+### Question 1
+
+Show monthly sales trends.
+
+```python id="case_plot01"
+monthly_sales.plot(
+    kind="line",
+    marker="o"
+)
+
+plt.show()
+```
+
+---
+
+### Question 2
+
+Compare sales across product categories.
+
+```python id="case_plot02"
+category_sales.plot(
+    kind="bar"
+)
+
+plt.show()
+```
+
+---
+
+### Question 3
+
+Visualize market share.
+
+```python id="case_plot03"
+category_sales.plot(
+    kind="pie",
+    autopct="%1.1f%%"
+)
+
+plt.ylabel("")
+
+plt.show()
+```
+
+---
+
+### Question 4
+
+Identify the distribution of sales.
+
+```python id="case_plot04"
+df["Sales"].plot(
+    kind="hist",
+    bins=20
+)
+
+plt.show()
+```
+
+---
+
+### Question 5
+
+Analyze the relationship between Sales and Profit.
+
+```python id="case_plot05"
+df.plot(
+    x="Sales",
+    y="Profit",
+    kind="scatter"
+)
+
+plt.show()
+```
+
+---
+
+# Business Insights
+
+After visualizing the dataset, you discover:
+
+* Monthly revenue follows an upward trend.
+* Technology products generate the highest sales.
+* A small number of products contribute a large percentage of revenue.
+* Most customer purchases fall within a moderate spending range.
+* Sales and Profit show a strong positive relationship.
+
+These visual insights help executives make informed decisions regarding inventory, pricing, and marketing.
+
+---
+
+# 21. Practice Exercises
+
+## Beginner
+
+1. Create a line chart of monthly sales.
+2. Create a bar chart for product categories.
+3. Plot a histogram of customer spending.
+4. Create a pie chart showing market share.
+5. Add chart titles and axis labels.
+
+---
+
+## Intermediate
+
+6. Compare Sales and Profit on one chart.
+7. Create multiple subplots.
+8. Save charts as image files.
+9. Rotate x-axis labels.
+10. Add legends and grid lines.
+
+---
+
+## Advanced
+
+11. Build a dashboard containing four different charts.
+12. Compare sales trends across regions.
+13. Analyze outliers using a box plot.
+14. Visualize the relationship between advertising and sales.
+15. Write five business insights based on your visualizations.
+
+---
+
+# 22. Interview Questions
+
+## Beginner
+
+1. Why is data visualization important?
+2. What is Matplotlib?
+3. Difference between a line chart and a bar chart?
+4. When should a histogram be used?
+5. What is a scatter plot?
+
+---
+
+## Intermediate
+
+6. When is a box plot useful?
+7. Why are legends important?
+8. What is the purpose of `plt.tight_layout()`?
+9. How do you save a chart?
+10. How do you customize figure size?
+
+---
+
+## Advanced
+
+11. Explain the advantages of visualization in business analytics.
+12. How do you choose the correct chart for a business problem?
+13. Describe a dashboard containing multiple KPIs.
+14. Why should charts avoid unnecessary visual clutter?
+15. Compare Matplotlib with other visualization libraries such as Seaborn and Plotly.
+
+---
+
+# 23. Cheat Sheet
+
+| Task             | Syntax                 |
+| ---------------- | ---------------------- |
+| Line Chart       | `kind="line"`          |
+| Bar Chart        | `kind="bar"`           |
+| Horizontal Bar   | `kind="barh"`          |
+| Pie Chart        | `kind="pie"`           |
+| Histogram        | `kind="hist"`          |
+| Box Plot         | `kind="box"`           |
+| Scatter Plot     | `kind="scatter"`       |
+| Multiple Columns | `y=["Sales","Profit"]` |
+| Subplots         | `subplots=True`        |
+| Figure Size      | `figsize=(10,5)`       |
+| Legend           | `plt.legend()`         |
+| Grid             | `plt.grid(True)`       |
+| Save Figure      | `plt.savefig()`        |
+| Tight Layout     | `plt.tight_layout()`   |
+
+---
+
+# 24. Mini Project
+
+## Executive Sales Dashboard
+
+Using any retail, finance, HR, or e-commerce dataset:
+
+Perform the following tasks:
+
+* Create a line chart showing monthly sales.
+* Build a bar chart comparing sales by category.
+* Create a pie chart showing category contribution.
+* Plot a histogram of customer purchase amounts.
+* Create a box plot to identify outliers.
+* Build a scatter plot comparing Sales and Profit.
+* Display Sales and Profit together on a line chart.
+* Export all charts as high-quality PNG files.
+* Write **five executive-level business insights** based on the visualizations.
+
+### Example Business Insights
+
+* Sales have grown steadily over the last six months.
+* Technology products account for nearly half of total revenue.
+* Customer purchase amounts are concentrated between ₹2,000 and ₹5,000.
+* Several high-value outliers contribute significantly to overall revenue.
+* Profit increases proportionally with sales, indicating healthy margins.
+
+---
+
+# 25. Summary
+
+Congratulations! 🎉
+
+Today you learned how to transform raw data into meaningful visualizations using **Pandas** and **Matplotlib**.
+
+You explored:
+
+* Line Charts
+* Bar Charts
+* Pie Charts
+* Histograms
+* Box Plots
+* Scatter Plots
+* Multi-line Charts
+* Subplots
+* Chart Customization
+* Saving Professional Visualizations
+
+These skills are essential for data storytelling, business intelligence, dashboard development, and executive reporting.
+
+---
+
+# 26. What's Next?
+
+In **Day 18**, you'll learn **Advanced GroupBy Operations & Aggregations**, including:
+
+* Multi-level GroupBy
+* Multiple aggregation functions
+* Named aggregations
+* `transform()`
+* `filter()`
+* `apply()`
+* Group-wise calculations
+* Business KPI generation
+
+These techniques are widely used to summarize, compare, and analyze data across departments, products, customers, and regions.
+
+---
+
+<div align="center">
+
+# Day 17 Complete!
+
+You've mastered the fundamentals of data visualization in Pandas and Matplotlib.
+
+You can now create clear, professional charts that transform raw datasets into actionable insights for reports, dashboards, and presentations.
+
+
+
+</div>
