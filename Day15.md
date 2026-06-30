@@ -884,12 +884,10 @@ These concepts form the foundation of forecasting, demand planning, stock market
 
 <div align="center">
 
-# 🎉 Day 15 Complete!
+# Day 15 Complete!
 
 You've now mastered sorting, ranking, and window operations—core techniques used by data analysts, business intelligence professionals, and financial analysts every day.
 
 These concepts bridge the gap between Pandas and SQL window functions, making your analytical skills more versatile across tools and platforms.
-
-⭐ **Next → Day 16: Time Series Analysis with Pandas** 📅📈🐼
 
 </div>
