@@ -1,4 +1,4 @@
-# 🐼 Day 16 — Time Series Analysis with Pandas
+# Day 16 — Time Series Analysis with Pandas
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Time Series Analysis Matters
