@@ -257,3 +257,280 @@ After completing this section, you should understand:
 
 > **"Indexes are more than row numbers—they are the foundation of efficient data selection, organization, and analysis in Pandas."**
 
+# 8. Understanding MultiIndex
+
+So far, we've worked with a single index column.
+
+However, many real-world datasets require multiple levels of identification.
+
+For example, consider a retail company operating across different regions.
+
+A single **Product** may exist in multiple **Regions**.
+
+Using only one index is no longer sufficient.
+
+This is where **MultiIndex**, also known as **Hierarchical Indexing**, becomes valuable.
+
+A MultiIndex allows multiple columns to function together as the DataFrame's index.
+
+---
+
+## Example Dataset
+
+| Region | Category   | Sales |
+| ------ | ---------- | ----: |
+| North  | Furniture  |  5200 |
+| North  | Technology |  6100 |
+| South  | Furniture  |  7300 |
+| South  | Technology |  8100 |
+
+Create a MultiIndex:
+
+```python id="multi01"
+df = df.set_index(
+    ["Region", "Category"]
+)
+```
+
+### Output
+
+| Region | Category   | Sales |
+| ------ | ---------- | ----: |
+| North  | Furniture  |  5200 |
+|        | Technology |  6100 |
+| South  | Furniture  |  7300 |
+|        | Technology |  8100 |
+
+Now every row is uniquely identified by both **Region** and **Category**.
+
+---
+
+# 9. Accessing MultiIndex Data
+
+Once a MultiIndex has been created, you can retrieve records using multiple labels.
+
+Retrieve Furniture sales in the North region:
+
+```python id="multi02"
+df.loc[
+    ("North", "Furniture")
+]
+```
+
+Output:
+
+| Sales |
+| ----: |
+|  5200 |
+
+---
+
+Retrieve all categories for the South region:
+
+```python id="multi03"
+df.loc["South"]
+```
+
+Output:
+
+| Category   | Sales |
+| ---------- | ----: |
+| Furniture  |  7300 |
+| Technology |  8100 |
+
+---
+
+Retrieve multiple regions:
+
+```python id="multi04"
+df.loc[
+    ["North", "South"]
+]
+```
+
+This flexibility makes MultiIndex ideal for complex reporting.
+
+---
+
+# 10. Sorting MultiIndex Data
+
+Many MultiIndex operations require sorted indexes.
+
+Sort the index:
+
+```python id="multi05"
+df = df.sort_index()
+```
+
+Sorting ensures predictable results when slicing or selecting hierarchical data.
+
+---
+
+# 11. Slicing MultiIndex Data
+
+One of the biggest advantages of MultiIndex is hierarchical slicing.
+
+Suppose you want only the Furniture category across all regions.
+
+```python id="multi06"
+df.xs(
+    "Furniture",
+    level="Category"
+)
+```
+
+### Output
+
+| Region | Sales |
+| ------ | ----: |
+| North  |  5200 |
+| South  |  7300 |
+
+The `xs()` method (cross-section) extracts data from a specified index level.
+
+---
+
+## Slice by Region
+
+```python id="multi07"
+df.loc["North"]
+```
+
+---
+
+## Slice by Multiple Levels
+
+```python id="multi08"
+df.loc[
+    ("North", "Technology")
+]
+```
+
+Hierarchical slicing is much cleaner than applying multiple filtering conditions.
+
+---
+
+# 12. Swapping Index Levels
+
+Sometimes a different hierarchy is needed.
+
+Suppose you want **Category** as the first level instead of **Region**.
+
+```python id="multi09"
+df.swaplevel()
+```
+
+Output:
+
+| Category   | Region | Sales |
+| ---------- | ------ | ----: |
+| Furniture  | North  |  5200 |
+| Technology | North  |  6100 |
+| Furniture  | South  |  7300 |
+| Technology | South  |  8100 |
+
+This is useful when analyzing data from different perspectives.
+
+---
+
+# 13. Removing Index Levels
+
+Convert the MultiIndex back into regular columns.
+
+```python id="multi10"
+df.reset_index()
+```
+
+This restores a standard DataFrame, making it easier to export or visualize the data.
+
+---
+
+# Business Example
+
+Imagine you're analyzing retail performance.
+
+Each transaction is uniquely identified by:
+
+* Region
+* Store
+* Product Category
+
+Instead of repeatedly filtering three separate columns, a MultiIndex allows fast and intuitive access.
+
+For example:
+
+```python id="multi11"
+df.loc[
+    ("West", "Store A")
+]
+```
+
+or
+
+```python id="multi12"
+df.xs(
+    "Electronics",
+    level="Category"
+)
+```
+
+This approach simplifies reporting and improves code readability.
+
+---
+
+# Best Practices
+
+✔ Use MultiIndex when one column cannot uniquely identify a record.
+
+✔ Sort the index before slicing.
+
+✔ Choose meaningful index levels.
+
+✔ Reset the index before exporting data to CSV or Excel.
+
+✔ Use `xs()` for cleaner hierarchical selections.
+
+---
+
+# Common Mistakes
+
+### Forgetting to Sort the Index
+
+Some slicing operations may fail or produce unexpected results if the MultiIndex is not sorted.
+
+Always sort first:
+
+```python id="multi13"
+df = df.sort_index()
+```
+
+---
+
+### Using `iloc[]` Instead of `loc[]`
+
+MultiIndex is label-based.
+
+Use:
+
+```python id="multi14"
+df.loc[
+    ("North", "Furniture")
+]
+```
+
+rather than relying on row positions.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Create a MultiIndex.
+* Retrieve hierarchical data.
+* Slice across index levels.
+* Sort hierarchical indexes.
+* Swap index levels.
+* Convert MultiIndexes back into regular columns.
+
+> **"MultiIndex transforms flat tables into structured hierarchies, making complex datasets easier to organize, navigate, and analyze."**
