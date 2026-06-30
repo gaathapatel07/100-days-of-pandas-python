@@ -1,4 +1,4 @@
-# 🐼 Day 18 — Advanced GroupBy Operations & Aggregations
+# Day 18 — Advanced GroupBy Operations & Aggregations
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why GroupBy Matters
