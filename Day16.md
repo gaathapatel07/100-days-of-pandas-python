@@ -785,12 +785,11 @@ You'll learn how to transform cleaned and analyzed data into clear, compelling v
 
 <div align="center">
 
-# 🎉 Day 16 Complete!
+# Day 16 Complete!
 
 You've now mastered one of the most powerful capabilities of Pandas: **Time Series Analysis**.
 
 From resampling and rolling windows to lag features and growth analysis, you're equipped to analyze temporal data and prepare it for forecasting and strategic decision-making.
 
-⭐ **Next → Day 17: Data Visualization with Pandas & Matplotlib** 📊🐼
 
 </div>
