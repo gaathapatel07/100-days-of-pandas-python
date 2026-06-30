@@ -781,12 +781,11 @@ These operations are essential for leaderboards, sales rankings, KPI dashboards,
 
 <div align="center">
 
-# 🎉 Day 14 Complete!
+# Day 14 Complete!
 
 You've learned how to organize, access, and navigate complex datasets using advanced indexing and hierarchical structures.
 
 These skills make working with large, multi-dimensional datasets significantly more efficient and are commonly used in professional analytics and reporting workflows.
 
-⭐ **Next → Day 15: Advanced Sorting, Ranking & Window Operations** 📈🐼
 
 </div>
