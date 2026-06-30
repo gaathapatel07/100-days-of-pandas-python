@@ -1,4 +1,4 @@
-# 🐼 Day 15 — Advanced Sorting, Ranking & Window Operations
+# Day 15 — Advanced Sorting, Ranking & Window Operations
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Ranking Matters
