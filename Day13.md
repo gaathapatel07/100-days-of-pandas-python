@@ -823,12 +823,11 @@ MultiIndex is a powerful feature that allows analysts to organize and query comp
 
 <div align="center">
 
-# 🎉 Day 13 Complete!
+# Day 13 Complete!
 
 You've learned how to assess, validate, and improve data quality using techniques that are widely applied in professional analytics workflows.
 
 From missing-value analysis to validation rules and quality reports, you're now equipped to prepare reliable datasets for deeper analysis.
 
-⭐ **Next → Day 14: Advanced Indexing & MultiIndex Operations** 🗂️🐼
 
 </div>
