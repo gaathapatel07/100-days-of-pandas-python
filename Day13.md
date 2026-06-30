@@ -253,5 +253,303 @@ After completing this section, you should understand:
 * How to measure missing-value percentages.
 * Why business context should guide cleaning decisions.
 
+# 8. Forward Fill (`ffill`)
+
+Not every missing value should be replaced with the mean or median.
+
+In many real-world datasets, the previous value remains valid until a new one is recorded.
+
+This technique is called **Forward Fill**.
+
+---
+
+## Example Dataset
+
+| Date       | Stock Price |
+| ---------- | ----------: |
+| 2025-01-01 |         102 |
+| 2025-01-02 |         NaN |
+| 2025-01-03 |         NaN |
+| 2025-01-04 |         108 |
+
+Instead of replacing the missing values with the average stock price, we carry forward the most recent known value.
+
+```python id="ffill01"
+df["Stock Price"] = (
+    df["Stock Price"]
+    .ffill()
+)
+```
+
+### Output
+
+| Date       | Stock Price |
+| ---------- | ----------: |
+| 2025-01-01 |         102 |
+| 2025-01-02 |         102 |
+| 2025-01-03 |         102 |
+| 2025-01-04 |         108 |
+
+---
+
+## When to Use Forward Fill
+
+Forward Fill works well for:
+
+* Stock market prices
+* IoT sensor readings
+* Daily inventory levels
+* Machine status logs
+* Slowly changing business data
+
+It should only be used when carrying the previous value forward is logically valid.
+
+---
+
+# 9. Backward Fill (`bfill`)
+
+Backward Fill works in the opposite direction.
+
+Instead of using the previous value, it fills missing entries with the next available observation.
+
+Example:
+
+| Date       | Temperature |
+| ---------- | ----------: |
+| 2025-01-01 |         NaN |
+| 2025-01-02 |         NaN |
+| 2025-01-03 |          24 |
+| 2025-01-04 |          26 |
+
+```python id="bfill01"
+df["Temperature"] = (
+    df["Temperature"]
+    .bfill()
+)
+```
+
+### Output
+
+| Date       | Temperature |
+| ---------- | ----------: |
+| 2025-01-01 |          24 |
+| 2025-01-02 |          24 |
+| 2025-01-03 |          24 |
+| 2025-01-04 |          26 |
+
+---
+
+## When to Use Backward Fill
+
+Typical use cases include:
+
+* Survey datasets
+* Forecast values
+* Reference tables
+* Configuration data
+
+As with Forward Fill, only use Backward Fill when it makes sense for the problem being solved.
+
+---
+
+# 10. Interpolation
+
+Sometimes neither the previous nor the next value is appropriate.
+
+Interpolation estimates missing values using surrounding observations.
+
+Example:
+
+| Day | Sales |
+| --: | ----: |
+|   1 |   100 |
+|   2 |   NaN |
+|   3 |   140 |
+
+Instead of copying 100 or 140, interpolation estimates a value between them.
+
+```python id="interp01"
+df["Sales"] = (
+    df["Sales"]
+    .interpolate()
+)
+```
+
+### Output
+
+| Day | Sales |
+| --: | ----: |
+|   1 |   100 |
+|   2 |   120 |
+|   3 |   140 |
+
+Interpolation is particularly useful for continuous numerical data.
+
+---
+
+## Common Applications
+
+Interpolation is widely used in:
+
+* Weather analysis
+* Financial time series
+* Sensor monitoring
+* Scientific research
+* Manufacturing systems
+
+---
+
+# 11. Replacing Invalid Values
+
+Missing values are not the only data quality issue.
+
+Datasets often contain impossible or invalid values.
+
+Example:
+
+| Employee | Age |
+| -------- | --: |
+| Alice    |  25 |
+| Rahul    |  -5 |
+| Emma     |  31 |
+| David    | 999 |
+
+Here:
+
+* `-5` is impossible.
+* `999` is clearly unrealistic.
+
+First, replace invalid values with `NaN`.
+
+```python id="replace01"
+import numpy as np
+
+df["Age"] = (
+    df["Age"]
+    .replace(
+        [-5, 999],
+        np.nan
+    )
+)
+```
+
+Then apply an appropriate filling strategy.
+
+This approach keeps the cleaning process consistent.
+
+---
+
+# 12. Detecting Out-of-Range Values
+
+Business rules help identify suspicious records.
+
+Example:
+
+Customer age should be between **18** and **100**.
+
+Find invalid ages:
+
+```python id="range01"
+invalid_age = df[
+    (df["Age"] < 18) |
+    (df["Age"] > 100)
+]
+```
+
+Similarly:
+
+* Discount > 100%
+* Quantity < 0
+* Negative prices
+* Future order dates
+
+These are all examples of values that should be validated before analysis.
+
+---
+
+# 13. Creating a Data Quality Report
+
+Rather than cleaning data immediately, many analysts first prepare a summary report.
+
+Example:
+
+```python id="report01"
+quality_report = (
+    pd.DataFrame({
+        "Missing Values": df.isna().sum(),
+        "Missing (%)": (
+            df.isna().mean() * 100
+        ),
+        "Data Type": df.dtypes
+    })
+)
+
+quality_report
+```
+
+### Example Output
+
+| Column     | Missing Values | Missing (%) | Data Type      |
+| ---------- | -------------: | ----------: | -------------- |
+| Sales      |              5 |         2.1 | float64        |
+| Region     |              2 |         0.8 | object         |
+| Order Date |              0 |         0.0 | datetime64[ns] |
+
+This report provides a quick overview of dataset health before analysis begins.
+
+---
+
+# Best Practices
+
+✔ Investigate why values are missing before replacing them.
+
+✔ Choose a filling strategy based on business logic.
+
+✔ Validate numerical ranges using business rules.
+
+✔ Replace impossible values before performing statistical analysis.
+
+✔ Document every cleaning step to ensure reproducibility.
+
+---
+
+# Common Mistakes
+
+### Using the Same Strategy for Every Column
+
+Avoid replacing every missing value with the mean.
+
+Different columns require different strategies.
+
+For example:
+
+* Salary → Median
+* City → Mode
+* Sensor Data → Forward Fill
+* Temperature → Interpolation
+
+---
+
+### Ignoring Invalid Values
+
+A dataset may contain no missing values but still be inaccurate due to impossible values.
+
+Always validate ranges and business rules in addition to checking for `NaN`.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Apply Forward Fill.
+* Apply Backward Fill.
+* Estimate missing values using Interpolation.
+* Detect impossible values.
+* Validate data using business rules.
+* Create a reusable data quality report.
+
+> **"High-quality datasets are not created by chance—they are built through careful validation, thoughtful cleaning strategies, and a clear understanding of the business context."**
+
 > **"Cleaning data is not about making every dataset perfect—it is about making it reliable enough to support confident decisions."**
 
