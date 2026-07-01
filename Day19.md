@@ -601,3 +601,369 @@ You have now learned how to:
 * Select the correct reshaping function for different analytical tasks.
 
 > **"Effective data reshaping allows a single dataset to support reporting, visualization, statistical analysis, and machine learning without changing the underlying information."**
+
+# 15. Real-World Business Case Study
+
+## Scenario
+
+You are working as a **Senior Data Analyst** at **RetailHub**, a multinational retail company.
+
+Every month, regional offices submit sales reports in Excel. Unfortunately, each region follows a different reporting format.
+
+Some files are in **wide format**, while others are already in **long format**.
+
+Before building dashboards in Power BI, your first task is to standardize every dataset into a consistent structure.
+
+The dataset contains:
+
+* Region
+* Product
+* Jan
+* Feb
+* Mar
+* Apr
+* May
+* Jun
+
+Your objective is to reshape the data into a tidy format suitable for analysis.
+
+---
+
+# Business Questions
+
+### Question 1
+
+Convert monthly columns into rows.
+
+```python id="case_melt01"
+sales_long = pd.melt(
+    df,
+    id_vars=[
+        "Region",
+        "Product"
+    ],
+    var_name="Month",
+    value_name="Sales"
+)
+```
+
+---
+
+### Question 2
+
+Generate a summary report showing monthly sales by product.
+
+```python id="case_pivot01"
+monthly_summary = (
+    sales_long.pivot(
+        index="Product",
+        columns="Month",
+        values="Sales"
+    )
+)
+```
+
+---
+
+### Question 3
+
+Handle duplicate monthly entries.
+
+```python id="case_pivot02"
+monthly_summary = (
+    pd.pivot_table(
+        sales_long,
+        index="Product",
+        columns="Month",
+        values="Sales",
+        aggfunc="sum"
+    )
+)
+```
+
+---
+
+### Question 4
+
+Convert a MultiIndex report into a dashboard-friendly table.
+
+```python id="case_unstack01"
+report = (
+    sales_long
+    .groupby(
+        ["Region", "Month"]
+    )["Sales"]
+    .sum()
+    .unstack()
+)
+```
+
+---
+
+### Question 5
+
+Return the report to long format for machine learning.
+
+```python id="case_stack01"
+report.stack()
+```
+
+---
+
+# 16. Complete Reshaping Workflow
+
+A typical analytics workflow follows these steps:
+
+```text id="workflow01"
+Excel File
+        │
+        ▼
+Load into Pandas
+        │
+        ▼
+Inspect Structure
+        │
+        ▼
+Convert Wide → Long
+        │
+        ▼
+Clean & Validate
+        │
+        ▼
+Group & Aggregate
+        │
+        ▼
+Pivot for Reporting
+        │
+        ▼
+Create Dashboard
+```
+
+Reshaping is rarely the final step—it is usually part of a larger data preparation pipeline.
+
+---
+
+# 17. Performance Optimization
+
+Large datasets require efficient reshaping techniques.
+
+### Specify Identifier Columns Carefully
+
+Instead of melting the entire DataFrame:
+
+```python id="perf_melt01"
+pd.melt(df)
+```
+
+Prefer:
+
+```python id="perf_melt02"
+pd.melt(
+    df,
+    id_vars=[
+        "Region",
+        "Product"
+    ]
+)
+```
+
+This preserves important identifiers and avoids unnecessary restructuring.
+
+---
+
+### Use `pivot_table()` for Large Datasets
+
+When duplicate combinations are possible, `pivot_table()` is safer than `pivot()`.
+
+```python id="perf_pivot01"
+pd.pivot_table(
+    df,
+    aggfunc="sum"
+)
+```
+
+---
+
+### Reset Index After Complex Operations
+
+```python id="perf_reset01"
+summary = (
+    summary
+    .reset_index()
+)
+```
+
+Flat tables are easier to export and visualize.
+
+---
+
+# 18. Business Insights
+
+After restructuring the dataset, you observe:
+
+* Long-format data simplifies monthly trend analysis.
+* Pivot tables provide cleaner executive summaries.
+* MultiIndex reshaping improves complex reporting.
+* A single tidy dataset can support dashboards, forecasting, and machine learning.
+* Consistent data structures reduce errors during analysis.
+
+These improvements increase efficiency across analytics teams.
+
+---
+
+# 19. Practice Exercises
+
+## Beginner
+
+1. Convert a wide table into long format.
+2. Rename melted columns.
+3. Create a simple pivot table.
+4. Convert long data back into wide format.
+5. Compare wide and long structures.
+
+---
+
+## Intermediate
+
+6. Use `pivot_table()` with multiple aggregation functions.
+7. Create a MultiIndex report.
+8. Apply `stack()`.
+9. Apply `unstack()`.
+10. Build a monthly sales summary.
+
+---
+
+## Advanced
+
+11. Reshape a survey dataset.
+12. Convert quarterly reports into tidy data.
+13. Build a complete reshaping pipeline.
+14. Compare `pivot()` and `pivot_table()` using duplicate data.
+15. Write five recommendations for improving data organization.
+
+---
+
+# 20. Interview Questions
+
+## Beginner
+
+1. What is data reshaping?
+2. Difference between wide and long data?
+3. What does `melt()` do?
+4. What is `pivot()` used for?
+5. Why is tidy data important?
+
+---
+
+## Intermediate
+
+6. Difference between `pivot()` and `pivot_table()`?
+7. When should `stack()` be used?
+8. What is `unstack()`?
+9. Why are MultiIndexes useful?
+10. What is the role of `id_vars` in `melt()`?
+
+---
+
+## Advanced
+
+11. Explain a complete reshaping workflow.
+12. How does tidy data improve machine learning?
+13. Compare reshaping in Pandas with SQL transformations.
+14. Why should data be reshaped before visualization?
+15. Describe a real-world business scenario involving data restructuring.
+
+---
+
+# 21. Cheat Sheet
+
+| Operation                 | Syntax                   |
+| ------------------------- | ------------------------ |
+| Wide → Long               | `pd.melt()`              |
+| Long → Wide               | `pivot()`                |
+| Long → Wide + Aggregation | `pivot_table()`          |
+| Columns → Rows            | `stack()`                |
+| Rows → Columns            | `unstack()`              |
+| MultiIndex                | `set_index()`            |
+| Reset Index               | `reset_index()`          |
+| Rename Melt Columns       | `var_name`, `value_name` |
+
+---
+
+# 22. Mini Project
+
+## Retail Sales Reshaping Pipeline
+
+Using any retail, finance, healthcare, HR, or education dataset:
+
+Perform the following tasks:
+
+* Import the dataset.
+* Identify whether it is in wide or long format.
+* Convert wide-format data into tidy format using `melt()`.
+* Rename variables appropriately.
+* Generate summary reports using `pivot_table()`.
+* Create a MultiIndex report.
+* Apply `stack()` and `unstack()`.
+* Export both the tidy dataset and the executive report.
+* Write **five executive-level business insights**.
+* Recommend **three improvements** to standardize future data collection.
+
+### Example Business Insights
+
+* Long-format data simplified monthly sales comparisons across all regions.
+* Pivot tables enabled quick executive summaries by product and month.
+* Tidy data reduced preprocessing time before visualization.
+* MultiIndex reports improved regional performance analysis.
+* A standardized reporting structure will improve consistency across departments.
+
+---
+
+# 23. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Data Reshaping & Tidy Data** in Pandas.
+
+You learned how to:
+
+* Understand wide and long data formats.
+* Create tidy datasets using `melt()`.
+* Transform long data into wide reports using `pivot()`.
+* Handle duplicate records with `pivot_table()`.
+* Reshape MultiIndex objects using `stack()` and `unstack()`.
+* Build efficient workflows for reporting and machine learning.
+
+These techniques are fundamental in data engineering, analytics, dashboard creation, and predictive modeling.
+
+---
+
+# 24. What's Next?
+
+In **Day 20**, you'll learn **Advanced File Handling & Data Input/Output in Pandas**.
+
+Topics include:
+
+* Reading CSV, Excel, JSON, HTML, XML, and Parquet files
+* Writing data to different formats
+* Reading multiple files automatically
+* Chunk processing for large datasets
+* Compression formats (ZIP, GZIP)
+* Performance optimization
+* Building automated ETL pipelines
+
+These skills are essential for handling real-world datasets from different sources efficiently.
+
+---
+
+<div align="center">
+
+# 🎉 Day 19 Complete!
+
+You've mastered the art of reshaping data into analysis-ready formats.
+
+From converting spreadsheets into tidy datasets to preparing executive reports and machine learning inputs, you now have the skills to organize data for virtually any analytical workflow.
+
+⭐ **Next → Day 20: Advanced File Handling & Data Input/Output** 📂🐼
+
+</div>
