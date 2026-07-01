@@ -1,4 +1,4 @@
-# 🐼 Day 20 — Advanced File Handling & Data Input/Output in Pandas
+# Day 20 — Advanced File Handling & Data Input/Output in Pandas
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why File Handling Matters
