@@ -690,3 +690,372 @@ You have now learned how to:
 * Build scalable file-handling workflows.
 
 > **"Efficient file handling transforms raw files into reliable analytical datasets while reducing manual effort, improving performance, and supporting scalable data pipelines."**
+
+# 17. Real-World Business Case Study
+
+## Scenario
+
+You are working as a **Senior Data Analyst** at **RetailHub**, a global e-commerce company.
+
+Every day, the analytics team receives data from multiple departments:
+
+* Sales transactions in CSV format
+* Inventory reports in Excel
+* Customer information from a REST API (JSON)
+* Product catalog in XML
+* Historical archives stored as Parquet
+
+Before creating dashboards in Power BI and running predictive models, all these files must be imported, validated, cleaned, merged, and stored in a consistent format.
+
+Your task is to design an automated ETL (Extract, Transform, Load) workflow using Pandas.
+
+---
+
+# Business Questions
+
+### Question 1
+
+Load sales data from CSV.
+
+```python id="case_io01"
+sales = pd.read_csv(
+    "sales.csv"
+)
+```
+
+---
+
+### Question 2
+
+Load inventory data from Excel.
+
+```python id="case_io02"
+inventory = pd.read_excel(
+    "inventory.xlsx"
+)
+```
+
+---
+
+### Question 3
+
+Import customer data from JSON.
+
+```python id="case_io03"
+customers = pd.read_json(
+    "customers.json"
+)
+```
+
+---
+
+### Question 4
+
+Combine monthly sales reports.
+
+```python id="case_io04"
+from glob import glob
+
+files = glob(
+    "monthly_reports/*.csv"
+)
+
+monthly_data = pd.concat(
+    [pd.read_csv(file) for file in files],
+    ignore_index=True
+)
+```
+
+---
+
+### Question 5
+
+Export the cleaned dataset as a Parquet file.
+
+```python id="case_io05"
+monthly_data.to_parquet(
+    "clean_sales.parquet"
+)
+```
+
+---
+
+# 18. Understanding the ETL Process
+
+ETL stands for:
+
+* **Extract** – Collect data from multiple sources.
+* **Transform** – Clean, validate, reshape, and enrich the data.
+* **Load** – Store the processed data for reporting or analysis.
+
+A typical ETL pipeline looks like this:
+
+```text
+             External Sources
+                    │
+ ┌──────────┬─────────────┬────────────┬───────────┐
+ │          │             │            │
+ CSV      Excel         JSON         Parquet
+ │          │             │            │
+ └──────────┴─────────────┴────────────┘
+                    │
+                    ▼
+           Extract into Pandas
+                    │
+                    ▼
+      Clean, Validate & Transform
+                    │
+                    ▼
+          Merge & Enrich Data
+                    │
+                    ▼
+       Export to CSV / Parquet
+                    │
+                    ▼
+   Power BI • Tableau • ML Models • SQL
+```
+
+ETL pipelines are the foundation of modern analytics systems.
+
+---
+
+# 19. Comparing File Formats
+
+Choosing the right file format improves performance, storage efficiency, and interoperability.
+
+| Format  | Advantages                      | Limitations                     | Best Use Cases               |
+| ------- | ------------------------------- | ------------------------------- | ---------------------------- |
+| CSV     | Simple, widely supported        | Larger file size, no formatting | Data exchange, quick imports |
+| Excel   | Multiple sheets, formatting     | Slower for large datasets       | Business reports             |
+| JSON    | Nested structures, API-friendly | Larger than Parquet             | Web applications, REST APIs  |
+| XML     | Structured and standardized     | Verbose and slower              | Enterprise systems           |
+| Parquet | Highly compressed, fast reads   | Less human-readable             | Big data, cloud analytics    |
+
+---
+
+# 20. Performance Tips
+
+When working with large datasets:
+
+### Read Only Necessary Columns
+
+```python id="perf_io01"
+df = pd.read_csv(
+    "sales.csv",
+    usecols=[
+        "Product",
+        "Sales",
+        "Profit"
+    ]
+)
+```
+
+---
+
+### Specify Data Types
+
+```python id="perf_io02"
+df = pd.read_csv(
+    "sales.csv",
+    dtype={
+        "Product": "string",
+        "Quantity": "int32",
+        "Sales": "float32"
+    }
+)
+```
+
+This reduces memory usage and speeds up processing.
+
+---
+
+### Process Large Files in Chunks
+
+```python id="perf_io03"
+for chunk in pd.read_csv(
+    "sales.csv",
+    chunksize=100000
+):
+    process(chunk)
+```
+
+Chunking prevents memory overflow and supports scalable workflows.
+
+---
+
+# 21. Business Insights
+
+After automating the ETL workflow, you discover:
+
+* Import time is significantly reduced by loading only required columns.
+* Parquet files occupy much less storage than CSV files.
+* Automating monthly imports eliminates repetitive manual work.
+* Standardized file structures reduce reporting errors.
+* A centralized ETL pipeline improves consistency across departments.
+
+These improvements increase productivity and support reliable business reporting.
+
+---
+
+# 22. Practice Exercises
+
+## Beginner
+
+1. Read a CSV file.
+2. Import an Excel worksheet.
+3. Load a JSON file.
+4. Export a DataFrame to CSV.
+5. Save a DataFrame as an Excel file.
+
+---
+
+## Intermediate
+
+6. Read an XML file.
+7. Import a Parquet dataset.
+8. Process a large CSV using chunks.
+9. Read multiple CSV files from a folder.
+10. Export a cleaned dataset to Parquet.
+
+---
+
+## Advanced
+
+11. Build an ETL workflow combining multiple file formats.
+12. Compare CSV and Parquet file sizes.
+13. Automate monthly report generation.
+14. Optimize memory usage during import.
+15. Write five recommendations to improve enterprise data management.
+
+---
+
+# 23. Interview Questions
+
+## Beginner
+
+1. What is ETL?
+2. What is the purpose of `read_csv()`?
+3. Why use `index=False` when exporting?
+4. What is the difference between CSV and Excel?
+5. Why is JSON commonly used with APIs?
+
+---
+
+## Intermediate
+
+6. Why is Parquet preferred for analytical workloads?
+7. What are the advantages of chunk processing?
+8. How do you read multiple files automatically?
+9. Why should data types be specified during import?
+10. What are the benefits of compressed files?
+
+---
+
+## Advanced
+
+11. Design an ETL pipeline using Pandas.
+12. Compare CSV, JSON, Excel, and Parquet.
+13. How would you process a 200 GB dataset?
+14. How can ETL workflows improve business reporting?
+15. What file-handling strategies improve analytics performance?
+
+---
+
+# 24. Cheat Sheet
+
+| Task                | Syntax                |
+| ------------------- | --------------------- |
+| Read CSV            | `pd.read_csv()`       |
+| Write CSV           | `df.to_csv()`         |
+| Read Excel          | `pd.read_excel()`     |
+| Write Excel         | `df.to_excel()`       |
+| Read JSON           | `pd.read_json()`      |
+| Write JSON          | `df.to_json()`        |
+| Read XML            | `pd.read_xml()`       |
+| Read Parquet        | `pd.read_parquet()`   |
+| Write Parquet       | `df.to_parquet()`     |
+| Read ZIP            | `compression="zip"`   |
+| Read GZIP           | `compression="gzip"`  |
+| Chunk Processing    | `chunksize=`          |
+| Read Multiple Files | `glob()` + `concat()` |
+
+---
+
+# 25. Mini Project
+
+## Automated ETL Pipeline for Retail Analytics
+
+Using any retail, finance, healthcare, HR, or logistics dataset:
+
+Complete the following tasks:
+
+* Import CSV, Excel, and JSON datasets.
+* Validate missing values and data types.
+* Merge datasets into a unified DataFrame.
+* Process large files using chunking where appropriate.
+* Export the cleaned data to both CSV and Parquet.
+* Organize files into `raw`, `processed`, and `exports` folders.
+* Generate a summary report containing record counts, missing values, and key statistics.
+* Write **five executive-level business insights**.
+* Recommend **three improvements** to streamline the ETL process.
+
+### Example Business Insights
+
+* Automating file imports reduced manual processing time by over 70%.
+* Parquet storage significantly reduced disk usage while improving read performance.
+* Consistent folder organization simplified collaboration across analytics teams.
+* Chunk processing enabled efficient handling of large datasets without memory issues.
+* Standardized ETL workflows improved the accuracy and reliability of executive reports.
+
+---
+
+# 26. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Advanced File Handling & Data Input/Output** in Pandas.
+
+You learned how to:
+
+* Import data from CSV, Excel, JSON, XML, HTML, and Parquet files.
+* Export datasets to multiple formats.
+* Read compressed files.
+* Process large datasets using chunking.
+* Automate file imports.
+* Build efficient ETL workflows.
+
+These skills are essential for modern data analytics, business intelligence, data engineering, and machine learning pipelines.
+
+---
+
+# 27. What's Next?
+
+In **Day 21**, you'll learn **Missing Data Handling & Advanced Data Cleaning**.
+
+Topics include:
+
+* Detecting missing values
+* `fillna()`
+* `dropna()`
+* Forward fill (`ffill`)
+* Backward fill (`bfill`)
+* Interpolation
+* Removing duplicates
+* Outlier detection
+* Data validation techniques
+
+These techniques are fundamental for producing clean, reliable datasets that support accurate analysis and predictive modeling.
+
+---
+
+<div align="center">
+
+# 🎉 Day 20 Complete!
+
+You've mastered importing, exporting, and managing data across multiple file formats while building scalable ETL workflows.
+
+These skills form the backbone of professional data analytics, enabling you to transform raw data into reliable, analysis-ready datasets.
+
+⭐ **Next → Day 21: Missing Data Handling & Advanced Data Cleaning** 🧹🐼
+
+</div>
