@@ -348,3 +348,345 @@ After completing this section, you should understand:
 
 > **"Successful data analysis begins long before visualization—it starts with importing the right data, in the right format, as efficiently as possible."**
 
+# 8. Writing CSV Files
+
+After cleaning and analyzing data, the next step is often exporting the results.
+
+Save a DataFrame as a CSV file.
+
+```python id="writecsv01"
+df.to_csv(
+    "processed_sales.csv",
+    index=False
+)
+```
+
+### Why `index=False`?
+
+By default, Pandas writes the DataFrame index as an additional column.
+
+Using `index=False` prevents unnecessary index columns from appearing in the exported file.
+
+---
+
+## Exporting Selected Columns
+
+```python id="writecsv02"
+df.to_csv(
+    "sales_summary.csv",
+    columns=[
+        "Product",
+        "Sales",
+        "Profit"
+    ],
+    index=False
+)
+```
+
+Only the specified columns are exported.
+
+---
+
+# 9. Writing Excel Files
+
+Business reports are commonly shared as Excel workbooks.
+
+```python id="excelwrite01"
+df.to_excel(
+    "sales_report.xlsx",
+    index=False
+)
+```
+
+---
+
+## Writing Multiple Sheets
+
+```python id="excelwrite02"
+with pd.ExcelWriter(
+    "business_report.xlsx"
+) as writer:
+
+    sales_df.to_excel(
+        writer,
+        sheet_name="Sales",
+        index=False
+    )
+
+    profit_df.to_excel(
+        writer,
+        sheet_name="Profit",
+        index=False
+    )
+
+    customer_df.to_excel(
+        writer,
+        sheet_name="Customers",
+        index=False
+    )
+```
+
+Multiple worksheets improve report organization.
+
+---
+
+# 10. Writing JSON Files
+
+Export structured data for APIs or web applications.
+
+```python id="jsonwrite01"
+df.to_json(
+    "customers.json",
+    orient="records",
+    indent=4
+)
+```
+
+The `records` orientation creates one JSON object per row, which is widely used in REST APIs.
+
+---
+
+# 11. Reading XML Files
+
+Many enterprise systems exchange information using XML.
+
+Read an XML file.
+
+```python id="xml01"
+df = pd.read_xml(
+    "employees.xml"
+)
+```
+
+Typical XML use cases include:
+
+* ERP systems
+* Banking software
+* Healthcare records
+* Government data
+
+---
+
+# 12. Reading Parquet Files
+
+Parquet is a columnar storage format designed for analytics.
+
+```python id="parquet01"
+df = pd.read_parquet(
+    "sales.parquet"
+)
+```
+
+Advantages:
+
+* Faster loading.
+* Better compression.
+* Reduced storage requirements.
+* Excellent performance on large datasets.
+
+Parquet is widely used with:
+
+* Apache Spark
+* Hadoop
+* Snowflake
+* Databricks
+* AWS Athena
+
+---
+
+# 13. Writing Parquet Files
+
+```python id="parquet02"
+df.to_parquet(
+    "processed_sales.parquet"
+)
+```
+
+Parquet is often preferred over CSV for large analytical datasets.
+
+---
+
+# 14. Reading Compressed Files
+
+Pandas can directly read compressed datasets.
+
+ZIP example:
+
+```python id="zip01"
+df = pd.read_csv(
+    "sales.zip",
+    compression="zip"
+)
+```
+
+GZIP example:
+
+```python id="gzip01"
+df = pd.read_csv(
+    "sales.csv.gz",
+    compression="gzip"
+)
+```
+
+Compressed files reduce storage space and network transfer time.
+
+---
+
+# 15. Processing Large Files Using Chunks
+
+Large datasets may exceed available memory.
+
+Instead of loading everything at once, process the data in smaller chunks.
+
+```python id="chunk01"
+chunks = pd.read_csv(
+    "large_sales.csv",
+    chunksize=50000
+)
+```
+
+Each iteration returns a DataFrame containing 50,000 rows.
+
+```python id="chunk02"
+for chunk in chunks:
+    print(chunk.shape)
+```
+
+Chunk processing enables efficient analysis of very large files.
+
+---
+
+# 16. Reading Multiple Files Automatically
+
+Suppose a folder contains monthly sales reports.
+
+```
+sales/
+├── jan.csv
+├── feb.csv
+├── mar.csv
+├── apr.csv
+```
+
+Load every CSV file.
+
+```python id="multi01"
+from glob import glob
+
+files = glob("sales/*.csv")
+
+dfs = [
+    pd.read_csv(file)
+    for file in files
+]
+
+combined = pd.concat(
+    dfs,
+    ignore_index=True
+)
+```
+
+This creates one consolidated DataFrame.
+
+---
+
+# Business Example
+
+An international retailer receives monthly sales files from every regional office.
+
+Instead of importing each file manually, analysts automate the process:
+
+* Read every CSV file.
+* Merge them into one dataset.
+* Remove duplicates.
+* Validate missing values.
+* Export a cleaned Parquet file for Power BI.
+
+This automation saves hours of manual work every month.
+
+---
+
+# Best Practices
+
+✔ Export reports without indexes.
+
+✔ Prefer Parquet for large analytical datasets.
+
+✔ Process large files using chunks.
+
+✔ Store raw and processed data separately.
+
+✔ Automate repetitive imports whenever possible.
+
+✔ Use meaningful file names with dates or versions.
+
+Example:
+
+```
+exports/
+│
+├── sales_report_2026_07.csv
+├── customer_summary.xlsx
+├── inventory_snapshot.parquet
+└── profit_dashboard.json
+```
+
+---
+
+# Common Mistakes
+
+### Exporting the DataFrame Index
+
+Incorrect:
+
+```python id="mistake03"
+df.to_csv("sales.csv")
+```
+
+Output contains an unnecessary index column.
+
+Correct:
+
+```python id="mistake04"
+df.to_csv(
+    "sales.csv",
+    index=False
+)
+```
+
+---
+
+### Loading Large Files into Memory
+
+Avoid:
+
+```python id="mistake05"
+pd.read_csv(
+    "100GB_dataset.csv"
+)
+```
+
+Instead:
+
+```python id="mistake06"
+pd.read_csv(
+    "100GB_dataset.csv",
+    chunksize=100000
+)
+```
+
+This significantly reduces memory consumption.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Export CSV, Excel, JSON, and Parquet files.
+* Read XML and compressed datasets.
+* Process large datasets in chunks.
+* Combine multiple files automatically.
+* Build scalable file-handling workflows.
+
+> **"Efficient file handling transforms raw files into reliable analytical datasets while reducing manual effort, improving performance, and supporting scalable data pipelines."**
