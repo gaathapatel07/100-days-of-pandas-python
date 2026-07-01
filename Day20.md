@@ -1050,12 +1050,12 @@ These techniques are fundamental for producing clean, reliable datasets that sup
 
 <div align="center">
 
-# 🎉 Day 20 Complete!
+# Day 20 Complete!
 
 You've mastered importing, exporting, and managing data across multiple file formats while building scalable ETL workflows.
 
 These skills form the backbone of professional data analytics, enabling you to transform raw data into reliable, analysis-ready datasets.
 
-⭐ **Next → Day 21: Missing Data Handling & Advanced Data Cleaning** 🧹🐼
+ **Next → Day 21: Missing Data Handling & Advanced Data Cleaning** 
 
 </div>
