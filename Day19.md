@@ -299,3 +299,305 @@ After completing this section, you should understand:
 
 > **"Reshaping data is often the first step toward transforming raw spreadsheets into meaningful analytical datasets."**
 
+# 8. Understanding `pivot()`
+
+While `melt()` converts **wide data into long data**, the `pivot()` function performs the opposite operation.
+
+It transforms **long-format** data into a **wide-format** table.
+
+This is especially useful for creating summary reports and dashboards.
+
+---
+
+## Example Dataset
+
+| Product | Month | Sales |
+| ------- | ----- | ----: |
+| Laptop  | Jan   |  5200 |
+| Laptop  | Feb   |  6100 |
+| Laptop  | Mar   |  5900 |
+| Phone   | Jan   |  4800 |
+| Phone   | Feb   |  5300 |
+| Phone   | Mar   |  5600 |
+
+Convert the data into a wide table.
+
+```python id="pivot01"
+df.pivot(
+    index="Product",
+    columns="Month",
+    values="Sales"
+)
+```
+
+### Output
+
+| Product |  Jan |  Feb |  Mar |
+| ------- | ---: | ---: | ---: |
+| Laptop  | 5200 | 6100 | 5900 |
+| Phone   | 4800 | 5300 | 5600 |
+
+The month values become column names.
+
+---
+
+# 9. When `pivot()` Fails
+
+`pivot()` requires each combination of index and column values to be unique.
+
+Suppose the dataset contains:
+
+| Product | Month | Sales |
+| ------- | ----- | ----: |
+| Laptop  | Jan   |  5200 |
+| Laptop  | Jan   |  6100 |
+
+Running:
+
+```python id="pivot02"
+df.pivot(
+    index="Product",
+    columns="Month",
+    values="Sales"
+)
+```
+
+produces:
+
+```text id="pivoterr01"
+ValueError
+
+Index contains duplicate entries.
+Cannot reshape.
+```
+
+When duplicate values exist, use **`pivot_table()`** instead.
+
+---
+
+# 10. Using `pivot_table()`
+
+Unlike `pivot()`, `pivot_table()` performs aggregation before reshaping.
+
+Example:
+
+```python id="pivot03"
+pd.pivot_table(
+    df,
+    values="Sales",
+    index="Product",
+    columns="Month",
+    aggfunc="sum"
+)
+```
+
+Output:
+
+| Product |   Jan |  Feb |  Mar |
+| ------- | ----: | ---: | ---: |
+| Laptop  | 11300 | 6100 | 5900 |
+| Phone   |  4800 | 5300 | 5600 |
+
+Supported aggregation functions include:
+
+* `sum`
+* `mean`
+* `count`
+* `max`
+* `min`
+
+---
+
+# 11. Understanding `stack()`
+
+The `stack()` function converts **columns into rows**.
+
+Example:
+
+Original DataFrame:
+
+| Product |  Jan |  Feb |
+| ------- | ---: | ---: |
+| Laptop  | 5200 | 6100 |
+| Phone   | 4800 | 5300 |
+
+Apply:
+
+```python id="stack01"
+df.stack()
+```
+
+### Output
+
+| Product | Month | Sales |
+| ------- | ----- | ----: |
+| Laptop  | Jan   |  5200 |
+| Laptop  | Feb   |  6100 |
+| Phone   | Jan   |  4800 |
+| Phone   | Feb   |  5300 |
+
+`stack()` creates a hierarchical (MultiIndex) Series.
+
+It is commonly used when preparing data for advanced analysis.
+
+---
+
+# 12. Understanding `unstack()`
+
+`unstack()` performs the opposite operation.
+
+It converts an index level into columns.
+
+Suppose:
+
+| Product | Month | Sales |
+| ------- | ----- | ----: |
+| Laptop  | Jan   |  5200 |
+| Laptop  | Feb   |  6100 |
+| Phone   | Jan   |  4800 |
+| Phone   | Feb   |  5300 |
+
+After applying:
+
+```python id="unstack01"
+df.unstack()
+```
+
+The result becomes:
+
+| Product |  Jan |  Feb |
+| ------- | ---: | ---: |
+| Laptop  | 5200 | 6100 |
+| Phone   | 4800 | 5300 |
+
+`stack()` and `unstack()` are especially useful when working with MultiIndex DataFrames.
+
+---
+
+# 13. Working with MultiIndex Reshaping
+
+Suppose we create a MultiIndex.
+
+```python id="multireshape01"
+df = df.set_index(
+    ["Region", "Category"]
+)
+```
+
+Example:
+
+| Region | Category   | Sales |
+| ------ | ---------- | ----: |
+| North  | Furniture  |  5200 |
+| North  | Technology |  6100 |
+| South  | Furniture  |  7300 |
+| South  | Technology |  8100 |
+
+Unstack the second level.
+
+```python id="multireshape02"
+df.unstack()
+```
+
+### Output
+
+| Region | Furniture | Technology |
+| ------ | --------: | ---------: |
+| North  |      5200 |       6100 |
+| South  |      7300 |       8100 |
+
+This creates a clean business summary from hierarchical data.
+
+---
+
+# 14. Choosing the Right Function
+
+Each reshaping function has a different purpose.
+
+| Function        | Converts                  | Typical Use          |
+| --------------- | ------------------------- | -------------------- |
+| `melt()`        | Wide → Long               | Data preparation     |
+| `pivot()`       | Long → Wide               | Report generation    |
+| `pivot_table()` | Long → Wide + Aggregation | Business summaries   |
+| `stack()`       | Columns → Rows            | MultiIndex reshaping |
+| `unstack()`     | Rows → Columns            | MultiIndex reporting |
+
+Understanding when to use each function is essential for efficient data transformation.
+
+---
+
+# Business Example
+
+A multinational retailer stores daily sales in a transactional format.
+
+Different teams require different layouts:
+
+* Data Scientists prefer **long-format** data for modeling.
+* Business Analysts create **pivot tables** for reporting.
+* Executives receive **wide-format dashboards**.
+* Data Engineers use **stack()** and **unstack()** when restructuring complex datasets.
+
+Using the appropriate reshaping function ensures that the same data can support multiple business needs.
+
+---
+
+# Best Practices
+
+✔ Use `melt()` for data preparation.
+
+✔ Use `pivot()` only when each combination is unique.
+
+✔ Use `pivot_table()` when duplicate observations exist.
+
+✔ Apply `stack()` and `unstack()` when working with MultiIndex DataFrames.
+
+✔ Verify row counts after reshaping to ensure data integrity.
+
+---
+
+# Common Mistakes
+
+### Using `pivot()` on Duplicate Data
+
+If duplicate index–column combinations exist, `pivot()` raises an error.
+
+In such cases, switch to:
+
+```python id="pivot04"
+pd.pivot_table()
+```
+
+---
+
+### Forgetting the Index Structure
+
+`stack()` and `unstack()` rely on the DataFrame's index.
+
+Before using them, inspect the index.
+
+```python id="index01"
+df.index
+```
+
+or
+
+```python id="index02"
+df.index.names
+```
+
+Understanding the current index structure helps avoid unexpected reshaping results.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Convert long data into wide format using `pivot()`.
+* Handle duplicate values with `pivot_table()`.
+* Reshape columns into rows using `stack()`.
+* Convert index levels into columns using `unstack()`.
+* Work with MultiIndex reshaping.
+* Select the correct reshaping function for different analytical tasks.
+
+> **"Effective data reshaping allows a single dataset to support reporting, visualization, statistical analysis, and machine learning without changing the underlying information."**
