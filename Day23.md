@@ -1,4 +1,4 @@
-# 🐼 Day 23 — Advanced Date & Time Handling in Pandas
+# Day 23 — Advanced Date & Time Handling in Pandas
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Date & Time Matter
@@ -64,9 +64,10 @@ The management team asks:
 
 Without proper DateTime handling, answering these questions becomes difficult.
 
+
 ---
 
-# 3. Learning Objectives
+# 3. Learning Objectives   
 
 By the end of this lesson, you will be able to:
 
