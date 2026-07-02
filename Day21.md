@@ -400,3 +400,409 @@ After completing this section, you should understand:
 
 > **"Effective data cleaning is not about removing imperfections—it is about making informed decisions that preserve the integrity and usefulness of the data."**
 
+# 8. Forward Fill (`ffill()`)
+
+Sometimes missing values should inherit the previous valid value.
+
+This technique is called **Forward Fill**.
+
+It is especially useful for:
+
+* Time-series data
+* Sensor readings
+* Stock prices
+* Inventory records
+* Weather observations
+
+---
+
+## Example Dataset
+
+| Date       | Temperature |
+| ---------- | ----------: |
+| 2025-01-01 |          28 |
+| 2025-01-02 |         NaN |
+| 2025-01-03 |          31 |
+| 2025-01-04 |         NaN |
+
+Apply Forward Fill.
+
+```python id="ffill01"
+df.ffill()
+```
+
+### Output
+
+| Date       | Temperature |
+| ---------- | ----------: |
+| 2025-01-01 |          28 |
+| 2025-01-02 |          28 |
+| 2025-01-03 |          31 |
+| 2025-01-04 |          31 |
+
+The last valid value is propagated forward.
+
+---
+
+## Filling Selected Columns
+
+```python id="ffill02"
+df["Temperature"] = (
+    df["Temperature"]
+      .ffill()
+)
+```
+
+This affects only the selected column.
+
+---
+
+# 9. Backward Fill (`bfill()`)
+
+Backward Fill replaces missing values using the **next valid observation**.
+
+```python id="bfill01"
+df.bfill()
+```
+
+Example Output:
+
+| Date       | Temperature |
+| ---------- | ----------: |
+| 2025-01-01 |          28 |
+| 2025-01-02 |          31 |
+| 2025-01-03 |          31 |
+| 2025-01-04 |          35 |
+
+Backward filling is useful when future observations are more appropriate than previous ones.
+
+---
+
+# 10. Interpolation
+
+Interpolation estimates missing values mathematically instead of copying neighboring values.
+
+Example:
+
+| Day | Sales |
+| --: | ----: |
+|   1 |   100 |
+|   2 |   NaN |
+|   3 |   140 |
+
+Apply interpolation.
+
+```python id="interp01"
+df["Sales"] = (
+    df["Sales"]
+      .interpolate()
+)
+```
+
+Output:
+
+| Day | Sales |
+| --: | ----: |
+|   1 |   100 |
+|   2 |   120 |
+|   3 |   140 |
+
+Interpolation is commonly used in:
+
+* Scientific research
+* Engineering
+* IoT
+* Environmental monitoring
+* Financial forecasting
+
+---
+
+# 11. Detecting Duplicate Records
+
+Duplicate rows can distort business reports and KPIs.
+
+Example:
+
+| Order ID | Customer | Sales |
+| -------- | -------- | ----: |
+| 1001     | Alice    |  5200 |
+| 1001     | Alice    |  5200 |
+| 1002     | Rahul    |  6100 |
+
+Identify duplicates.
+
+```python id="dup01"
+df.duplicated()
+```
+
+Returns:
+
+```text id="duptext01"
+False
+True
+False
+```
+
+---
+
+## Count Duplicate Rows
+
+```python id="dup02"
+df.duplicated().sum()
+```
+
+This reports the total number of duplicate records.
+
+---
+
+# 12. Removing Duplicate Records
+
+Remove duplicate rows.
+
+```python id="dup03"
+df.drop_duplicates()
+```
+
+---
+
+## Remove Duplicates Based on Specific Columns
+
+```python id="dup04"
+df.drop_duplicates(
+    subset=[
+        "Order ID"
+    ]
+)
+```
+
+This keeps only one record for each unique Order ID.
+
+---
+
+## Keep the Last Duplicate
+
+```python id="dup05"
+df.drop_duplicates(
+    subset="Order ID",
+    keep="last"
+)
+```
+
+Options include:
+
+* `"first"` (default)
+* `"last"`
+* `False` (remove all duplicates)
+
+---
+
+# 13. Cleaning Text Data
+
+Real-world datasets often contain inconsistent text.
+
+Example:
+
+| City  |
+| ----- |
+| Delhi |
+| delhi |
+| DELHI |
+| Delhi |
+
+These values should represent the same city.
+
+---
+
+## Remove Extra Spaces
+
+```python id="text01"
+df["City"] = (
+    df["City"]
+      .str.strip()
+)
+```
+
+---
+
+## Convert to Lowercase
+
+```python id="text02"
+df["City"] = (
+    df["City"]
+      .str.lower()
+)
+```
+
+---
+
+## Convert to Uppercase
+
+```python id="text03"
+df["City"] = (
+    df["City"]
+      .str.upper()
+)
+```
+
+---
+
+## Convert to Title Case
+
+```python id="text04"
+df["City"] = (
+    df["City"]
+      .str.title()
+)
+```
+
+Output:
+
+```text id="title01"
+Delhi
+Mumbai
+Bangalore
+```
+
+This creates consistent formatting.
+
+---
+
+# 14. Replacing Incorrect Values
+
+Suppose customers entered inconsistent city names.
+
+```text id="replace01"
+Bombay
+Mumbai
+MUMBAI
+```
+
+Standardize them.
+
+```python id="replace02"
+df["City"] = (
+    df["City"]
+      .replace(
+          {
+              "Bombay":"Mumbai",
+              "MUMBAI":"Mumbai"
+          }
+      )
+)
+```
+
+Consistent values improve grouping and reporting.
+
+---
+
+# 15. Correcting Data Types
+
+Imported datasets often assign incorrect data types.
+
+Check data types.
+
+```python id="dtype01"
+df.dtypes
+```
+
+Convert Sales into numeric values.
+
+```python id="dtype02"
+df["Sales"] = (
+    pd.to_numeric(
+        df["Sales"]
+    )
+)
+```
+
+Convert dates.
+
+```python id="dtype03"
+df["Order Date"] = (
+    pd.to_datetime(
+        df["Order Date"]
+    )
+)
+```
+
+Correct data types improve performance and reduce errors.
+
+---
+
+# Business Example
+
+A retail company receives customer records from multiple branches.
+
+Problems include:
+
+* Duplicate customers
+* Different spellings of cities
+* Missing phone numbers
+* Blank product categories
+* Numeric values stored as text
+
+Cleaning these issues ensures:
+
+* Accurate dashboards
+* Reliable customer analytics
+* Better forecasting
+* Higher-quality machine learning models
+
+---
+
+# Best Practices
+
+✔ Standardize text before grouping.
+
+✔ Remove duplicate records carefully.
+
+✔ Verify data types after importing.
+
+✔ Prefer interpolation only for continuous numerical data.
+
+✔ Document every cleaning step for reproducibility.
+
+---
+
+# Common Mistakes
+
+### Blindly Removing Duplicates
+
+Not every duplicate row is incorrect.
+
+Always verify whether duplicate records represent repeated transactions or genuine data-entry errors.
+
+---
+
+### Converting Text Without Cleaning
+
+Applying `.str.lower()` before removing extra spaces may still leave inconsistent values.
+
+Recommended order:
+
+1. `strip()`
+2. `replace()`
+3. `lower()` or `title()`
+
+---
+
+### Interpolating Categorical Data
+
+Interpolation should only be applied to continuous numerical variables.
+
+Never interpolate names, cities, or product categories.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Fill missing values using Forward Fill and Backward Fill.
+* Estimate missing numerical values with interpolation.
+* Detect and remove duplicate records.
+* Standardize text formatting.
+* Replace inconsistent values.
+* Correct data types for accurate analysis.
+
+> **"High-quality analysis begins with high-quality data. Every cleaned value improves the reliability of insights, dashboards, and predictive models."**
