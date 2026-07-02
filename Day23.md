@@ -1233,15 +1233,14 @@ Topics include:
 These concepts are essential for building efficient analytical pipelines and preparing datasets for machine learning.
 
 ---
+ 
 
 <div align="center">
 
-# 🎉 Day 23 Complete!
+#  Day 23 Complete!
 
 You've mastered one of the most valuable aspects of Pandas—working with dates and time.
 
 From extracting temporal features to building business KPIs, resampling data, and analyzing trends, you now have the skills needed for professional time-series analytics.
-
-⭐ **Next → Day 24: Categorical Data, Encoding & Memory Optimization** 🏷️🐼
 
 </div>
