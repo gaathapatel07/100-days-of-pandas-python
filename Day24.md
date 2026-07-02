@@ -380,3 +380,394 @@ After completing this section, you should understand:
 
 > **"Categorical data allows analysts to represent repeated information efficiently, reducing memory usage while improving performance across analytical workflows."**
 
+# 8. Ordered Categories
+
+Some categorical variables have a natural order.
+
+Examples include:
+
+* Customer Satisfaction
+* Education Level
+* Employee Performance
+* Product Ratings
+* T-Shirt Sizes
+
+Unlike nominal categories, ordinal categories should preserve their ranking.
+
+---
+
+## Creating Ordered Categories
+
+Suppose customer satisfaction levels are:
+
+```text id="order01"
+Poor
+
+Average
+
+Good
+
+Excellent
+```
+
+Create an ordered categorical column.
+
+```python id="order02"
+from pandas.api.types import CategoricalDtype
+
+satisfaction_order = CategoricalDtype(
+    categories=[
+        "Poor",
+        "Average",
+        "Good",
+        "Excellent"
+    ],
+    ordered=True
+)
+
+df["Satisfaction"] = (
+    df["Satisfaction"]
+      .astype(satisfaction_order)
+)
+```
+
+---
+
+## Comparing Ordered Categories
+
+```python id="order03"
+df[
+    df["Satisfaction"] >
+    "Average"
+]
+```
+
+Output:
+
+| Satisfaction |
+| ------------ |
+| Good         |
+| Excellent    |
+
+Ordered categories allow meaningful comparisons.
+
+---
+
+# 9. Renaming Categories
+
+Business terminology often changes.
+
+Suppose:
+
+```text id="rename01"
+M
+
+F
+```
+
+Rename the categories.
+
+```python id="rename02"
+df["Gender"] = (
+    df["Gender"]
+      .cat.rename_categories({
+          "M":"Male",
+          "F":"Female"
+      })
+)
+```
+
+Output:
+
+| Gender |
+| ------ |
+| Male   |
+| Female |
+
+This improves readability without changing the underlying structure.
+
+---
+
+# 10. Adding New Categories
+
+Sometimes additional categories become necessary.
+
+```python id="addcat01"
+df["Department"] = (
+    df["Department"]
+      .cat.add_categories(
+          ["Research"]
+      )
+)
+```
+
+Now the new category exists even if no rows currently use it.
+
+---
+
+# 11. Removing Unused Categories
+
+Suppose a category is no longer present.
+
+```python id="removecat01"
+df["Department"] = (
+    df["Department"]
+      .cat.remove_unused_categories()
+)
+```
+
+Removing unused categories keeps the metadata clean and reduces unnecessary storage.
+
+---
+
+# 12. Label Encoding
+
+Many machine learning algorithms require numerical inputs.
+
+Label Encoding assigns an integer to each category.
+
+Example:
+
+| City   | Label |
+| ------ | ----: |
+| Delhi  |     0 |
+| Mumbai |     1 |
+| Pune   |     2 |
+
+Using category codes:
+
+```python id="label01"
+df["City Label"] = (
+    df["City"]
+      .astype("category")
+      .cat.codes
+)
+```
+
+Output:
+
+| City   | Label |
+| ------ | ----: |
+| Delhi  |     0 |
+| Mumbai |     1 |
+| Delhi  |     0 |
+
+---
+
+## When to Use Label Encoding
+
+Suitable for:
+
+* Ordinal variables
+* Tree-based machine learning models
+* Decision Trees
+* Random Forest
+* XGBoost
+* LightGBM
+
+Avoid using label encoding for nominal categories with linear models because it may introduce an artificial order.
+
+---
+
+# 13. One-Hot Encoding
+
+For nominal variables, One-Hot Encoding is generally preferred.
+
+Original data:
+
+| Payment Method |
+| -------------- |
+| Cash           |
+| Card           |
+| UPI            |
+
+Create dummy variables.
+
+```python id="dummy01"
+pd.get_dummies(
+    df["Payment Method"]
+)
+```
+
+Output:
+
+| Cash | Card | UPI |
+| ---: | ---: | --: |
+|    1 |    0 |   0 |
+|    0 |    1 |   0 |
+|    0 |    0 |   1 |
+
+Each category becomes its own binary feature.
+
+---
+
+# 14. One-Hot Encoding Multiple Columns
+
+Encode several categorical columns simultaneously.
+
+```python id="dummy02"
+pd.get_dummies(
+    df,
+    columns=[
+        "Gender",
+        "Department"
+    ]
+)
+```
+
+The specified columns are replaced with encoded features.
+
+---
+
+# 15. Avoiding the Dummy Variable Trap
+
+In regression models, one dummy variable may be redundant because it can be inferred from the others.
+
+Avoid this by dropping one category.
+
+```python id="dummy03"
+pd.get_dummies(
+    df,
+    columns=["Gender"],
+    drop_first=True
+)
+```
+
+Example:
+
+Instead of:
+
+| Male | Female |
+| ---: | -----: |
+|    1 |      0 |
+|    0 |      1 |
+
+Store only:
+
+| Male |
+| ---: |
+|    1 |
+|    0 |
+
+The missing category is implied.
+
+---
+
+# 16. Feature Engineering Using Categories
+
+Categorical variables can be transformed into meaningful machine learning features.
+
+Example:
+
+Customer Segment:
+
+| Segment |
+| ------- |
+| Gold    |
+| Silver  |
+| Bronze  |
+
+Encoded features allow machine learning algorithms to use customer segment information effectively.
+
+Other examples include:
+
+* Product Categories
+* Shipping Methods
+* Customer Types
+* Education Levels
+* Subscription Plans
+
+---
+
+# Business Example
+
+A banking institution builds a customer churn prediction model.
+
+The dataset contains:
+
+* Gender
+* Marital Status
+* Occupation
+* Education Level
+* Account Type
+
+Before training the model:
+
+* Ordinal variables are label encoded.
+* Nominal variables are one-hot encoded.
+* High-cardinality variables are reviewed carefully.
+* Categories are standardized for consistency.
+
+The resulting dataset becomes suitable for predictive modeling.
+
+---
+
+# Best Practices
+
+✔ Use ordered categories only when a natural ranking exists.
+
+✔ Use One-Hot Encoding for nominal variables.
+
+✔ Use Label Encoding primarily for ordinal variables.
+
+✔ Remove unused categories regularly.
+
+✔ Document category mappings used during preprocessing.
+
+---
+
+# Common Mistakes
+
+### Label Encoding Nominal Categories
+
+Incorrect interpretation:
+
+```text id="mistake01"
+Red = 0
+
+Blue = 1
+
+Green = 2
+```
+
+These numbers do **not** indicate that Green is greater than Blue.
+
+For unordered variables, One-Hot Encoding is usually a better choice.
+
+---
+
+### One-Hot Encoding High-Cardinality Columns
+
+Encoding columns such as Customer ID or Email Address can create thousands of unnecessary columns.
+
+Consider alternative encoding strategies for very high-cardinality variables.
+
+---
+
+### Forgetting `drop_first=True`
+
+For linear regression models, retaining every dummy variable may introduce multicollinearity.
+
+Use:
+
+```python id="mistake02"
+drop_first=True
+```
+
+when appropriate.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Create ordered categories.
+* Rename categories.
+* Add and remove categories.
+* Perform Label Encoding.
+* Perform One-Hot Encoding.
+* Avoid the Dummy Variable Trap.
+* Prepare categorical variables for machine learning.
+
+> **"Encoding transforms human-readable categories into machine-readable features, enabling algorithms to learn meaningful patterns while preserving valuable business information."**
