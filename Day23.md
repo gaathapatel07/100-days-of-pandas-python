@@ -822,3 +822,426 @@ You have now learned how to:
 * Resample time-series datasets.
 
 > **"Time-series analysis transforms raw timestamps into meaningful business insights, helping organizations understand trends, seasonality, operational efficiency, and customer behavior."**
+
+# 16. Real-World Business Case Study
+
+## Scenario
+
+You are working as a **Senior Business Data Analyst** at **RetailHub**, a multinational e-commerce company.
+
+Every transaction includes:
+
+* Order Date
+* Delivery Date
+* Customer Registration Date
+* Payment Date
+* Region
+* Sales
+* Profit
+
+Management wants to answer several business questions:
+
+* Which month generated the highest revenue?
+* Which quarter was most profitable?
+* What is the average delivery time?
+* How many orders were placed on weekends?
+* Which days experience the highest sales volume?
+
+Your task is to prepare and analyze the DateTime data using Pandas.
+
+---
+
+# Business Questions
+
+### Question 1
+
+Extract the month from each order.
+
+```python id="case_date01"
+df["Month"] = (
+    df["Order Date"]
+      .dt.month_name()
+)
+```
+
+---
+
+### Question 2
+
+Calculate delivery duration.
+
+```python id="case_date02"
+df["Delivery Days"] = (
+    df["Delivery Date"]
+    -
+    df["Order Date"]
+).dt.days
+```
+
+---
+
+### Question 3
+
+Find orders placed during weekends.
+
+```python id="case_date03"
+weekend_orders = df[
+    df["Order Date"]
+      .dt.dayofweek >= 5
+]
+```
+
+`dayofweek`
+
+| Value | Day       |
+| ----: | --------- |
+|     0 | Monday    |
+|     1 | Tuesday   |
+|     2 | Wednesday |
+|     3 | Thursday  |
+|     4 | Friday    |
+|     5 | Saturday  |
+|     6 | Sunday    |
+
+---
+
+### Question 4
+
+Calculate monthly revenue.
+
+```python id="case_date04"
+monthly_sales = (
+    df.groupby(
+        df["Order Date"]
+          .dt.month_name()
+    )["Sales"]
+    .sum()
+)
+```
+
+---
+
+### Question 5
+
+Generate quarterly profit.
+
+```python id="case_date05"
+quarterly_profit = (
+    df.groupby(
+        df["Order Date"]
+          .dt.quarter
+    )["Profit"]
+    .sum()
+)
+```
+
+---
+
+# 17. Building Business KPIs
+
+Date columns help organizations generate important performance indicators.
+
+Examples:
+
+* Daily Revenue
+* Weekly Orders
+* Monthly Growth
+* Quarterly Profit
+* Year-over-Year Sales
+* Customer Retention
+* Delivery Performance
+
+Example:
+
+Daily sales summary.
+
+```python id="kpi01"
+daily_sales = (
+    df.groupby(
+        df["Order Date"]
+          .dt.date
+    )["Sales"]
+    .sum()
+)
+```
+
+Monthly average order value.
+
+```python id="kpi02"
+monthly_aov = (
+    df.groupby(
+        df["Order Date"]
+          .dt.to_period("M")
+    )["Sales"]
+    .mean()
+)
+```
+
+---
+
+# 18. Advanced Resampling
+
+Resampling changes the frequency of time-series data.
+
+Suppose sales are recorded hourly.
+
+Convert them into daily totals.
+
+```python id="resample02"
+daily_sales = (
+    df.resample(
+        "D",
+        on="Order Date"
+    )["Sales"]
+    .sum()
+)
+```
+
+Weekly averages.
+
+```python id="resample03"
+weekly_sales = (
+    df.resample(
+        "W",
+        on="Order Date"
+    )["Sales"]
+    .mean()
+)
+```
+
+Quarterly totals.
+
+```python id="resample04"
+quarterly_sales = (
+    df.resample(
+        "Q",
+        on="Order Date"
+    )["Sales"]
+    .sum()
+)
+```
+
+Resampling enables flexible reporting at different time intervals.
+
+---
+
+# 19. Performance Optimization
+
+Large time-series datasets require efficient processing.
+
+### Convert Dates Immediately
+
+```python id="perf_date01"
+df["Order Date"] = (
+    pd.to_datetime(
+        df["Order Date"]
+    )
+)
+```
+
+Avoid repeatedly converting the same column.
+
+---
+
+### Set DateTime as Index
+
+```python id="perf_date02"
+df = df.set_index(
+    "Order Date"
+)
+```
+
+This improves the performance of filtering, slicing, and resampling.
+
+---
+
+### Sort Dates
+
+```python id="perf_date03"
+df = df.sort_index()
+```
+
+Chronological ordering improves the accuracy of rolling windows and resampling operations.
+
+---
+
+# 20. Business Insights
+
+After analyzing the dataset, you discover:
+
+* Weekend sales consistently exceed weekday sales.
+* The fourth quarter contributes the highest annual revenue.
+* Average delivery time is approximately four days.
+* Monthly revenue follows a clear seasonal pattern.
+* Holiday periods produce significant increases in sales volume.
+
+These findings help management improve inventory planning, staffing, and marketing campaigns.
+
+---
+
+# 21. Practice Exercises
+
+## Beginner
+
+1. Convert strings to DateTime.
+2. Extract the year and month.
+3. Extract the weekday.
+4. Filter orders after a given date.
+5. Generate a weekly date range.
+
+---
+
+## Intermediate
+
+6. Calculate delivery duration.
+7. Add business days to an order date.
+8. Convert timestamps between time zones.
+9. Calculate a rolling average.
+10. Generate monthly sales summaries.
+
+---
+
+## Advanced
+
+11. Build a quarterly KPI report.
+12. Resample hourly data into daily totals.
+13. Analyze weekend versus weekday sales.
+14. Create a customer retention timeline.
+15. Write five recommendations based on seasonal trends.
+
+---
+
+# 22. Interview Questions
+
+## Beginner
+
+1. What is a DateTime object?
+2. Why use `pd.to_datetime()`?
+3. What does `.dt` do?
+4. What is `NaT`?
+5. How do you extract the month from a date?
+
+---
+
+## Intermediate
+
+6. Difference between `Timedelta` and `DateOffset`?
+7. What is resampling?
+8. Why use business days?
+9. How do you filter records by date?
+10. Why are time zones important?
+
+---
+
+## Advanced
+
+11. Explain a complete time-series workflow.
+12. Compare rolling windows and resampling.
+13. Design KPIs using DateTime data.
+14. How would you optimize time-series analysis for millions of records?
+15. Describe a real-world forecasting workflow using Pandas.
+
+---
+
+# 23. Cheat Sheet
+
+| Task                | Syntax             |
+| ------------------- | ------------------ |
+| Convert to DateTime | `pd.to_datetime()` |
+| Extract Year        | `.dt.year`         |
+| Extract Month       | `.dt.month`        |
+| Month Name          | `.dt.month_name()` |
+| Day                 | `.dt.day`          |
+| Weekday             | `.dt.day_name()`   |
+| Quarter             | `.dt.quarter`      |
+| Date Arithmetic     | `+ pd.Timedelta()` |
+| Business Days       | `BDay()`           |
+| Time Zone           | `tz_localize()`    |
+| Convert Time Zone   | `tz_convert()`     |
+| Shift               | `shift()`          |
+| Rolling Average     | `rolling().mean()` |
+| Resample            | `resample()`       |
+
+---
+
+# 24. Mini Project
+
+## Time-Series Sales Analytics Dashboard
+
+Using any retail, banking, logistics, healthcare, or finance dataset:
+
+Complete the following tasks:
+
+* Convert all date columns into DateTime format.
+* Handle invalid dates using `errors="coerce"`.
+* Extract year, month, weekday, and quarter.
+* Calculate delivery duration.
+* Identify weekend orders.
+* Generate daily, weekly, monthly, and quarterly summaries.
+* Compute rolling averages for sales.
+* Resample data at different frequencies.
+* Export the processed dataset.
+* Write **five executive-level business insights**.
+* Recommend **three business strategies** based on seasonal trends.
+
+### Example Business Insights
+
+* Sales consistently peak during weekends.
+* Fourth-quarter revenue significantly exceeds other quarters.
+* Delivery times are longest during holiday seasons.
+* Customer registrations increase at the beginning of each month.
+* Rolling averages reveal steady long-term revenue growth despite short-term fluctuations.
+
+---
+
+# 25. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Advanced Date & Time Handling** in Pandas.
+
+You learned how to:
+
+* Convert text into DateTime objects.
+* Extract meaningful date components.
+* Filter records using dates.
+* Perform date arithmetic with `Timedelta`.
+* Work with business days and time zones.
+* Apply rolling windows and resampling.
+* Build business KPIs using temporal data.
+
+These techniques are fundamental for financial analysis, operational reporting, customer analytics, forecasting, and time-series machine learning.
+
+---
+
+# 26. What's Next?
+
+In **Day 24**, you'll learn **Categorical Data, Encoding & Memory Optimization**.
+
+Topics include:
+
+* Understanding Categorical Data
+* Category Data Type
+* Label Encoding
+* One-Hot Encoding
+* Dummy Variables
+* Ordered Categories
+* Memory Optimization
+* Category Operations
+* Feature Engineering for Machine Learning
+
+These concepts are essential for building efficient analytical pipelines and preparing datasets for machine learning.
+
+---
+
+<div align="center">
+
+# 🎉 Day 23 Complete!
+
+You've mastered one of the most valuable aspects of Pandas—working with dates and time.
+
+From extracting temporal features to building business KPIs, resampling data, and analyzing trends, you now have the skills needed for professional time-series analytics.
+
+⭐ **Next → Day 24: Categorical Data, Encoding & Memory Optimization** 🏷️🐼
+
+</div>
