@@ -1,4 +1,4 @@
-# 🐼 Day 22 — Advanced String Operations & Regular Expressions (Regex)
+# Day 22 — Advanced String Operations & Regular Expressions (Regex)
 
 <div align="center">
 
@@ -16,7 +16,8 @@
 
 ---
 
-# 📚 Table of Contents
+
+# Table of Contents
 
 1. Introduction
 2. Why String Processing Matters
@@ -48,11 +49,12 @@ Unlike numerical data, text often contains inconsistencies such as:
 
 * Extra spaces
 * Mixed capitalization
-* Typographical errors
+* Typographical errors 
 * Missing values
 * Unwanted symbols
 
 Before meaningful analysis can begin, text must be cleaned and standardized.
+
 
 Pandas provides the powerful `.str` accessor, allowing analysts to perform vectorized string operations efficiently.
 
