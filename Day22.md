@@ -375,3 +375,413 @@ After completing this section, you should understand:
 
 > **"Consistent text transforms fragmented information into meaningful categories, enabling accurate analysis and reliable business insights."**
 
+# 8. Checking the Beginning of a String
+
+Sometimes you need to filter records that start with a specific pattern.
+
+Examples:
+
+* Employee IDs
+* Product Codes
+* Invoice Numbers
+* Customer IDs
+
+---
+
+## Using `startswith()`
+
+Suppose employee IDs begin with **EMP**.
+
+```python id="start01"
+df[
+    df["Employee ID"]
+      .str.startswith("EMP")
+]
+```
+
+### Example
+
+| Employee ID |
+| ----------- |
+| EMP001      |
+| EMP002      |
+| MGR101      |
+
+Output:
+
+| Employee ID |
+| ----------- |
+| EMP001      |
+| EMP002      |
+
+---
+
+## Case-Insensitive Search
+
+```python id="start02"
+df[
+    df["Employee ID"]
+      .str.lower()
+      .str.startswith("emp")
+]
+```
+
+This ensures consistent matching regardless of capitalization.
+
+---
+
+# 9. Checking the End of a String
+
+Use `endswith()` to identify values ending with a specific pattern.
+
+Example:
+
+```python id="end01"
+df[
+    df["Email"]
+      .str.endswith(".com")
+]
+```
+
+Output:
+
+| Email                                     |
+| ----------------------------------------- |
+| [alice@gmail.com](mailto:alice@gmail.com) |
+| [john@yahoo.com](mailto:john@yahoo.com)   |
+
+Useful for:
+
+* File extensions
+* Email domains
+* URLs
+* Product SKUs
+
+---
+
+# 10. Replacing Text
+
+Replace incorrect or outdated values.
+
+Suppose the dataset contains:
+
+| City      |
+| --------- |
+| Bombay    |
+| Bangalore |
+| Madras    |
+
+Update them.
+
+```python id="replace01"
+df["City"] = (
+    df["City"]
+      .str.replace(
+          "Bombay",
+          "Mumbai"
+      )
+)
+```
+
+Replace multiple values.
+
+```python id="replace02"
+df["City"] = (
+    df["City"]
+      .replace({
+          "Bombay":"Mumbai",
+          "Madras":"Chennai",
+          "Calcutta":"Kolkata"
+      })
+)
+```
+
+---
+
+# 11. Splitting Strings
+
+Many datasets combine multiple values in one column.
+
+Example:
+
+| Name        |
+| ----------- |
+| Alice Smith |
+| Rahul Patel |
+
+Split the names.
+
+```python id="split01"
+df["Name"].str.split()
+```
+
+Output:
+
+```text id="splittext01"
+["Alice","Smith"]
+
+["Rahul","Patel"]
+```
+
+---
+
+## Splitting into Multiple Columns
+
+```python id="split02"
+df[
+    ["First Name","Last Name"]
+] = (
+    df["Name"]
+      .str.split(
+          " ",
+          expand=True
+      )
+)
+```
+
+Output:
+
+| First Name | Last Name |
+| ---------- | --------- |
+| Alice      | Smith     |
+| Rahul      | Patel     |
+
+---
+
+# 12. Joining Strings
+
+Combine multiple columns.
+
+```python id="join01"
+df["Full Name"] = (
+    df["First Name"]
+    + " "
+    + df["Last Name"]
+)
+```
+
+Output:
+
+| Full Name   |
+| ----------- |
+| Alice Smith |
+| Rahul Patel |
+
+---
+
+# 13. Extracting Text
+
+Sometimes only part of a string is needed.
+
+Suppose employee IDs look like:
+
+```text id="extract01"
+EMP001
+
+EMP245
+
+EMP999
+```
+
+Extract only the numeric portion.
+
+```python id="extract02"
+df["Employee ID"].str.extract(
+    r"(\d+)"
+)
+```
+
+Output:
+
+| Employee Number |
+| --------------: |
+|               1 |
+|             245 |
+|             999 |
+
+---
+
+# 14. Calculating String Length
+
+Count the number of characters.
+
+```python id="length01"
+df["Name Length"] = (
+    df["Customer"]
+      .str.len()
+)
+```
+
+Output:
+
+| Customer    | Length |
+| ----------- | -----: |
+| Alice       |      5 |
+| Rahul       |      5 |
+| Christopher |     11 |
+
+Applications include:
+
+* Password validation
+* Product code verification
+* Customer name analysis
+
+---
+
+# 15. Counting Words
+
+Determine the number of words in customer feedback.
+
+```python id="words01"
+df["Word Count"] = (
+    df["Feedback"]
+      .str.split()
+      .str.len()
+)
+```
+
+Output:
+
+| Feedback          | Word Count |
+| ----------------- | ---------: |
+| Very good service |          3 |
+| Excellent support |          2 |
+
+Useful for:
+
+* NLP preprocessing
+* Review analysis
+* Survey responses
+
+---
+
+# 16. Chaining Multiple String Operations
+
+Complex cleaning tasks often combine several methods.
+
+Example:
+
+```python id="chain01"
+df["City"] = (
+    df["City"]
+      .str.strip()
+      .str.lower()
+      .str.replace(
+          "-",
+          " "
+      )
+      .str.title()
+)
+```
+
+Input:
+
+```text id="chain02"
+ DELHI-
+
+mumbai
+
+BANGALORE
+```
+
+Output:
+
+```text id="chain03"
+Delhi
+
+Mumbai
+
+Bangalore
+```
+
+Method chaining produces concise, readable code.
+
+---
+
+# Business Example
+
+A multinational retailer stores customer names collected from online forms.
+
+Issues include:
+
+* Mixed capitalization
+* Extra spaces
+* Combined first and last names
+* Inconsistent city names
+* Invalid product codes
+
+String operations standardize the dataset before customer segmentation and reporting.
+
+---
+
+# Best Practices
+
+✔ Use vectorized string methods instead of loops.
+
+✔ Apply `strip()` before changing capitalization.
+
+✔ Use `expand=True` when splitting into multiple columns.
+
+✔ Standardize values before grouping or merging.
+
+✔ Chain operations for cleaner code.
+
+---
+
+# Common Mistakes
+
+### Forgetting `expand=True`
+
+Incorrect:
+
+```python id="mistake03"
+df["Name"].str.split(" ")
+```
+
+This returns a list.
+
+Correct:
+
+```python id="mistake04"
+df["Name"].str.split(
+    " ",
+    expand=True
+)
+```
+
+This creates separate DataFrame columns.
+
+---
+
+### Applying String Methods to Numeric Columns
+
+Always verify the data type.
+
+```python id="mistake05"
+df["Sales"].dtype
+```
+
+Convert to string only when necessary.
+
+```python id="mistake06"
+df["Sales"] = (
+    df["Sales"]
+      .astype(str)
+)
+```
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Search using `startswith()` and `endswith()`.
+* Replace text values.
+* Split strings into multiple columns.
+* Join text columns.
+* Extract portions of strings.
+* Count characters and words.
+* Chain multiple string operations efficiently.
+
+> **"Well-structured text data transforms inconsistent records into reliable information, enabling accurate reporting, customer segmentation, and advanced analytics."**
