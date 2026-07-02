@@ -1298,12 +1298,11 @@ These concepts are fundamental for time-series analysis, financial reporting, op
 
 <div align="center">
 
-# 🎉 Day 22 Complete!
+# Day 22 Complete!
 
 You've mastered advanced text processing and Regular Expressions in Pandas.
 
 You can now clean, validate, extract, and standardize textual information with techniques widely used in enterprise analytics, ETL pipelines, customer relationship management, and data science.
 
-⭐ **Next → Day 23: Advanced Date & Time Handling** 📅🐼
 
 </div>
