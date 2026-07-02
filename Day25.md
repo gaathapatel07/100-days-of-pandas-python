@@ -1,4 +1,4 @@
-# 🐼 Day 25 — Advanced `map()`, `apply()`, `pipe()` & Vectorization
+# Day 25 — Advanced `map()`, `apply()`, `pipe()` & Vectorization
 
 <div align="center">
 
@@ -16,7 +16,8 @@
 
 ---
 
-# 📚 Table of Contents
+
+# Table of Contents
 
 1. Introduction
 2. Why Data Transformation Matters
@@ -124,7 +125,7 @@ df["Gender"] = (
 | F        | Female |
 | M        | Male   |
 
-Each value is replaced according to the mapping dictionary.
+Each value is replaced according to the mapping dictionary. 
 
 ---
 
