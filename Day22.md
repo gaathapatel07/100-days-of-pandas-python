@@ -785,3 +785,525 @@ You have now learned how to:
 * Chain multiple string operations efficiently.
 
 > **"Well-structured text data transforms inconsistent records into reliable information, enabling accurate reporting, customer segmentation, and advanced analytics."**
+
+# 17. Introduction to Regular Expressions (Regex)
+
+Regular Expressions (Regex) are patterns used to search, match, validate, and extract text.
+
+Instead of searching for exact words, Regex allows you to define **patterns**.
+
+Examples:
+
+* Validate email addresses
+* Extract phone numbers
+* Find URLs
+* Detect PIN codes
+* Extract invoice numbers
+* Validate product IDs
+
+Pandas integrates Regex through many string functions such as:
+
+* `str.contains()`
+* `str.extract()`
+* `str.replace()`
+* `str.findall()`
+
+---
+
+# 18. Common Regex Patterns
+
+| Pattern | Meaning                     | Example Match |
+| ------- | --------------------------- | ------------- |
+| `.`     | Any single character        | A, b, 7       |
+| `\d`    | Any digit                   | 0–9           |
+| `\D`    | Non-digit                   | A, @          |
+| `\w`    | Letter, digit or underscore | A, 9, _       |
+| `\W`    | Special character           | @, #          |
+| `\s`    | Whitespace                  | Space, Tab    |
+| `\S`    | Non-whitespace              | A, 5          |
+| `^`     | Start of string             | Beginning     |
+| `$`     | End of string               | Ending        |
+| `+`     | One or more occurrences     | abc           |
+| `*`     | Zero or more occurrences    | aa            |
+| `?`     | Optional character          | colou?r       |
+
+Understanding these symbols allows you to create powerful search patterns.
+
+---
+
+# 19. Finding Patterns Using `contains()`
+
+Suppose we want every Gmail address.
+
+```python id="regex01"
+df[
+    df["Email"]
+      .str.contains(
+          r"gmail\.com",
+          regex=True,
+          na=False
+      )
+]
+```
+
+Output:
+
+| Email                                     |
+| ----------------------------------------- |
+| [alice@gmail.com](mailto:alice@gmail.com) |
+| [john@gmail.com](mailto:john@gmail.com)   |
+
+---
+
+# 20. Extracting Information Using Regex
+
+Suppose invoice IDs look like:
+
+```text id="regex02"
+INV-2026-001
+
+INV-2026-245
+
+INV-2026-999
+```
+
+Extract the invoice number.
+
+```python id="regex03"
+df["Invoice Number"] = (
+    df["Invoice"]
+      .str.extract(
+          r"(\d{3})$"
+      )
+)
+```
+
+Output:
+
+| Invoice      | Invoice Number |
+| ------------ | -------------: |
+| INV-2026-001 |            001 |
+| INV-2026-245 |            245 |
+| INV-2026-999 |            999 |
+
+---
+
+# 21. Validating Email Addresses
+
+A common email pattern:
+
+```python id="regex04"
+pattern = (
+    r"^[A-Za-z0-9._%+-]+"
+    r"@[A-Za-z0-9.-]+"
+    r"\.[A-Za-z]{2,}$"
+)
+```
+
+Validate emails.
+
+```python id="regex05"
+valid_email = (
+    df["Email"]
+      .str.match(
+          pattern,
+          na=False
+      )
+)
+```
+
+Example:
+
+| Email                                     | Valid |
+| ----------------------------------------- | ----- |
+| [alice@gmail.com](mailto:alice@gmail.com) | ✅     |
+| [john@yahoo.in](mailto:john@yahoo.in)     | ✅     |
+| abc@                                      | ❌     |
+| @gmail.com                                | ❌     |
+
+---
+
+# 22. Validating Phone Numbers
+
+Suppose phone numbers must contain exactly 10 digits.
+
+```python id="regex06"
+pattern = r"^\d{10}$"
+
+df["Valid Phone"] = (
+    df["Phone"]
+      .str.match(
+          pattern,
+          na=False
+      )
+)
+```
+
+Example:
+
+| Phone      | Valid |
+| ---------- | ----- |
+| 9876543210 | ✅     |
+| 91234      | ❌     |
+| 98765abcd1 | ❌     |
+
+---
+
+# 23. Extracting Website URLs
+
+Suppose customer feedback contains website links.
+
+```text id="regex07"
+Visit https://company.com
+
+See https://example.org
+```
+
+Extract URLs.
+
+```python id="regex08"
+df["URL"] = (
+    df["Feedback"]
+      .str.extract(
+          r"(https?://\S+)"
+      )
+)
+```
+
+Output:
+
+| Feedback                  | URL                 |
+| ------------------------- | ------------------- |
+| Visit https://company.com | https://company.com |
+
+---
+
+# 24. Removing Special Characters
+
+Keep only letters, numbers, and spaces.
+
+```python id="regex09"
+df["Customer"] = (
+    df["Customer"]
+      .str.replace(
+          r"[^A-Za-z0-9 ]",
+          "",
+          regex=True
+      )
+)
+```
+
+Example:
+
+| Original  | Cleaned  |
+| --------- | -------- |
+| Alice@123 | Alice123 |
+| John#!    | John     |
+
+---
+
+# 25. Finding All Matches
+
+Retrieve every number present inside a string.
+
+```python id="regex10"
+df["Numbers"] = (
+    df["Description"]
+      .str.findall(
+          r"\d+"
+      )
+)
+```
+
+Example:
+
+| Description      | Numbers   |
+| ---------------- | --------- |
+| Order 245 Qty 12 | [245, 12] |
+| Invoice 567      | [567]     |
+
+---
+
+# 26. Business Case Study
+
+## Scenario
+
+You are working as a **Data Quality Analyst** for an online marketplace.
+
+The customer database contains:
+
+* Invalid email addresses
+* Incorrect phone numbers
+* Product IDs with inconsistent formats
+* URLs embedded inside customer reviews
+* Names containing unwanted symbols
+
+Your task is to validate, clean, and standardize the text fields before marketing campaigns begin.
+
+---
+
+## Business Questions
+
+### Question 1
+
+Identify valid email addresses.
+
+```python id="case_regex01"
+email_pattern = (
+    r"^[A-Za-z0-9._%+-]+"
+    r"@[A-Za-z0-9.-]+"
+    r"\.[A-Za-z]{2,}$"
+)
+
+df["Valid Email"] = (
+    df["Email"]
+      .str.match(
+          email_pattern,
+          na=False
+      )
+)
+```
+
+---
+
+### Question 2
+
+Identify valid phone numbers.
+
+```python id="case_regex02"
+phone_pattern = r"^\d{10}$"
+
+df["Valid Phone"] = (
+    df["Phone"]
+      .str.match(
+          phone_pattern,
+          na=False
+      )
+)
+```
+
+---
+
+### Question 3
+
+Extract URLs from customer reviews.
+
+```python id="case_regex03"
+df["URL"] = (
+    df["Review"]
+      .str.extract(
+          r"(https?://\S+)"
+      )
+)
+```
+
+---
+
+### Question 4
+
+Remove unwanted symbols from customer names.
+
+```python id="case_regex04"
+df["Customer"] = (
+    df["Customer"]
+      .str.replace(
+          r"[^A-Za-z ]",
+          "",
+          regex=True
+      )
+)
+```
+
+---
+
+### Question 5
+
+Extract invoice numbers.
+
+```python id="case_regex05"
+df["Invoice Number"] = (
+    df["Invoice"]
+      .str.extract(
+          r"(\d+)"
+      )
+)
+```
+
+---
+
+# 27. Business Insights
+
+After cleaning the customer database, you discover:
+
+* Nearly 8% of customer emails are invalid.
+* Multiple phone numbers fail the required validation rules.
+* Product identifiers become consistent after removing unwanted characters.
+* Extracted URLs provide valuable information about customer-referenced websites.
+* Clean text significantly improves customer segmentation and reporting accuracy.
+
+---
+
+# 28. Practice Exercises
+
+## Beginner
+
+1. Convert text to lowercase.
+2. Remove leading and trailing spaces.
+3. Search for a keyword.
+4. Replace incorrect city names.
+5. Split names into first and last names.
+
+---
+
+## Intermediate
+
+6. Extract invoice numbers.
+7. Validate email addresses.
+8. Validate phone numbers.
+9. Remove special characters.
+10. Count words in customer feedback.
+
+---
+
+## Advanced
+
+11. Extract all URLs from reviews.
+12. Create custom Regex patterns.
+13. Build a complete text-cleaning pipeline.
+14. Standardize customer names and addresses.
+15. Write five recommendations for improving text data quality.
+
+---
+
+# 29. Interview Questions
+
+## Beginner
+
+1. What is the `.str` accessor?
+2. What is Regular Expression (Regex)?
+3. Difference between `contains()` and `match()`?
+4. What is `replace()` used for?
+5. Why clean text before analysis?
+
+---
+
+## Intermediate
+
+6. Difference between `split()` and `extract()`?
+7. How do you validate an email address?
+8. How do you validate a phone number?
+9. Why is Regex useful?
+10. What is method chaining?
+
+---
+
+## Advanced
+
+11. Explain a real-world text-cleaning workflow.
+12. Compare `contains()`, `match()`, and `extract()`.
+13. Design a Regex pattern for product IDs.
+14. How would you clean millions of customer records?
+15. How does text preprocessing improve machine learning models?
+
+---
+
+# 30. Cheat Sheet
+
+| Operation     | Syntax              |
+| ------------- | ------------------- |
+| Lowercase     | `.str.lower()`      |
+| Uppercase     | `.str.upper()`      |
+| Title Case    | `.str.title()`      |
+| Remove Spaces | `.str.strip()`      |
+| Search Text   | `.str.contains()`   |
+| Starts With   | `.str.startswith()` |
+| Ends With     | `.str.endswith()`   |
+| Replace       | `.str.replace()`    |
+| Split         | `.str.split()`      |
+| Join          | `+`                 |
+| Extract       | `.str.extract()`    |
+| Match Pattern | `.str.match()`      |
+| Find All      | `.str.findall()`    |
+
+---
+
+# 31. Mini Project
+
+## Customer Data Standardization & Validation System
+
+Using any customer, HR, banking, healthcare, or e-commerce dataset:
+
+Complete the following tasks:
+
+* Standardize names and city values.
+* Remove unnecessary spaces and symbols.
+* Convert text into a consistent format.
+* Validate email addresses.
+* Validate phone numbers.
+* Extract invoice numbers and URLs.
+* Generate a report showing invalid records.
+* Export the cleaned dataset.
+* Write **five executive-level business insights**.
+* Recommend **three improvements** for future data collection.
+
+### Example Business Insights
+
+* Standardizing customer names reduced duplicate customer records.
+* Email validation identified invalid contact information before campaign execution.
+* Phone number validation improved communication reliability.
+* Regex extraction simplified invoice tracking.
+* Text preprocessing improved the consistency of customer segmentation.
+
+---
+
+# 32. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Advanced String Operations & Regular Expressions** in Pandas.
+
+You learned how to:
+
+* Process text using the `.str` accessor.
+* Search, replace, split, and join strings.
+* Extract information using Regex.
+* Validate emails and phone numbers.
+* Remove unwanted characters.
+* Build professional text-cleaning workflows.
+
+These techniques are widely used in ETL pipelines, customer analytics, fraud detection, CRM systems, NLP, and business intelligence.
+
+---
+
+# 33. What's Next?
+
+In **Day 23**, you'll explore **Advanced Date & Time Handling in Pandas**.
+
+Topics include:
+
+* DateTime Objects
+* Date Arithmetic
+* Extracting Year, Month, Day, Hour, Minute, and Second
+* Time Zones
+* Business Days
+* Offsets
+* Date Ranges
+* Timedeltas
+* Holiday Calendars
+* Advanced Date Filtering
+
+These concepts are fundamental for time-series analysis, financial reporting, operational analytics, forecasting, and scheduling.
+
+---
+
+<div align="center">
+
+# 🎉 Day 22 Complete!
+
+You've mastered advanced text processing and Regular Expressions in Pandas.
+
+You can now clean, validate, extract, and standardize textual information with techniques widely used in enterprise analytics, ETL pipelines, customer relationship management, and data science.
+
+⭐ **Next → Day 23: Advanced Date & Time Handling** 📅🐼
+
+</div>
