@@ -747,3 +747,432 @@ You have now learned how to:
 * Write clean method-chained Pandas code.
 
 > **"Well-designed transformation pipelines are easier to understand, easier to maintain, and easier to scale as datasets and business requirements grow."**
+
+# 16. Vectorization
+
+One of the biggest advantages of Pandas is **vectorization**.
+
+Instead of processing one row at a time using loops, vectorized operations apply calculations to an entire column simultaneously.
+
+Vectorization is:
+
+* Faster
+* Cleaner
+* Easier to read
+* Optimized internally using NumPy
+
+---
+
+## Example
+
+Instead of:
+
+```python id="vector01"
+result = []
+
+for value in df["Sales"]:
+    result.append(value * 1.10)
+
+df["Updated Sales"] = result
+```
+
+Use:
+
+```python id="vector02"
+df["Updated Sales"] = (
+    df["Sales"] * 1.10
+)
+```
+
+Both produce the same result, but the vectorized version is significantly faster.
+
+---
+
+# 17. Vectorization vs `apply()`
+
+Many beginners use `apply()` for every task.
+
+However, built-in vectorized operations should be preferred whenever possible.
+
+Example:
+
+Using `apply()`:
+
+```python id="vector03"
+df["Tax"] = (
+    df["Price"]
+      .apply(
+          lambda x:
+          x * 0.18
+      )
+)
+```
+
+Using vectorization:
+
+```python id="vector04"
+df["Tax"] = (
+    df["Price"] * 0.18
+)
+```
+
+The second approach is:
+
+* Faster
+* More readable
+* Better optimized
+
+---
+
+# 18. Performance Comparison
+
+Suppose a DataFrame contains **1 million rows**.
+
+| Method               | Approximate Time |
+| -------------------- | ---------------: |
+| Python Loop          |      8.5 seconds |
+| `apply()`            |      2.4 seconds |
+| Vectorized Operation |     0.08 seconds |
+
+The exact timings depend on hardware and the specific operation, but vectorized operations are generally much faster than loops and often faster than `apply()`.
+
+---
+
+# 19. Building a Complete Transformation Pipeline
+
+Professional workflows often combine several operations.
+
+```python id="pipeline01"
+def clean_data(dataframe):
+
+    return (
+        dataframe
+        .drop_duplicates()
+        .dropna()
+        .assign(
+            Revenue=lambda x:
+            x["Quantity"] * x["Price"]
+        )
+        .sort_values("Revenue")
+        .reset_index(drop=True)
+    )
+```
+
+Execute:
+
+```python id="pipeline02"
+clean_df = clean_data(df)
+```
+
+The transformation remains concise, readable, and reusable.
+
+---
+
+# 20. Enterprise ETL Workflow
+
+Large organizations often process data through a structured pipeline.
+
+```text id="etl01"
+Raw Data
+    │
+    ▼
+Read Dataset
+    │
+    ▼
+Clean Missing Values
+    │
+    ▼
+Transform Columns
+    │
+    ▼
+Apply Business Rules
+    │
+    ▼
+Create New Features
+    │
+    ▼
+Validate Data
+    │
+    ▼
+Export Clean Dataset
+```
+
+Breaking transformations into small reusable functions makes enterprise code easier to maintain.
+
+---
+
+# 21. Real-World Business Case Study
+
+## Scenario
+
+You are working as a **Senior Data Analyst** for **RetailHub**.
+
+The daily transaction dataset contains:
+
+* Duplicate records
+* Missing values
+* Payment codes
+* Product prices
+* Quantities
+* Customer cities
+
+Your goal is to prepare the data before creating executive dashboards.
+
+---
+
+## Business Questions
+
+### Question 1
+
+Map payment codes.
+
+```python id="case_apply01"
+payment_map = {
+    1: "Cash",
+    2: "Card",
+    3: "UPI"
+}
+
+df["Payment"] = (
+    df["Payment Code"]
+      .map(payment_map)
+)
+```
+
+---
+
+### Question 2
+
+Calculate revenue.
+
+```python id="case_apply02"
+df["Revenue"] = (
+    df["Price"] *
+    df["Quantity"]
+)
+```
+
+---
+
+### Question 3
+
+Standardize city names.
+
+```python id="case_apply03"
+df["City"] = (
+    df["City"]
+      .str.strip()
+      .str.title()
+)
+```
+
+---
+
+### Question 4
+
+Remove duplicate records.
+
+```python id="case_apply04"
+df = (
+    df
+      .drop_duplicates()
+)
+```
+
+---
+
+### Question 5
+
+Generate a reusable pipeline.
+
+```python id="case_apply05"
+def prepare_sales(dataframe):
+
+    return (
+        dataframe
+        .drop_duplicates()
+        .dropna()
+        .assign(
+            Revenue=lambda x:
+            x["Price"] * x["Quantity"]
+        )
+    )
+
+clean_df = prepare_sales(df)
+```
+
+---
+
+# 22. Business Insights
+
+After transforming the sales dataset, analysts discover:
+
+* Standardized payment methods improve reporting consistency.
+* Vectorized calculations reduce processing time significantly.
+* Reusable transformation pipelines simplify maintenance.
+* Revenue calculations become consistent across departments.
+* Clean, modular code improves collaboration within analytics teams.
+
+---
+
+# 23. Practice Exercises
+
+## Beginner
+
+1. Use `map()` to convert country codes into names.
+2. Replace outdated city names.
+3. Apply a discount using a lambda function.
+4. Create a new revenue column.
+5. Standardize customer names.
+
+---
+
+## Intermediate
+
+6. Write a reusable cleaning function.
+7. Apply row-wise calculations.
+8. Build a method-chaining pipeline.
+9. Compare `apply()` with vectorized operations.
+10. Replace multiple values using a dictionary.
+
+---
+
+## Advanced
+
+11. Create a complete ETL transformation pipeline.
+12. Optimize a slow transformation using vectorization.
+13. Build reusable `pipe()` functions.
+14. Benchmark transformation performance.
+15. Write five recommendations for improving code efficiency.
+
+---
+
+# 24. Interview Questions
+
+## Beginner
+
+1. What is `map()`?
+2. What is `replace()`?
+3. What is `apply()`?
+4. What is a lambda function?
+5. What is vectorization?
+
+---
+
+## Intermediate
+
+6. Difference between `map()` and `apply()`?
+7. Difference between `apply()` and vectorized operations?
+8. What is `pipe()`?
+9. Why use method chaining?
+10. When should `replace()` be preferred over `map()`?
+
+---
+
+## Advanced
+
+11. Explain an enterprise ETL transformation workflow.
+12. Compare loops, `apply()`, and vectorization.
+13. Design a reusable transformation pipeline.
+14. How would you optimize transformations on a 100-million-row dataset?
+15. What coding practices improve maintainability in Pandas projects?
+
+---
+
+# 25. Cheat Sheet
+
+| Task                            | Syntax                   |
+| ------------------------------- | ------------------------ |
+| Map Values                      | `Series.map()`           |
+| Replace Values                  | `replace()`              |
+| Apply Function                  | `apply()`                |
+| Element-wise DataFrame Function | `DataFrame.map()`        |
+| Method Chaining                 | `df.method1().method2()` |
+| Pipe Function                   | `pipe()`                 |
+| Create Column                   | `assign()`               |
+| Vectorized Calculation          | `df["A"] * df["B"]`      |
+| Row-wise Apply                  | `apply(axis=1)`          |
+| Column-wise Apply               | `apply(axis=0)`          |
+
+---
+
+# 26. Mini Project
+
+## Automated Sales Data Transformation Pipeline
+
+Using any retail, banking, HR, healthcare, or logistics dataset:
+
+Complete the following tasks:
+
+* Standardize categorical values using `map()`.
+* Replace inconsistent values.
+* Remove duplicates.
+* Handle missing values.
+* Create calculated columns using vectorized operations.
+* Write reusable transformation functions.
+* Build a complete method-chaining pipeline.
+* Export the processed dataset.
+* Write **five executive-level business insights**.
+* Recommend **three performance improvements** for the pipeline.
+
+### Example Business Insights
+
+* Vectorized calculations reduced processing time compared with row-wise transformations.
+* Standardized payment methods improved reporting consistency.
+* Modular transformation functions simplified future maintenance.
+* Revenue calculations became consistent across all reports.
+* Automated preprocessing reduced manual effort and improved data quality.
+
+---
+
+# 27. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Advanced Data Transformation** in Pandas.
+
+You learned how to:
+
+* Transform values using `map()` and `replace()`.
+* Apply custom functions with `apply()`.
+* Build reusable workflows using `pipe()`.
+* Write clean method-chained code.
+* Optimize transformations using vectorization.
+* Create production-ready ETL pipelines.
+
+These techniques are fundamental for data engineering, business intelligence, feature engineering, and scalable analytics.
+
+---
+
+# 28. What's Next?
+
+In **Day 26**, you'll learn **Advanced GroupBy, Aggregation & Pivot Analysis**.
+
+Topics include:
+
+* Multi-Level GroupBy
+* Multiple Aggregations
+* Named Aggregations
+* `agg()`
+* `transform()`
+* `filter()`
+* Crosstab
+* Pivot Analysis
+* Business KPI Reporting
+* Advanced Analytical Workflows
+
+These concepts are widely used for executive reporting, business intelligence dashboards, financial analysis, and operational analytics.
+
+---
+
+<div align="center">
+
+# 🎉 Day 25 Complete!
+
+You've learned how to transform, clean, and optimize data using modern Pandas techniques.
+
+By combining vectorization, reusable functions, method chaining, and efficient transformation strategies, you can write clean, scalable, and production-ready code for real-world analytics projects.
+
+⭐ **Next → Day 26: Advanced GroupBy, Aggregation & Pivot Analysis** 📊🐼
+
+</div>
