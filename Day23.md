@@ -442,3 +442,383 @@ After completing this section, you should understand:
 
 > **"Dates are more than timestamps—they reveal trends, seasonality, customer behavior, and the rhythm of business operations."**
 
+# 8. Filtering Data by Date
+
+One of the most common business tasks is filtering records based on dates.
+
+Suppose we want all orders placed after **1st July 2026**.
+
+```python id="filter01"
+df[
+    df["Order Date"] >
+    "2026-07-01"
+]
+```
+
+---
+
+## Filter Between Two Dates
+
+Retrieve orders placed during January 2026.
+
+```python id="filter02"
+df[
+    (
+        df["Order Date"] >=
+        "2026-01-01"
+    )
+    &
+    (
+        df["Order Date"] <=
+        "2026-01-31"
+    )
+]
+```
+
+---
+
+## Using `.loc`
+
+```python id="filter03"
+df.loc[
+    df["Order Date"] >=
+    "2026-06-01"
+]
+```
+
+Filtering by date is essential for monthly, quarterly, and yearly business reporting.
+
+---
+
+# 9. Date Arithmetic
+
+DateTime objects support arithmetic operations.
+
+Suppose shipping takes seven days.
+
+```python id="arith01"
+df["Delivery Date"] = (
+    df["Order Date"] +
+    pd.Timedelta(days=7)
+)
+```
+
+Output:
+
+| Order Date | Delivery Date |
+| ---------- | ------------- |
+| 2026-07-01 | 2026-07-08    |
+| 2026-07-05 | 2026-07-12    |
+
+---
+
+## Subtract Dates
+
+Calculate delivery duration.
+
+```python id="arith02"
+df["Delivery Time"] = (
+    df["Delivery Date"]
+    -
+    df["Order Date"]
+)
+```
+
+Output:
+
+```text id="arith03"
+7 days
+
+5 days
+
+10 days
+```
+
+---
+
+# 10. Understanding `Timedelta`
+
+A `Timedelta` represents the difference between two dates or times.
+
+Example:
+
+```python id="timedelta01"
+pd.Timedelta(days=5)
+```
+
+Output:
+
+```text id="timedelta02"
+5 days
+```
+
+---
+
+## Add Hours
+
+```python id="timedelta03"
+df["Timestamp"] = (
+    df["Timestamp"]
+    +
+    pd.Timedelta(hours=3)
+)
+```
+
+---
+
+## Add Minutes
+
+```python id="timedelta04"
+df["Timestamp"] = (
+    df["Timestamp"]
+    +
+    pd.Timedelta(minutes=45)
+)
+```
+
+`Timedelta` supports:
+
+* Days
+* Hours
+* Minutes
+* Seconds
+* Weeks
+
+---
+
+# 11. Working with Business Days
+
+Businesses often ignore weekends when calculating deadlines.
+
+Generate business days.
+
+```python id="business01"
+pd.bdate_range(
+    start="2026-07-01",
+    end="2026-07-10"
+)
+```
+
+Output:
+
+```text id="business02"
+2026-07-01
+
+2026-07-02
+
+2026-07-03
+
+2026-07-06
+
+2026-07-07
+
+...
+```
+
+Notice that Saturday and Sunday are excluded.
+
+---
+
+## Add Business Days
+
+```python id="business03"
+from pandas.tseries.offsets import BDay
+
+df["Deadline"] = (
+    df["Order Date"]
+    +
+    BDay(5)
+)
+```
+
+Five business days are added while skipping weekends.
+
+---
+
+# 12. Working with Time Zones
+
+Global companies often receive timestamps from multiple countries.
+
+Suppose timestamps are stored without a timezone.
+
+```python id="tz01"
+df["Timestamp"] = (
+    df["Timestamp"]
+      .dt.tz_localize("UTC")
+)
+```
+
+---
+
+## Convert to Another Time Zone
+
+```python id="tz02"
+df["Timestamp"] = (
+    df["Timestamp"]
+      .dt.tz_convert(
+          "Asia/Kolkata"
+      )
+)
+```
+
+Common time zones:
+
+| Time Zone        | Region         |
+| ---------------- | -------------- |
+| UTC              | Universal Time |
+| Asia/Kolkata     | India          |
+| Europe/London    | United Kingdom |
+| America/New_York | Eastern US     |
+| Asia/Tokyo       | Japan          |
+
+---
+
+# 13. Shifting Dates
+
+Sometimes previous or future values are required.
+
+Shift by one day.
+
+```python id="shift01"
+df["Previous Sales"] = (
+    df["Sales"]
+      .shift(1)
+)
+```
+
+Example:
+
+| Date  | Sales | Previous Sales |
+| ----- | ----: | -------------: |
+| 1 Jul |   100 |            NaN |
+| 2 Jul |   120 |            100 |
+| 3 Jul |   150 |            120 |
+
+Shifting is widely used in time-series feature engineering.
+
+---
+
+# 14. Rolling Windows
+
+Rolling windows calculate statistics over a moving period.
+
+Calculate a 3-day moving average.
+
+```python id="rolling01"
+df["Rolling Average"] = (
+    df["Sales"]
+      .rolling(3)
+      .mean()
+)
+```
+
+Example:
+
+| Day | Sales | Rolling Avg |
+| --: | ----: | ----------: |
+|   1 |   100 |         NaN |
+|   2 |   120 |         NaN |
+|   3 |   140 |         120 |
+|   4 |   160 |         140 |
+
+Rolling calculations smooth fluctuations and reveal trends.
+
+---
+
+# 15. Resampling Time-Series Data
+
+Suppose sales are recorded daily.
+
+Convert them into monthly totals.
+
+```python id="resample01"
+df.resample(
+    "M",
+    on="Order Date"
+)["Sales"].sum()
+```
+
+Frequency codes:
+
+| Code | Meaning   |
+| ---- | --------- |
+| D    | Daily     |
+| W    | Weekly    |
+| M    | Monthly   |
+| Q    | Quarterly |
+| Y    | Yearly    |
+
+Resampling is frequently used for business reporting and forecasting.
+
+---
+
+# Business Example
+
+A logistics company tracks package deliveries.
+
+Using DateTime operations, analysts:
+
+* Calculate delivery durations.
+* Skip weekends when estimating deadlines.
+* Convert timestamps from UTC to local office time.
+* Generate monthly shipment summaries.
+* Compute moving averages to monitor operational performance.
+
+These insights improve planning and customer satisfaction.
+
+---
+
+# Best Practices
+
+✔ Store all timestamps in DateTime format.
+
+✔ Use `Timedelta` for date calculations.
+
+✔ Use business-day offsets for operational deadlines.
+
+✔ Standardize timestamps to UTC before converting to local time.
+
+✔ Use rolling calculations for trend analysis.
+
+---
+
+# Common Mistakes
+
+### Performing Arithmetic on Strings
+
+Incorrect:
+
+```python id="mistake05"
+df["Order Date"] + 5
+```
+
+Always convert to DateTime first.
+
+---
+
+### Ignoring Time Zones
+
+When analyzing global datasets, timestamps from different regions should be standardized before comparison.
+
+---
+
+### Using Calendar Days Instead of Business Days
+
+For business processes such as shipping or banking, use `BDay()` instead of adding calendar days.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Filter data using dates.
+* Perform date arithmetic.
+* Use `Timedelta`.
+* Generate business days.
+* Work with time zones.
+* Shift time-series data.
+* Calculate rolling statistics.
+* Resample time-series datasets.
+
+> **"Time-series analysis transforms raw timestamps into meaningful business insights, helping organizations understand trends, seasonality, operational efficiency, and customer behavior."**
