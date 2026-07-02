@@ -356,3 +356,394 @@ After completing this section, you should understand:
 
 > **"Data transformation bridges the gap between raw information and meaningful insights by converting complex codes into understandable business language."**
 
+# 8. Understanding `apply()`
+
+The `apply()` function applies a custom function along a Series or DataFrame.
+
+It is one of the most flexible functions in Pandas.
+
+Typical use cases include:
+
+* Feature engineering
+* Data transformation
+* Business rule implementation
+* Statistical calculations
+* Custom aggregations
+
+---
+
+## Applying a Function to a Series
+
+Suppose we want to classify sales.
+
+```python id="apply01"
+def sales_category(sales):
+
+    if sales >= 10000:
+        return "High"
+
+    elif sales >= 5000:
+        return "Medium"
+
+    else:
+        return "Low"
+
+df["Sales Category"] = (
+    df["Sales"]
+      .apply(sales_category)
+)
+```
+
+### Output
+
+| Sales | Sales Category |
+| ----: | -------------- |
+| 12000 | High           |
+|  6500 | Medium         |
+|  3000 | Low            |
+
+---
+
+## Using Lambda Functions
+
+Small transformations are often written using lambda functions.
+
+```python id="apply02"
+df["Discounted Price"] = (
+    df["Price"]
+      .apply(
+          lambda x:
+          x * 0.9
+      )
+)
+```
+
+Output:
+
+| Price | Discounted |
+| ----: | ---------: |
+|  1000 |        900 |
+|  2500 |       2250 |
+
+Lambda functions make short transformations concise.
+
+---
+
+# 9. Applying Functions Across Rows
+
+`apply()` can also work row-wise.
+
+Example:
+
+Calculate total revenue.
+
+```python id="apply03"
+df["Revenue"] = (
+    df.apply(
+        lambda row:
+        row["Quantity"] * row["Price"],
+        axis=1
+    )
+)
+```
+
+### Example
+
+| Quantity | Price | Revenue |
+| -------: | ----: | ------: |
+|        5 |   100 |     500 |
+|        3 |   250 |     750 |
+
+Here:
+
+* `axis=1` → Row-wise
+* `axis=0` → Column-wise (default)
+
+---
+
+# 10. Applying Functions Across Columns
+
+Calculate the range of each numerical column.
+
+```python id="apply04"
+df[
+    ["Sales", "Profit"]
+].apply(
+    lambda column:
+    column.max() - column.min()
+)
+```
+
+Output:
+
+| Column | Range |
+| ------ | ----: |
+| Sales  |  9500 |
+| Profit |  2200 |
+
+---
+
+# 11. `applymap()` and Modern `DataFrame.map()`
+
+Historically, `applymap()` was used to apply a function to **every element** of a DataFrame.
+
+```python id="applymap01"
+df = df.applymap(
+    lambda value:
+    str(value).upper()
+)
+```
+
+In **modern versions of Pandas**, the recommended method is:
+
+```python id="applymap02"
+df = df.map(
+    lambda value:
+    str(value).upper()
+)
+```
+
+Both perform element-wise transformations, but `DataFrame.map()` is the modern replacement for `applymap()`.
+
+---
+
+## Example
+
+Original DataFrame:
+
+| City   | State       |
+| ------ | ----------- |
+| Delhi  | Delhi       |
+| Mumbai | Maharashtra |
+
+After mapping:
+
+| City   | State       |
+| ------ | ----------- |
+| DELHI  | DELHI       |
+| MUMBAI | MAHARASHTRA |
+
+---
+
+# 12. Understanding `pipe()`
+
+Complex transformation pipelines become difficult to read.
+
+The `pipe()` function allows transformations to be broken into reusable steps.
+
+---
+
+## Create a Custom Function
+
+```python id="pipe01"
+def add_tax(dataframe):
+
+    dataframe["Price"] = (
+        dataframe["Price"] * 1.18
+    )
+
+    return dataframe
+```
+
+Apply it.
+
+```python id="pipe02"
+df = (
+    df.pipe(add_tax)
+)
+```
+
+---
+
+## Chaining Multiple Pipes
+
+```python id="pipe03"
+df = (
+    df
+    .pipe(add_tax)
+    .pipe(clean_names)
+    .pipe(remove_duplicates)
+)
+```
+
+Each function performs one logical task.
+
+This improves readability and maintainability.
+
+---
+
+# 13. Method Chaining
+
+Instead of creating many intermediate DataFrames:
+
+```python id="chain01"
+df = df.dropna()
+
+df = df.sort_values("Sales")
+
+df = df.reset_index(drop=True)
+```
+
+Use method chaining.
+
+```python id="chain02"
+df = (
+    df
+    .dropna()
+    .sort_values("Sales")
+    .reset_index(drop=True)
+)
+```
+
+Benefits include:
+
+* Cleaner code
+* Easier debugging
+* Better readability
+* Fewer temporary variables
+
+---
+
+# 14. Writing Reusable Functions
+
+Instead of repeating the same cleaning logic:
+
+```python id="reuse01"
+def clean_city(city):
+
+    return (
+        city
+        .strip()
+        .title()
+    )
+
+df["City"] = (
+    df["City"]
+      .apply(clean_city)
+)
+```
+
+Reusable functions reduce duplication and improve maintainability.
+
+---
+
+# 15. Choosing the Right Transformation Method
+
+| Function          | Works On           | Best Use                    |
+| ----------------- | ------------------ | --------------------------- |
+| `map()`           | Series             | One-to-one mapping          |
+| `replace()`       | Series / DataFrame | Replace existing values     |
+| `apply()`         | Series / DataFrame | Custom transformations      |
+| `DataFrame.map()` | DataFrame          | Element-wise transformation |
+| `pipe()`          | DataFrame          | Reusable workflows          |
+
+Choosing the correct function improves both readability and performance.
+
+---
+
+# Business Example
+
+A multinational retailer prepares customer data before generating reports.
+
+Tasks include:
+
+* Mapping payment codes.
+* Calculating revenue.
+* Standardizing city names.
+* Applying tax calculations.
+* Removing duplicates.
+* Exporting the cleaned dataset.
+
+Using `pipe()` and method chaining, the entire workflow becomes modular and easier to maintain.
+
+---
+
+# Best Practices
+
+✔ Prefer vectorized operations whenever possible.
+
+✔ Use `map()` for simple value replacements.
+
+✔ Use `apply()` for custom business logic.
+
+✔ Write reusable helper functions.
+
+✔ Keep each `pipe()` function focused on a single task.
+
+✔ Chain transformations for better readability.
+
+---
+
+# Common Mistakes
+
+### Overusing `apply()`
+
+Many tasks can be performed using built-in vectorized methods.
+
+Instead of:
+
+```python id="mistake01"
+df["Sales"].apply(
+    lambda x:
+    x * 2
+)
+```
+
+Prefer:
+
+```python id="mistake02"
+df["Sales"] * 2
+```
+
+Vectorized operations are usually much faster.
+
+---
+
+### Creating Very Long Lambda Functions
+
+Avoid placing complex business logic inside lambda expressions.
+
+Instead:
+
+```python id="mistake03"
+def classify_sales(value):
+
+    if value >= 10000:
+        return "High"
+
+    elif value >= 5000:
+        return "Medium"
+
+    return "Low"
+```
+
+This improves readability and makes testing easier.
+
+---
+
+### Mixing Too Many Responsibilities in One Function
+
+Each custom function should perform one clear task.
+
+For example:
+
+* Clean names
+* Calculate tax
+* Remove duplicates
+
+rather than combining all operations into one large function.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Apply custom functions using `apply()`.
+* Use lambda functions for concise transformations.
+* Apply row-wise and column-wise operations.
+* Perform element-wise transformations with `DataFrame.map()`.
+* Build reusable workflows using `pipe()`.
+* Write clean method-chained Pandas code.
+
+> **"Well-designed transformation pipelines are easier to understand, easier to maintain, and easier to scale as datasets and business requirements grow."**
