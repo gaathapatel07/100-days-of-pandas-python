@@ -1232,12 +1232,11 @@ These techniques are widely used in customer analytics, web scraping, natural la
 
 <div align="center">
 
-# 🎉 Day 21 Complete!
+# Day 21 Complete!
 
 You've mastered one of the most valuable skills in data analytics—transforming messy, incomplete, and inconsistent datasets into clean, trustworthy data ready for analysis.
 
 These techniques form the backbone of every professional data science, business intelligence, and machine learning workflow.
 
-⭐ **Next → Day 22: Advanced String Operations & Regular Expressions** 🔤🐼
 
 </div>
