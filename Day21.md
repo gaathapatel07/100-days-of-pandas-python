@@ -1,4 +1,4 @@
-# 🐼 Day 21 — Missing Data Handling & Advanced Data Cleaning
+# Day 21 — Missing Data Handling & Advanced Data Cleaning
 
 <div align="center">
 
@@ -16,7 +16,8 @@
 
 ---
 
-# 📚 Table of Contents
+
+# Table of Contents
 
 1. Introduction
 2. Why Data Cleaning Matters
@@ -385,6 +386,7 @@ Deleting rows indiscriminately can reduce the dataset and introduce bias.
 Always evaluate the impact before using `dropna()`.
 
 ---
+
 
 # Key Takeaways
 
