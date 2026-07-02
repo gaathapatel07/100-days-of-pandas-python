@@ -1154,12 +1154,10 @@ These concepts help you write cleaner, faster, and more reusable data transforma
 
 <div align="center">
 
-# 🎉 Day 24 Complete!
+# Day 24 Complete!
 
 You've mastered one of the most valuable preprocessing techniques in modern data analytics and machine learning.
 
 By understanding categorical variables, memory optimization, and encoding strategies, you can build faster analytics pipelines, reduce resource consumption, and prepare high-quality datasets for predictive models.
-
-⭐ **Next → Day 25: Advanced `apply()`, `map()`, `pipe()` & Vectorization** ⚡🐼
 
 </div>
