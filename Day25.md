@@ -1167,12 +1167,10 @@ These concepts are widely used for executive reporting, business intelligence da
 
 <div align="center">
 
-# 🎉 Day 25 Complete!
+# Day 25 Complete!
 
 You've learned how to transform, clean, and optimize data using modern Pandas techniques.
 
 By combining vectorization, reusable functions, method chaining, and efficient transformation strategies, you can write clean, scalable, and production-ready code for real-world analytics projects.
-
-⭐ **Next → Day 26: Advanced GroupBy, Aggregation & Pivot Analysis** 📊🐼
 
 </div>
