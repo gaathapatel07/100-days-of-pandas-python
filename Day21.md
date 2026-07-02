@@ -806,3 +806,438 @@ You have now learned how to:
 * Correct data types for accurate analysis.
 
 > **"High-quality analysis begins with high-quality data. Every cleaned value improves the reliability of insights, dashboards, and predictive models."**
+
+# 16. Detecting Outliers
+
+Not every unusual value is incorrect, but outliers should always be investigated.
+
+Outliers may indicate:
+
+* Data entry errors
+* Fraudulent transactions
+* Equipment malfunctions
+* Exceptional business events
+
+Identifying outliers helps improve data quality and prevents misleading analysis.
+
+---
+
+## Using the IQR Method
+
+The **Interquartile Range (IQR)** is one of the most commonly used techniques for detecting outliers.
+
+### Step 1: Calculate Quartiles
+
+```python id="outlier01"
+Q1 = df["Sales"].quantile(0.25)
+
+Q3 = df["Sales"].quantile(0.75)
+```
+
+---
+
+### Step 2: Calculate IQR
+
+```python id="outlier02"
+IQR = Q3 - Q1
+```
+
+---
+
+### Step 3: Define Outlier Limits
+
+```python id="outlier03"
+lower_limit = Q1 - 1.5 * IQR
+
+upper_limit = Q3 + 1.5 * IQR
+```
+
+---
+
+### Step 4: Detect Outliers
+
+```python id="outlier04"
+outliers = df[
+    (df["Sales"] < lower_limit) |
+    (df["Sales"] > upper_limit)
+]
+```
+
+These records should be reviewed before deciding whether to remove or retain them.
+
+---
+
+# 17. Detecting Outliers Using Z-Score
+
+For approximately normally distributed data, the **Z-score** measures how many standard deviations a value lies from the mean.
+
+```python id="zscore01"
+from scipy.stats import zscore
+
+df["Z_Score"] = (
+    zscore(df["Sales"])
+)
+```
+
+Identify extreme values.
+
+```python id="zscore02"
+outliers = df[
+    df["Z_Score"].abs() > 3
+]
+```
+
+A Z-score greater than **3** or less than **−3** is commonly treated as an outlier.
+
+---
+
+# 18. Data Validation
+
+Before analysis, verify that the dataset satisfies basic quality rules.
+
+### Example Validation Rules
+
+| Column     | Rule                   |
+| ---------- | ---------------------- |
+| Age        | Must be greater than 0 |
+| Sales      | Cannot be negative     |
+| Quantity   | Must be an integer     |
+| Email      | Cannot be blank        |
+| Order Date | Must be a valid date   |
+
+Validation prevents invalid records from entering reports or predictive models.
+
+---
+
+## Example Validation
+
+```python id="validate01"
+invalid_sales = df[
+    df["Sales"] < 0
+]
+```
+
+Check for impossible ages.
+
+```python id="validate02"
+invalid_age = df[
+    df["Age"] < 0
+]
+```
+
+---
+
+# 19. Complete Data Cleaning Workflow
+
+A professional data cleaning workflow follows a structured process.
+
+```text id="workflow01"
+Raw Dataset
+      │
+      ▼
+Inspect Dataset
+      │
+      ▼
+Identify Missing Values
+      │
+      ▼
+Handle Missing Values
+      │
+      ▼
+Remove Duplicates
+      │
+      ▼
+Standardize Text
+      │
+      ▼
+Correct Data Types
+      │
+      ▼
+Validate Data
+      │
+      ▼
+Detect Outliers
+      │
+      ▼
+Export Clean Dataset
+```
+
+Following a consistent workflow improves reliability and reproducibility.
+
+---
+
+# 20. Real-World Business Case Study
+
+## Scenario
+
+You are working as a **Senior Data Analyst** at **RetailHub**, a multinational retail company.
+
+The company receives sales data from hundreds of stores every day.
+
+Unfortunately, the dataset contains:
+
+* Missing customer details
+* Duplicate invoices
+* Inconsistent city names
+* Incorrect data types
+* Negative sales values
+* Outlier transactions
+
+Your responsibility is to prepare the dataset before it is used for executive dashboards and forecasting.
+
+---
+
+# Business Questions
+
+### Question 1
+
+Count missing values.
+
+```python id="case_clean01"
+df.isnull().sum()
+```
+
+---
+
+### Question 2
+
+Replace missing salaries with the median.
+
+```python id="case_clean02"
+df["Salary"] = (
+    df["Salary"]
+      .fillna(
+          df["Salary"].median()
+      )
+)
+```
+
+---
+
+### Question 3
+
+Remove duplicate invoices.
+
+```python id="case_clean03"
+df.drop_duplicates(
+    subset="Invoice ID"
+)
+```
+
+---
+
+### Question 4
+
+Standardize city names.
+
+```python id="case_clean04"
+df["City"] = (
+    df["City"]
+      .str.strip()
+      .str.title()
+)
+```
+
+---
+
+### Question 5
+
+Identify abnormal sales transactions.
+
+```python id="case_clean05"
+Q1 = df["Sales"].quantile(0.25)
+
+Q3 = df["Sales"].quantile(0.75)
+
+IQR = Q3 - Q1
+
+outliers = df[
+    (df["Sales"] < Q1 - 1.5 * IQR) |
+    (df["Sales"] > Q3 + 1.5 * IQR)
+]
+```
+
+---
+
+# 21. Business Insights
+
+After cleaning the dataset, you discover:
+
+* Duplicate invoices inflated reported sales.
+* Standardizing city names improved regional reporting accuracy.
+* Missing values were concentrated in older records.
+* Several extreme sales values represented genuine bulk purchases rather than errors.
+* Data validation significantly improved dashboard reliability.
+
+These findings ensure that business decisions are based on trustworthy information.
+
+---
+
+# 22. Practice Exercises
+
+## Beginner
+
+1. Detect missing values.
+2. Remove incomplete rows.
+3. Fill missing values using the mean.
+4. Identify duplicate rows.
+5. Remove duplicate records.
+
+---
+
+## Intermediate
+
+6. Apply Forward Fill.
+7. Apply Backward Fill.
+8. Standardize text values.
+9. Convert incorrect data types.
+10. Detect outliers using IQR.
+
+---
+
+## Advanced
+
+11. Detect outliers using Z-score.
+12. Build a complete cleaning pipeline.
+13. Validate numerical columns.
+14. Prepare a dataset for machine learning.
+15. Write five recommendations to improve data quality.
+
+---
+
+# 23. Interview Questions
+
+## Beginner
+
+1. Why is data cleaning important?
+2. What is `NaN`?
+3. Difference between `isnull()` and `isna()`?
+4. What is `dropna()`?
+5. What is `fillna()`?
+
+---
+
+## Intermediate
+
+6. Difference between Forward Fill and Backward Fill?
+7. When should interpolation be used?
+8. Why remove duplicates?
+9. What is IQR?
+10. Why standardize text?
+
+---
+
+## Advanced
+
+11. Explain an end-to-end data cleaning workflow.
+12. Compare IQR and Z-score for outlier detection.
+13. How does poor data quality affect machine learning?
+14. Describe validation rules for a sales dataset.
+15. How would you clean a dataset with millions of records?
+
+---
+
+# 24. Cheat Sheet
+
+| Task                  | Syntax              |
+| --------------------- | ------------------- |
+| Detect Missing Values | `isnull()`          |
+| Count Missing Values  | `isnull().sum()`    |
+| Remove Missing Rows   | `dropna()`          |
+| Fill Missing Values   | `fillna()`          |
+| Forward Fill          | `ffill()`           |
+| Backward Fill         | `bfill()`           |
+| Interpolate           | `interpolate()`     |
+| Detect Duplicates     | `duplicated()`      |
+| Remove Duplicates     | `drop_duplicates()` |
+| Strip Spaces          | `str.strip()`       |
+| Lowercase             | `str.lower()`       |
+| Title Case            | `str.title()`       |
+| Replace Values        | `replace()`         |
+| Convert to Numeric    | `pd.to_numeric()`   |
+| Convert to Date       | `pd.to_datetime()`  |
+
+---
+
+# 25. Mini Project
+
+## Customer Data Quality Improvement System
+
+Using any retail, healthcare, banking, HR, or e-commerce dataset:
+
+Perform the following tasks:
+
+* Detect missing values and calculate their percentage.
+* Handle missing values using suitable techniques.
+* Remove duplicate records.
+* Standardize categorical values.
+* Correct incorrect data types.
+* Detect outliers using both the IQR and Z-score methods.
+* Validate important business rules (e.g., Sales ≥ 0, Age > 0).
+* Export the cleaned dataset.
+* Write **five executive-level business insights**.
+* Recommend **three improvements** to improve future data collection.
+
+### Example Business Insights
+
+* Duplicate customer records caused inflated customer counts.
+* Missing salary values were concentrated in legacy employee records.
+* Standardized city names improved regional sales reporting.
+* Most detected outliers were legitimate high-value transactions rather than errors.
+* Data validation reduced inconsistencies before dashboard generation.
+
+---
+
+# 26. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Missing Data Handling & Advanced Data Cleaning** in Pandas.
+
+You learned how to:
+
+* Detect and handle missing values.
+* Remove or impute incomplete records.
+* Apply Forward Fill, Backward Fill, and interpolation.
+* Detect and remove duplicates.
+* Standardize text values.
+* Correct data types.
+* Detect outliers using IQR and Z-score.
+* Validate datasets before analysis.
+
+These techniques are essential for producing reliable datasets that support accurate dashboards, statistical analysis, and machine learning.
+
+---
+
+# 27. What's Next?
+
+In **Day 22**, you'll learn **Advanced String Operations & Regular Expressions (Regex) in Pandas**.
+
+Topics include:
+
+* String Accessor (`.str`)
+* Searching and Filtering Text
+* `contains()`
+* `startswith()`
+* `endswith()`
+* `replace()`
+* Splitting and Joining Strings
+* Extracting Patterns with Regular Expressions
+* Email, Phone Number & URL Validation
+* Text Cleaning for Real-World Datasets
+
+These techniques are widely used in customer analytics, web scraping, natural language preprocessing, and enterprise data cleaning.
+
+---
+
+<div align="center">
+
+# 🎉 Day 21 Complete!
+
+You've mastered one of the most valuable skills in data analytics—transforming messy, incomplete, and inconsistent datasets into clean, trustworthy data ready for analysis.
+
+These techniques form the backbone of every professional data science, business intelligence, and machine learning workflow.
+
+⭐ **Next → Day 22: Advanced String Operations & Regular Expressions** 🔤🐼
+
+</div>
