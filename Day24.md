@@ -1,4 +1,4 @@
-# 🐼 Day 24 — Categorical Data, Encoding & Memory Optimization
+# Day 24 — Categorical Data, Encoding & Memory Optimization
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Categorical Data Matters
@@ -368,7 +368,7 @@ Category codes are internal representations and should not be treated as meaning
 
 ---
 
-# Key Takeaways
+# Key Takeaways 
 
 After completing this section, you should understand:
 
