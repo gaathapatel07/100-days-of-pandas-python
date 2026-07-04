@@ -922,12 +922,12 @@ Topics include:
 
 <div align="center">
 
-# 🎉 Day 26 Complete!
+# Day 26 Complete! 
 
 You've mastered one of the most powerful features of Pandas—**GroupBy, Aggregation, and Pivot Analysis**.
 
 These skills are the foundation of business intelligence, executive reporting, dashboard creation, and analytical decision-making.
 
-⭐ **Next → Day 27: Advanced Merge, Join & Concatenation** 🔗🐼
+
 
 </div>
