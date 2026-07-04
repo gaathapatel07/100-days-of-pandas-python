@@ -626,3 +626,308 @@ You now understand:
 * Ranking within groups
 
 > **"Professional analytics is not about calculating totals—it is about comparing, ranking, filtering, and understanding groups from multiple perspectives."**
+
+# 15. Pivot Tables
+
+Pivot Tables summarize data across multiple dimensions.
+
+Example
+
+```python
+pd.pivot_table(
+    df,
+    values="Sales",
+    index="Region",
+    columns="Category",
+    aggfunc="sum"
+)
+```
+
+Output
+
+| Region | Electronics | Furniture | Clothing |
+| ------ | ----------: | --------: | -------: |
+| North  |       85000 |     42000 |    35000 |
+| South  |       91000 |     31000 |    28000 |
+
+---
+
+# 16. Crosstab
+
+Count relationships between categorical variables.
+
+```python
+pd.crosstab(
+    df["Gender"],
+    df["Department"]
+)
+```
+
+Output
+
+| Gender | HR | IT | Finance |
+| ------ | -: | -: | ------: |
+| Female | 35 | 18 |      12 |
+| Male   | 28 | 45 |      20 |
+
+Useful for survey analysis.
+
+---
+
+# 17. Business KPI Dashboard
+
+Using GroupBy and Pivot Tables, analysts build KPIs like:
+
+* Revenue by Region
+* Profit by Product
+* Orders by Month
+* Customer Count
+* Average Order Value
+* Repeat Purchase Rate
+
+Example:
+
+```python
+df.groupby("Region").agg(
+    Revenue=("Sales","sum"),
+    Orders=("Order ID","count"),
+    Profit=("Profit","sum")
+)
+```
+
+---
+
+# 18. Performance Tips
+
+For large datasets:
+
+✔ Convert grouping columns to `category`.
+
+```python
+df["Region"] = (
+    df["Region"]
+      .astype("category")
+)
+```
+
+✔ Group only required columns.
+
+✔ Avoid unnecessary sorting.
+
+```python
+df.groupby(
+    "Region",
+    sort=False
+)
+```
+
+✔ Use built-in aggregation functions instead of custom loops.
+
+---
+
+# 19. Enterprise Case Study
+
+## Scenario
+
+A multinational retailer wants an executive dashboard.
+
+The dataset contains:
+
+* Region
+* City
+* Product Category
+* Sales
+* Profit
+* Customer ID
+* Order Date
+
+Management requests:
+
+* Total revenue by region
+* Average order value
+* Top product category
+* Monthly sales
+* Customer count
+
+Solution:
+
+```python
+dashboard = (
+    df.groupby("Region")
+      .agg(
+          Revenue=("Sales","sum"),
+          Profit=("Profit","sum"),
+          Customers=("Customer ID","nunique"),
+          Orders=("Order ID","count")
+      )
+)
+```
+
+---
+
+# 20. Business Insights
+
+Analysis reveals:
+
+* South region contributes the highest revenue.
+* Electronics generate maximum profit.
+* Furniture has the largest average order value.
+* Weekend orders exceed weekday orders.
+* Customer growth is strongest in metropolitan cities.
+
+---
+
+# 21. Practice Exercises
+
+## Beginner
+
+1. Group by one column.
+2. Calculate mean.
+3. Calculate total sales.
+4. Count customers.
+5. Find maximum salary.
+
+---
+
+## Intermediate
+
+6. Multiple aggregations.
+7. Group by two columns.
+8. Calculate percentage contribution.
+9. Rank products.
+10. Create Pivot Table.
+
+---
+
+## Advanced
+
+11. Build KPI dashboard.
+12. Use `transform()`.
+13. Filter groups.
+14. Generate Crosstab.
+15. Compare monthly performance.
+
+---
+
+# 22. Interview Questions
+
+## Beginner
+
+1. What is GroupBy?
+2. Difference between `sum()` and `count()`?
+3. What is `agg()`?
+4. Why use multiple aggregations?
+5. What is a Pivot Table?
+
+---
+
+## Intermediate
+
+6. Difference between `agg()` and `transform()`?
+7. Difference between `count()` and `size()`?
+8. What is `filter()`?
+9. What is `cumcount()`?
+10. What is `ngroup()`?
+
+---
+
+## Advanced
+
+11. Design KPI reports using GroupBy.
+12. Compare Pivot Tables and GroupBy.
+13. Optimize GroupBy for 100M rows.
+14. Explain analytical workflows.
+15. How does GroupBy support business intelligence?
+
+---
+
+# 23. Cheat Sheet
+
+| Task          | Syntax          |
+| ------------- | --------------- |
+| Group Data    | `groupby()`     |
+| Aggregate     | `agg()`         |
+| Transform     | `transform()`   |
+| Filter Groups | `filter()`      |
+| Group Size    | `size()`        |
+| Count Values  | `count()`       |
+| Group ID      | `ngroup()`      |
+| Row Number    | `cumcount()`    |
+| Rank          | `rank()`        |
+| Pivot Table   | `pivot_table()` |
+| Crosstab      | `crosstab()`    |
+
+---
+
+# 24. Mini Project
+
+## Executive Sales Dashboard
+
+Using any retail or e-commerce dataset:
+
+* Calculate revenue by region.
+* Monthly sales trend.
+* Product-wise profit.
+* Customer count by city.
+* Average order value.
+* Percentage contribution.
+* Rank top-selling products.
+* Create Pivot Tables.
+* Generate Crosstabs.
+* Write **five executive-level business insights**.
+* Recommend **three strategic business improvements**.
+
+---
+
+# 25. Summary
+
+Congratulations! 🎉
+
+Today you mastered:
+
+* GroupBy
+* Multiple Aggregations
+* Named Aggregations
+* `transform()`
+* `filter()`
+* Pivot Tables
+* Crosstabs
+* Ranking
+* KPI Reporting
+* Enterprise Analytics
+
+These are among the most frequently used techniques in Power BI, Tableau, SQL analytics, and business intelligence.
+
+---
+
+# 26. What's Next?
+
+In **Day 27**, you'll learn **Advanced Merge, Join & Concatenation**.
+
+Topics include:
+
+* `merge()`
+* `join()`
+* `concat()`
+* Inner Join
+* Left Join
+* Right Join
+* Outer Join
+* Cross Join
+* Merge Indicators
+* Duplicate Key Handling
+* Real-world Database Joins
+
+---
+
+<div align="center">
+
+# 🎉 Day 26 Complete!
+
+You've mastered one of the most powerful features of Pandas—**GroupBy, Aggregation, and Pivot Analysis**.
+
+These skills are the foundation of business intelligence, executive reporting, dashboard creation, and analytical decision-making.
+
+⭐ **Next → Day 27: Advanced Merge, Join & Concatenation** 🔗🐼
+
+</div>
