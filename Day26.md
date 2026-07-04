@@ -343,3 +343,286 @@ After completing this section, you should understand:
 
 > **"GroupBy transforms millions of individual records into concise summaries that reveal trends, performance, and actionable business insights."**
 
+# 8. Named Aggregations
+
+Large business reports often require meaningful column names instead of generic ones.
+
+Instead of:
+
+```python
+df.groupby("Department")["Salary"].agg(
+    ["mean", "max", "min"]
+)
+```
+
+Use Named Aggregations.
+
+```python
+df.groupby("Department").agg(
+    Average_Salary=("Salary", "mean"),
+    Highest_Salary=("Salary", "max"),
+    Lowest_Salary=("Salary", "min"),
+    Employee_Count=("Salary", "count")
+)
+```
+
+Output
+
+| Department | Average Salary | Highest Salary | Lowest Salary | Employee Count |
+| ---------- | -------------: | -------------: | ------------: | -------------: |
+| HR         |          53000 |          61000 |         45000 |              8 |
+| IT         |          72000 |          94000 |         58000 |             12 |
+
+---
+
+# 9. Using `transform()`
+
+Unlike `agg()`, which reduces groups into summary values, `transform()` returns **one value for every original row**.
+
+Example:
+
+```python
+df["Department Average"] = (
+    df.groupby("Department")["Salary"]
+      .transform("mean")
+)
+```
+
+Output
+
+| Employee | Department | Salary | Department Average |
+| -------- | ---------- | -----: | -----------------: |
+| Alice    | IT         |  65000 |              72000 |
+| Rahul    | IT         |  72000 |              72000 |
+| Priya    | HR         |  52000 |              53000 |
+
+Useful for:
+
+* Feature Engineering
+* Normalization
+* Salary comparisons
+* Percentage contribution
+
+---
+
+## Percentage Contribution
+
+```python
+df["Sales %"] = (
+    df["Sales"]
+    /
+    df.groupby("Region")["Sales"]
+      .transform("sum")
+) * 100
+```
+
+This calculates each row's contribution within its region.
+
+---
+
+# 10. Using `filter()`
+
+Sometimes entire groups should be removed.
+
+Keep only departments having more than 20 employees.
+
+```python
+df.groupby("Department").filter(
+    lambda x: len(x) > 20
+)
+```
+
+The complete group is either retained or removed.
+
+---
+
+# 11. Difference Between `size()` and `count()`
+
+Many interviews ask this.
+
+### `size()`
+
+Counts **all rows**, including missing values.
+
+```python
+df.groupby("Department").size()
+```
+
+---
+
+### `count()`
+
+Counts **non-missing values only**.
+
+```python
+df.groupby("Department").count()
+```
+
+Example
+
+| Department | Salary |
+| ---------- | ------ |
+| IT         | NaN    |
+| IT         | 70000  |
+
+Result
+
+```text
+size()  = 2
+
+count() = 1
+```
+
+---
+
+# 12. Using `ngroup()`
+
+Assign each group a unique numeric ID.
+
+```python
+df["Group ID"] = (
+    df.groupby("Department")
+      .ngroup()
+)
+```
+
+Output
+
+| Department | Group ID |
+| ---------- | -------- |
+| HR         | 0        |
+| IT         | 1        |
+| Finance    | 2        |
+
+---
+
+# 13. Using `cumcount()`
+
+Number observations within each group.
+
+```python
+df["Employee Number"] = (
+    df.groupby("Department")
+      .cumcount() + 1
+)
+```
+
+Output
+
+| Department | Employee Number |
+| ---------- | --------------: |
+| IT         |               1 |
+| IT         |               2 |
+| IT         |               3 |
+
+Useful for ranking transactions.
+
+---
+
+# 14. Ranking Within Groups
+
+Find highest sales inside each region.
+
+```python
+df["Rank"] = (
+    df.groupby("Region")["Sales"]
+      .rank(
+          ascending=False
+      )
+)
+```
+
+Output
+
+| Region | Sales | Rank |
+| ------ | ----: | ---: |
+| North  | 12000 |    1 |
+| North  |  9500 |    2 |
+| North  |  6200 |    3 |
+
+---
+
+# Business Example
+
+A retail company wants:
+
+* Average salary by department
+* Percentage contribution of each employee
+* Top-selling product in every city
+* Regions having more than 500 customers
+
+These tasks are solved using:
+
+* `transform()`
+* `filter()`
+* `rank()`
+* `agg()`
+
+---
+
+# Best Practices
+
+✔ Prefer Named Aggregations.
+
+✔ Use `transform()` when original row count must remain unchanged.
+
+✔ Use `filter()` before visualization.
+
+✔ Always rename aggregation columns.
+
+✔ Keep grouping logic simple.
+
+---
+
+# Common Mistakes
+
+### Confusing `agg()` and `transform()`
+
+`agg()`
+
+```text
+1000 rows
+↓
+
+10 rows
+```
+
+`transform()`
+
+```text
+1000 rows
+↓
+
+1000 rows
+```
+
+---
+
+### Forgetting Missing Values
+
+Remember:
+
+```python
+size()
+
+!=
+
+count()
+```
+
+---
+
+# Quick Recap
+
+You now understand:
+
+* Named Aggregations
+* `transform()`
+* `filter()`
+* `size()`
+* `count()`
+* `ngroup()`
+* `cumcount()`
+* Ranking within groups
+
+> **"Professional analytics is not about calculating totals—it is about comparing, ranking, filtering, and understanding groups from multiple perspectives."**
