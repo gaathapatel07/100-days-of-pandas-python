@@ -1,4 +1,4 @@
-# 🐼 Day 27 — Advanced Merge, Join & Concatenation
+# Day 27 — Advanced Merge, Join & Concatenation
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Merge Matters
