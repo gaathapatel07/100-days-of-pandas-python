@@ -340,3 +340,383 @@ After completing this section, you should understand:
 
 > **"Effective data analysis depends on connecting related datasets into a single, trustworthy source of information."**
 
+# 8. Right Join
+
+A **Right Join** keeps **every record from the right DataFrame**.
+
+### Example
+
+Customers
+
+| Customer ID | Name  |
+| ----------- | ----- |
+| 101         | Alice |
+| 102         | Rahul |
+| 103         | Priya |
+
+Orders
+
+| Customer ID | Sales |
+| ----------- | ----: |
+| 101         |  5200 |
+| 102         |  6400 |
+| 104         |  7100 |
+
+```python id="right01"
+pd.merge(
+    customers,
+    orders,
+    on="Customer ID",
+    how="right"
+)
+```
+
+Output
+
+| Customer ID | Name  | Sales |
+| ----------- | ----- | ----: |
+| 101         | Alice |  5200 |
+| 102         | Rahul |  6400 |
+| 104         | NaN   |  7100 |
+
+Customer **104** appears because it exists in the Orders table.
+
+---
+
+# 9. Outer Join
+
+An **Outer Join** keeps **every row from both DataFrames**.
+
+```python id="outer01"
+pd.merge(
+    customers,
+    orders,
+    on="Customer ID",
+    how="outer"
+)
+```
+
+Output
+
+| Customer ID | Name  | Sales |
+| ----------- | ----- | ----: |
+| 101         | Alice |  5200 |
+| 102         | Rahul |  6400 |
+| 103         | Priya |   NaN |
+| 104         | NaN   |  7100 |
+
+Outer joins are useful for identifying missing relationships.
+
+---
+
+# 10. Cross Join
+
+A **Cross Join** creates the Cartesian Product.
+
+Every row from the first DataFrame is matched with every row from the second DataFrame.
+
+Example
+
+Products
+
+| Product |
+| ------- |
+| Laptop  |
+| Phone   |
+
+Colors
+
+| Color  |
+| ------ |
+| Black  |
+| Silver |
+
+```python id="cross01"
+pd.merge(
+    products,
+    colors,
+    how="cross"
+)
+```
+
+Output
+
+| Product | Color  |
+| ------- | ------ |
+| Laptop  | Black  |
+| Laptop  | Silver |
+| Phone   | Black  |
+| Phone   | Silver |
+
+Use cases:
+
+* Product combinations
+* Pricing simulations
+* Inventory planning
+
+---
+
+# 11. Joining on Different Column Names
+
+Sometimes the key columns have different names.
+
+Customers
+
+| Customer_ID | Name  |
+| ----------- | ----- |
+| 101         | Alice |
+
+Orders
+
+| Client_ID | Sales |
+| --------- | ----: |
+| 101       |  5200 |
+
+Use:
+
+```python id="merge03"
+pd.merge(
+    customers,
+    orders,
+    left_on="Customer_ID",
+    right_on="Client_ID"
+)
+```
+
+This joins columns with different names.
+
+---
+
+# 12. Joining Using Indexes
+
+Merge using DataFrame indexes instead of columns.
+
+```python id="index01"
+pd.merge(
+    df1,
+    df2,
+    left_index=True,
+    right_index=True
+)
+```
+
+Useful when indexes represent unique identifiers.
+
+---
+
+# 13. Merge Indicators
+
+Sometimes analysts need to know where each row originated.
+
+```python id="indicator01"
+pd.merge(
+    customers,
+    orders,
+    on="Customer ID",
+    how="outer",
+    indicator=True
+)
+```
+
+Output
+
+| Customer ID | Name  | Sales | _merge     |
+| ----------- | ----- | ----: | ---------- |
+| 101         | Alice |  5200 | both       |
+| 103         | Priya |   NaN | left_only  |
+| 104         | NaN   |  7100 | right_only |
+
+Indicator values:
+
+| Value      | Meaning              |
+| ---------- | -------------------- |
+| both       | Found in both tables |
+| left_only  | Only in left table   |
+| right_only | Only in right table  |
+
+This is extremely useful for data validation.
+
+---
+
+# 14. Handling Duplicate Column Names
+
+Suppose both tables contain a column named **City**.
+
+Pandas automatically creates suffixes.
+
+```python id="suffix01"
+pd.merge(
+    customers,
+    orders,
+    on="Customer ID"
+)
+```
+
+Output
+
+```text id="suffix02"
+City_x
+
+City_y
+```
+
+Provide meaningful suffixes.
+
+```python id="suffix03"
+pd.merge(
+    customers,
+    orders,
+    on="Customer ID",
+    suffixes=(
+        "_Customer",
+        "_Order"
+    )
+)
+```
+
+Output
+
+```text id="suffix04"
+City_Customer
+
+City_Order
+```
+
+---
+
+# 15. Merge Validation
+
+Large datasets may contain unexpected duplicate keys.
+
+Use `validate=` to verify assumptions.
+
+### One-to-One
+
+```python id="validate01"
+pd.merge(
+    customers,
+    profile,
+    on="Customer ID",
+    validate="one_to_one"
+)
+```
+
+---
+
+### One-to-Many
+
+```python id="validate02"
+pd.merge(
+    customers,
+    orders,
+    on="Customer ID",
+    validate="one_to_many"
+)
+```
+
+Other options:
+
+| Validation     | Meaning                       |
+| -------------- | ----------------------------- |
+| `one_to_one`   | Unique keys in both tables    |
+| `one_to_many`  | Left unique, right duplicates |
+| `many_to_one`  | Right unique, left duplicates |
+| `many_to_many` | Duplicates allowed in both    |
+
+Validation helps detect data quality issues early.
+
+---
+
+# Business Example
+
+A telecom company maintains:
+
+**Customers**
+
+* Customer ID
+* Name
+* City
+
+**Subscriptions**
+
+* Customer ID
+* Plan
+
+**Payments**
+
+* Customer ID
+* Amount
+
+Analysts:
+
+* Merge customer and subscription tables.
+* Identify customers without subscriptions.
+* Find payments without customer records.
+* Validate that customer IDs remain unique.
+
+This ensures accurate billing and reporting.
+
+---
+
+# Best Practices
+
+✔ Choose the correct join type for the business problem.
+
+✔ Validate key uniqueness before merging.
+
+✔ Use merge indicators when reconciling datasets.
+
+✔ Rename duplicate columns using descriptive suffixes.
+
+✔ Check row counts before and after merging.
+
+---
+
+# Common Mistakes
+
+### Accidentally Creating a Many-to-Many Merge
+
+If both tables contain duplicate keys, the merged result can grow unexpectedly.
+
+Example:
+
+Customers
+
+| Customer ID |
+| ----------- |
+| 101         |
+| 101         |
+
+Orders
+
+| Customer ID |
+| ----------- |
+| 101         |
+| 101         |
+
+The merge creates **4 rows**, not 2.
+
+Always inspect duplicate keys before merging.
+
+---
+
+### Ignoring Merge Indicators
+
+When performing reconciliation tasks, adding `indicator=True` can quickly reveal missing or unmatched records.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Perform Right Joins.
+* Perform Outer Joins.
+* Create Cross Joins.
+* Merge on different column names.
+* Merge using indexes.
+* Use merge indicators.
+* Handle duplicate column names.
+* Validate merge relationships.
+
+> **"Successful data integration depends not only on combining datasets, but also on validating relationships and preserving data integrity."**
