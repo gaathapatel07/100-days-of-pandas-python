@@ -1263,12 +1263,10 @@ Mastering MultiIndex will allow you to work efficiently with complex, multi-dime
 
 <div align="center">
 
-# 🎉 Day 27 Complete!
+# Day 27 Complete!
 
 You've mastered one of the most essential skills in Pandas—combining data from multiple sources using **merge**, **join**, and **concat**.
 
 These techniques form the foundation of real-world ETL pipelines, SQL-style data integration, and business intelligence reporting.
-
-⭐ **Next → Day 28: MultiIndex, Hierarchical Indexing & Advanced Index Operations** 📑🐼
 
 </div>
