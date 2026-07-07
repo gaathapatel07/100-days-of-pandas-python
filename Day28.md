@@ -352,3 +352,387 @@ After completing this section, you should understand:
 
 > **"Hierarchical indexing transforms flat tables into structured, multi-dimensional datasets that mirror real-world business relationships."**
 
+# 8. Sorting a MultiIndex
+
+A MultiIndex should usually be sorted before performing advanced slicing.
+
+Suppose the DataFrame has a MultiIndex:
+
+```text id="sort01"
+Region
+   City
+```
+
+Sort the index.
+
+```python id="sort02"
+df = df.sort_index()
+```
+
+Sorting improves performance and enables efficient label-based slicing.
+
+---
+
+## Sort a Specific Level
+
+Sort only by **City**.
+
+```python id="sort03"
+df.sort_index(
+    level="City"
+)
+```
+
+This sorts records alphabetically within each region.
+
+---
+
+# 9. Swapping Index Levels
+
+Sometimes analysts need to change the hierarchy.
+
+Current hierarchy:
+
+```text id="swap01"
+Region
+   City
+```
+
+Swap the levels.
+
+```python id="swap02"
+df = df.swaplevel()
+```
+
+Output:
+
+```text id="swap03"
+City
+   Region
+```
+
+This operation is useful when reports need to be organized differently.
+
+---
+
+## Example
+
+Before
+
+| Region | City    |
+| ------ | ------- |
+| North  | Delhi   |
+| South  | Chennai |
+
+After `swaplevel()`
+
+| City    | Region |
+| ------- | ------ |
+| Delhi   | North  |
+| Chennai | South  |
+
+---
+
+# 10. Reordering Multiple Levels
+
+For MultiIndexes with three or more levels, reorder them explicitly.
+
+Suppose the index contains:
+
+```text id="reorder01"
+Year
+
+Region
+
+City
+```
+
+Reorder the hierarchy.
+
+```python id="reorder02"
+df = df.reorder_levels(
+    [
+        "Region",
+        "City",
+        "Year"
+    ]
+)
+```
+
+Output
+
+```text id="reorder03"
+Region
+
+City
+
+Year
+```
+
+This is especially useful in financial and sales reporting.
+
+---
+
+# 11. Cross Sections Using `xs()`
+
+The `xs()` method extracts data from a specific level of a MultiIndex.
+
+Suppose we want every record from the **North** region.
+
+```python id="xs01"
+df.xs(
+    "North",
+    level="Region"
+)
+```
+
+Output
+
+| City   | Sales |
+| ------ | ----: |
+| Delhi  |  5200 |
+| Jaipur |  4800 |
+
+---
+
+## Cross Section on Another Level
+
+Retrieve data for **Delhi**, regardless of region.
+
+```python id="xs02"
+df.xs(
+    "Delhi",
+    level="City"
+)
+```
+
+This is much cleaner than writing complex filtering expressions.
+
+---
+
+# 12. Advanced Slicing with `IndexSlice`
+
+`IndexSlice` enables powerful slicing across multiple index levels.
+
+Import it.
+
+```python id="slice01"
+idx = pd.IndexSlice
+```
+
+Example:
+
+```python id="slice02"
+df.loc[
+    idx[
+        "North":"South",
+        :
+    ],
+    :
+]
+```
+
+Explanation:
+
+* `"North":"South"` → Region range
+* `:` → Every city
+* Final `:` → Every column
+
+---
+
+## Slice Specific Cities
+
+```python id="slice03"
+df.loc[
+    idx[
+        :,
+        [
+            "Delhi",
+            "Mumbai"
+        ]
+    ],
+    :
+]
+```
+
+Only the specified cities are returned.
+
+---
+
+# 13. MultiIndex Columns
+
+Indexes are not limited to rows.
+
+Columns can also have multiple levels.
+
+Example
+
+| Sales | Sales | Profit | Profit |
+| ----- | ----- | ------ | ------ |
+| 2025  | 2026  | 2025   | 2026   |
+
+Create MultiIndex columns.
+
+```python id="columns01"
+df.columns = pd.MultiIndex.from_tuples(
+    [
+        ("Sales","2025"),
+        ("Sales","2026"),
+        ("Profit","2025"),
+        ("Profit","2026")
+    ]
+)
+```
+
+---
+
+## Access Multi-Level Columns
+
+Retrieve Sales for 2026.
+
+```python id="columns02"
+df[
+    (
+        "Sales",
+        "2026"
+    )
+]
+```
+
+This is common in financial statements and business dashboards.
+
+---
+
+# 14. Selecting Values from MultiIndex Columns
+
+Retrieve every Sales column.
+
+```python id="columns03"
+df["Sales"]
+```
+
+Output
+
+| 2025 | 2026 |
+| ---: | ---: |
+| 5200 | 6100 |
+
+Retrieve a single value.
+
+```python id="columns04"
+df[
+    (
+        "Profit",
+        "2025"
+    )
+]
+```
+
+---
+
+# 15. Performance Benefits of Indexing
+
+Indexes improve performance by reducing the amount of data that Pandas must scan.
+
+Benefits include:
+
+* Faster filtering
+* Faster joins
+* Efficient slicing
+* Better grouping performance
+* Reduced lookup time
+
+Proper indexing becomes increasingly important as datasets grow into millions of rows.
+
+---
+
+# Business Example
+
+A multinational retailer stores sales data using three index levels:
+
+* Region
+* City
+* Year
+
+Management frequently requests reports such as:
+
+* Sales for one region across all years.
+* Profit for one city.
+* Revenue by year and city.
+* Quarterly comparisons between regions.
+
+Using `xs()`, `swaplevel()`, and `IndexSlice`, analysts retrieve these reports efficiently without restructuring the dataset.
+
+---
+
+# Best Practices
+
+✔ Sort MultiIndexes before slicing.
+
+✔ Use descriptive names for index levels.
+
+✔ Prefer `xs()` for selecting a single level.
+
+✔ Use `IndexSlice` for complex selections.
+
+✔ Limit MultiIndex depth to what is necessary for analysis.
+
+---
+
+# Common Mistakes
+
+### Slicing an Unsorted MultiIndex
+
+Attempting advanced slicing on an unsorted MultiIndex may produce incorrect results or performance warnings.
+
+Always sort first.
+
+```python id="mistake01"
+df = df.sort_index()
+```
+
+---
+
+### Forgetting the Order of Levels
+
+After using `swaplevel()` or `reorder_levels()`, review the new structure.
+
+```python id="mistake02"
+df.index.names
+```
+
+This displays the current hierarchy.
+
+---
+
+### Confusing Row and Column MultiIndexes
+
+A DataFrame may have:
+
+* A MultiIndex on rows.
+* A MultiIndex on columns.
+* Both simultaneously.
+
+Always check:
+
+```python id="mistake03"
+df.index
+
+df.columns
+```
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Sort MultiIndexes.
+* Swap index levels.
+* Reorder hierarchical indexes.
+* Extract cross sections with `xs()`.
+* Perform advanced slicing using `IndexSlice`.
+* Work with MultiIndex columns.
+* Improve performance using indexing.
+
+> **"Well-designed indexes transform complex, multi-dimensional datasets into structures that are easy to navigate, analyze, and scale."**
