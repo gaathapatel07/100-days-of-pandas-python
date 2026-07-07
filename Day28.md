@@ -1,4 +1,4 @@
-# 🐼 Day 28 — MultiIndex, Hierarchical Indexing & Advanced Index Operations
+# Day 28 — MultiIndex, Hierarchical Indexing & Advanced Index Operations
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents 
 
 1. Introduction
 2. Why MultiIndex Matters
