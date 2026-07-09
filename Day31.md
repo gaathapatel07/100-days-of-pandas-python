@@ -281,3 +281,368 @@ After completing this section, you should understand:
 
 > **"Time-series analysis begins with treating time as a first-class feature, enabling meaningful exploration of trends, cycles, and business performance over time."**
 
+# 8. Resampling Time Series Data
+
+Real-world data is often collected at one frequency but analyzed at another.
+
+For example:
+
+* Hourly → Daily
+* Daily → Monthly
+* Monthly → Quarterly
+* Quarterly → Yearly
+
+Pandas uses **`resample()`** for frequency conversion.
+
+---
+
+## Daily Sales → Monthly Sales
+
+```python id="resample01"
+monthly_sales = (
+    df["Sales"]
+      .resample("M")
+      .sum()
+)
+```
+
+Output
+
+| Month | Total Sales |
+| ----- | ----------: |
+| Jan   |      155000 |
+| Feb   |      148200 |
+| Mar   |      172600 |
+
+`"M"` represents **Month-End** frequency.
+
+---
+
+## Daily Sales → Weekly Sales
+
+```python id="resample02"
+weekly_sales = (
+    df["Sales"]
+      .resample("W")
+      .sum()
+)
+```
+
+---
+
+## Daily Sales → Yearly Sales
+
+```python id="resample03"
+yearly_sales = (
+    df["Sales"]
+      .resample("Y")
+      .sum()
+)
+```
+
+---
+
+# Common Resampling Frequencies
+
+| Code  | Meaning     |
+| ----- | ----------- |
+| `D`   | Daily       |
+| `W`   | Weekly      |
+| `M`   | Month-End   |
+| `MS`  | Month Start |
+| `Q`   | Quarter-End |
+| `Y`   | Year-End    |
+| `H`   | Hourly      |
+| `min` | Minute      |
+| `s`   | Second      |
+
+---
+
+# 9. Frequency Conversion
+
+Sometimes you need to change the frequency without aggregation.
+
+Example:
+
+```python id="freq01"
+df = (
+    df.asfreq("D")
+)
+```
+
+Missing dates are inserted with `NaN`.
+
+---
+
+## Fill Missing Dates
+
+```python id="freq02"
+df = (
+    df.asfreq("D")
+      .ffill()
+)
+```
+
+Useful for stock prices and sensor data where continuous dates are required.
+
+---
+
+# 10. Rolling Windows
+
+Rolling windows calculate statistics over a moving window of observations.
+
+Example:
+
+Calculate a **7-day moving average**.
+
+```python id="rolling01"
+df["7-Day Average"] = (
+    df["Sales"]
+      .rolling(window=7)
+      .mean()
+)
+```
+
+Output
+
+| Date  | Sales | 7-Day Average |
+| ----- | ----: | ------------: |
+| Jan 1 |  5200 |           NaN |
+| Jan 2 |  6100 |           NaN |
+| ...   |   ... |           ... |
+| Jan 7 |  5900 |          5600 |
+
+Rolling averages smooth short-term fluctuations.
+
+---
+
+## Rolling Sum
+
+```python id="rolling02"
+df["7-Day Total"] = (
+    df["Sales"]
+      .rolling(7)
+      .sum()
+)
+```
+
+---
+
+## Rolling Maximum
+
+```python id="rolling03"
+df["Highest Week"] = (
+    df["Sales"]
+      .rolling(7)
+      .max()
+)
+```
+
+---
+
+# 11. Expanding Windows
+
+Unlike rolling windows, expanding windows include **all previous observations**.
+
+```python id="expand01"
+df["Running Average"] = (
+    df["Sales"]
+      .expanding()
+      .mean()
+)
+```
+
+Example
+
+| Day | Sales | Running Average |
+| --: | ----: | --------------: |
+|   1 |  5000 |            5000 |
+|   2 |  6000 |            5500 |
+|   3 |  7000 |            6000 |
+
+Useful for cumulative business metrics.
+
+---
+
+# 12. Shifting Time Series
+
+Move observations forward or backward.
+
+```python id="shift01"
+df["Previous Day"] = (
+    df["Sales"]
+      .shift(1)
+)
+```
+
+Output
+
+| Day | Sales | Previous Day |
+| --: | ----: | -----------: |
+|   1 |  5000 |          NaN |
+|   2 |  6200 |         5000 |
+|   3 |  5800 |         6200 |
+
+---
+
+## Future Values
+
+```python id="shift02"
+df["Next Day"] = (
+    df["Sales"]
+      .shift(-1)
+)
+```
+
+---
+
+# 13. Lag Features
+
+Lag features are widely used in forecasting and machine learning.
+
+Example:
+
+```python id="lag01"
+df["Lag_1"] = (
+    df["Sales"]
+      .shift(1)
+)
+
+df["Lag_7"] = (
+    df["Sales"]
+      .shift(7)
+)
+```
+
+These columns represent previous observations.
+
+---
+
+# 14. Lead Features
+
+Lead features reference future values.
+
+```python id="lead01"
+df["Lead_1"] = (
+    df["Sales"]
+      .shift(-1)
+)
+```
+
+Often used for comparison and target generation during model development.
+
+---
+
+# 15. Moving Averages
+
+Moving averages smooth noisy data and highlight long-term trends.
+
+### 30-Day Moving Average
+
+```python id="ma01"
+df["MA30"] = (
+    df["Sales"]
+      .rolling(30)
+      .mean()
+)
+```
+
+### 90-Day Moving Average
+
+```python id="ma02"
+df["MA90"] = (
+    df["Sales"]
+      .rolling(90)
+      .mean()
+)
+```
+
+Applications:
+
+* Stock market analysis
+* Demand forecasting
+* Revenue trends
+* Production planning
+
+---
+
+# Business Example
+
+A retail company records daily sales.
+
+Management wants:
+
+* Weekly revenue.
+* Monthly trends.
+* Rolling 30-day average.
+* Previous day's sales.
+* Quarterly summaries.
+
+Using:
+
+* `resample()`
+* `rolling()`
+* `expanding()`
+* `shift()`
+
+analysts generate executive dashboards that reveal trends and seasonal patterns.
+
+---
+
+# Best Practices
+
+✔ Sort data before time-series operations.
+
+✔ Use meaningful rolling window sizes.
+
+✔ Choose resampling frequencies that match business needs.
+
+✔ Validate missing dates before resampling.
+
+✔ Create lag features for forecasting models.
+
+---
+
+# Common Mistakes
+
+### Resampling Without a `DatetimeIndex`
+
+Incorrect:
+
+```python id="mistake01"
+df.resample("M")
+```
+
+This raises an error unless the DataFrame has a `DatetimeIndex`.
+
+---
+
+### Misinterpreting Initial `NaN` Values
+
+Rolling calculations require enough observations to fill the window.
+
+For a 7-day rolling mean, the first six rows will naturally contain `NaN`.
+
+---
+
+### Using Lag Features Without Handling Missing Values
+
+Shifting introduces missing values at the beginning or end of the dataset.
+
+Always decide whether to remove or impute these rows before modeling.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Resample time-series data.
+* Convert frequencies using `asfreq()`.
+* Compute rolling statistics.
+* Calculate expanding metrics.
+* Shift observations.
+* Create lag and lead features.
+* Build moving averages for trend analysis.
+
+> **"Time-series analysis transforms chronological observations into meaningful trends, enabling organizations to monitor performance, identify patterns, and forecast future outcomes."**
