@@ -1061,12 +1061,10 @@ These concepts are heavily used in financial modeling, risk analysis, KPI report
 
 <div align="center">
 
-# 🎉 Day 31 Complete!
+# Day 31 Complete!
 
 You've mastered **Time Series Analysis**, a cornerstone of modern analytics.
 
-From date indexing and resampling to rolling statistics and seasonality analysis, you now have the tools to explore and prepare chronological data for forecasting and business intelligence.
-
-⭐ **Next → Day 32: Advanced Window Functions & Analytical Operations** 📈🐼
+From date indexing and resampling to rolling statistics and seasonality analysis, you now have the tools to explore and prepare chronological data for forecasting and business intelligence. 
 
 </div>
