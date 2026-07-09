@@ -1146,7 +1146,7 @@ Complete the following tasks:
 
 # 25. Summary
 
-Congratulations! 🎉
+Congratulations! 
 
 Today you mastered **Advanced Feature Engineering & Data Transformation**.
 
@@ -1187,12 +1187,10 @@ These concepts are critical for building reliable, production-ready data pipelin
 
 <div align="center">
 
-# 🎉 Day 33 Complete!
+# Day 33 Complete!
 
 You've mastered **Feature Engineering & Data Transformation**, one of the most impactful stages in any analytics or machine learning workflow.
 
 By creating meaningful features and preparing high-quality datasets, you've taken an important step toward building production-ready analytical solutions.
-
-⭐ **Next → Day 34: Advanced Data Validation, Quality Assurance & Error Detection** ✅🐼
 
 </div>
