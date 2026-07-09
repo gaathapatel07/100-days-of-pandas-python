@@ -1221,12 +1221,10 @@ These concepts are essential for building end-to-end data pipelines and integrat
 
 <div align="center">
 
-# 🎉 Day 29 Complete!
+#  Day 29 Complete!
 
 You've mastered one of the most critical phases of any analytics workflow—**data cleaning**.
 
 By learning to detect, clean, validate, and standardize datasets, you now have the skills to prepare reliable, high-quality data for reporting, dashboards, statistical analysis, and machine learning.
-
-⭐ **Next → Day 30: Advanced Input & Output (I/O), File Formats & Data Serialization** 📂🐼
 
 </div>
