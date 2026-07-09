@@ -1139,12 +1139,11 @@ These concepts bridge the gap between raw datasets and machine learning-ready da
 
 <div align="center">
 
-# 🎉 Day 32 Complete!
+# Day 32 Complete!
 
 You've mastered **Window Functions & Analytical Operations**, one of the most valuable analytical skill sets in Pandas.
 
 From cumulative metrics and rolling windows to KPI dashboards and customer segmentation, you can now build sophisticated analytical workflows while preserving every original record.
 
-⭐ **Next → Day 33: Advanced Feature Engineering & Data Transformation** 🚀🐼
 
 </div>
