@@ -1,4 +1,4 @@
-# 🐼 Day 30 — Advanced Input & Output (I/O), File Formats & Data Serialization
+# Day 30 — Advanced Input & Output (I/O), File Formats & Data Serialization
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why I/O Matters
