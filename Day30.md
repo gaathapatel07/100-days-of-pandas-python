@@ -340,3 +340,439 @@ After completing this section, you should understand:
 
 > **"Cleaning data is not about removing imperfections—it is about ensuring that every business decision is based on trustworthy information."**
 
+# 8. Filling Missing Values with `fillna()`
+
+Removing missing values is not always the best option.
+
+Instead, replace them with meaningful values.
+
+Suppose the dataset contains:
+
+| Customer | Sales |
+| -------- | ----: |
+| Alice    |  5200 |
+| Rahul    |   NaN |
+| Priya    |  4800 |
+
+Fill missing values with zero.
+
+```python id="fill01"
+df["Sales"] = (
+    df["Sales"]
+      .fillna(0)
+)
+```
+
+Output
+
+| Customer | Sales |
+| -------- | ----: |
+| Alice    |  5200 |
+| Rahul    |     0 |
+| Priya    |  4800 |
+
+---
+
+## Fill Multiple Columns
+
+```python id="fill02"
+df.fillna(
+    {
+        "Sales": 0,
+        "Profit": 0,
+        "City": "Unknown"
+    }
+)
+```
+
+Each column receives its own replacement value.
+
+---
+
+# 9. Filling Using Statistics
+
+Replacing missing values with statistical measures often preserves the overall distribution.
+
+---
+
+## Fill with Mean
+
+```python id="fill03"
+df["Salary"] = (
+    df["Salary"]
+      .fillna(
+          df["Salary"].mean()
+      )
+)
+```
+
+Best suited for approximately normally distributed numerical data.
+
+---
+
+## Fill with Median
+
+```python id="fill04"
+df["Income"] = (
+    df["Income"]
+      .fillna(
+          df["Income"].median()
+      )
+)
+```
+
+Median is more robust when outliers are present.
+
+---
+
+## Fill with Mode
+
+```python id="fill05"
+df["City"] = (
+    df["City"]
+      .fillna(
+          df["City"].mode()[0]
+      )
+)
+```
+
+Mode is commonly used for categorical variables.
+
+---
+
+# 10. Forward Fill (`ffill`)
+
+Forward Fill copies the previous valid value.
+
+```python id="ffill01"
+df["Sales"] = (
+    df["Sales"]
+      .ffill()
+)
+```
+
+Example
+
+| Day | Sales |
+| --: | ----: |
+|   1 |  5200 |
+|   2 |   NaN |
+|   3 |  6100 |
+
+Output
+
+| Day | Sales |
+| --: | ----: |
+|   1 |  5200 |
+|   2 |  5200 |
+|   3 |  6100 |
+
+Useful for time-series data where the previous observation remains valid.
+
+---
+
+# 11. Backward Fill (`bfill`)
+
+Backward Fill copies the next valid value.
+
+```python id="bfill01"
+df["Sales"] = (
+    df["Sales"]
+      .bfill()
+)
+```
+
+Example
+
+| Day | Sales |
+| --: | ----: |
+|   1 |  5200 |
+|   2 |   NaN |
+|   3 |  6100 |
+
+Output
+
+| Day | Sales |
+| --: | ----: |
+|   1 |  5200 |
+|   2 |  6100 |
+|   3 |  6100 |
+
+---
+
+# 12. Interpolation
+
+Interpolation estimates missing values based on neighboring values.
+
+```python id="interp01"
+df["Temperature"] = (
+    df["Temperature"]
+      .interpolate()
+)
+```
+
+Example
+
+| Day | Temperature |
+| --: | ----------: |
+|   1 |          20 |
+|   2 |         NaN |
+|   3 |          24 |
+
+Output
+
+| Day | Temperature |
+| --: | ----------: |
+|   1 |          20 |
+|   2 |          22 |
+|   3 |          24 |
+
+Interpolation is commonly used in:
+
+* Weather data
+* Sensor readings
+* Stock prices
+* Scientific measurements
+
+---
+
+# 13. Detecting Duplicate Records
+
+Duplicate rows can distort business metrics.
+
+Identify duplicates.
+
+```python id="dup01"
+df.duplicated()
+```
+
+Output
+
+| Row | Duplicate |
+| --: | --------- |
+|   0 | False     |
+|   1 | False     |
+|   2 | True      |
+
+---
+
+## Count Duplicate Rows
+
+```python id="dup02"
+df.duplicated().sum()
+```
+
+---
+
+# 14. Removing Duplicates
+
+Remove duplicate rows.
+
+```python id="dup03"
+df = (
+    df.drop_duplicates()
+)
+```
+
+---
+
+## Remove Duplicates Based on Specific Columns
+
+```python id="dup04"
+df.drop_duplicates(
+    subset=[
+        "Customer ID"
+    ]
+)
+```
+
+---
+
+## Keep the Last Occurrence
+
+```python id="dup05"
+df.drop_duplicates(
+    subset="Customer ID",
+    keep="last"
+)
+```
+
+Options:
+
+| Option  | Meaning                         |
+| ------- | ------------------------------- |
+| `first` | Keep first occurrence (default) |
+| `last`  | Keep last occurrence            |
+| `False` | Remove all duplicates           |
+
+---
+
+# 15. Standardizing Data
+
+Real-world data often contains inconsistent formatting.
+
+Example:
+
+| City   |
+| ------ |
+| mumbai |
+| Mumbai |
+| MUMBAI |
+
+Standardize the values.
+
+```python id="clean01"
+df["City"] = (
+    df["City"]
+      .str.strip()
+      .str.title()
+)
+```
+
+Output
+
+| City   |
+| ------ |
+| Mumbai |
+| Mumbai |
+| Mumbai |
+
+---
+
+## Standardizing Text
+
+```python id="clean02"
+df["Department"] = (
+    df["Department"]
+      .str.upper()
+)
+```
+
+or
+
+```python id="clean03"
+df["Department"] = (
+    df["Department"]
+      .str.lower()
+)
+```
+
+Consistency improves grouping and reporting accuracy.
+
+---
+
+# 16. Validating Data
+
+After cleaning, validate the dataset.
+
+Missing values.
+
+```python id="valid01"
+df.isna().sum()
+```
+
+Duplicates.
+
+```python id="valid02"
+df.duplicated().sum()
+```
+
+Data types.
+
+```python id="valid03"
+df.dtypes
+```
+
+Summary statistics.
+
+```python id="valid04"
+df.describe()
+```
+
+Validation ensures that cleaning operations produced the intended result.
+
+---
+
+# Business Example
+
+A banking institution receives customer records from multiple branches.
+
+Problems include:
+
+* Missing customer ages.
+* Duplicate customer IDs.
+* Inconsistent city names.
+* Missing account balances.
+
+Analysts:
+
+* Fill missing balances using appropriate strategies.
+* Remove duplicate customer IDs.
+* Standardize city names.
+* Validate the cleaned dataset before generating regulatory reports.
+
+---
+
+# Best Practices
+
+✔ Choose an imputation strategy based on the data type and business context.
+
+✔ Use the median for skewed numerical data.
+
+✔ Standardize text before grouping.
+
+✔ Validate the dataset after every major cleaning step.
+
+✔ Keep a copy of the raw dataset before making changes.
+
+---
+
+# Common Mistakes
+
+### Filling Every Missing Value with Zero
+
+Zero may not always be a meaningful replacement.
+
+Choose values that make sense in the business context.
+
+---
+
+### Removing Legitimate Duplicate Transactions
+
+Not every repeated row is an error.
+
+For example, two customers may legitimately purchase the same product at the same time.
+
+Always verify duplicates before deleting them.
+
+---
+
+### Ignoring Text Standardization
+
+Values such as:
+
+```text id="mistake01"
+Delhi
+
+delhi
+
+ DELHI
+```
+
+represent the same city but will be treated as different categories unless standardized.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Fill missing values using `fillna()`.
+* Use mean, median, and mode for imputation.
+* Apply Forward Fill and Backward Fill.
+* Perform interpolation.
+* Detect and remove duplicates.
+* Standardize text values.
+* Validate cleaned datasets.
+
+> **"Effective data cleaning preserves valuable information while eliminating inconsistencies that could lead to misleading conclusions."**
