@@ -1180,15 +1180,12 @@ These skills are essential for finance, forecasting, demand planning, IoT analyt
 
 <div align="center">
 
-# 🎉 Day 30 Complete!
-
-## 🏆 Milestone: 30% of the Journey Complete
+# Day 30 Complete!
 
 You've built a strong professional foundation in Pandas—from importing raw data to creating clean, analytics-ready datasets and scalable ETL workflows.
 
 The next phase will focus on **time-series analytics**, one of the most valuable skills in data science and business forecasting.
 
-⭐ **Next → Day 31: Advanced Time Series Analysis** 📈🐼
 
 </div>
 
