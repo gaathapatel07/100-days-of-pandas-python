@@ -1,4 +1,4 @@
-# 🐼 Day 33 — Advanced Feature Engineering & Data Transformation
+# Day 33 — Advanced Feature Engineering & Data Transformation
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. What is Feature Engineering?
