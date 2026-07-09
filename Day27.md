@@ -2,6 +2,7 @@
 
 <div align="center">
 
+
 # 100 Days of Pandas
 
 ### Day 27 · Combining Multiple Datasets Efficiently
