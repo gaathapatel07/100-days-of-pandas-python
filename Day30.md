@@ -1,4 +1,4 @@
-# 🐼 Day 29 — Advanced Missing Data Handling & Data Cleaning
+# Day 29 — Advanced Missing Data Handling & Data Cleaning
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why Data Cleaning Matters
