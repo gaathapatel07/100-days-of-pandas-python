@@ -1,4 +1,4 @@
-# 🐼 Day 32 — Advanced Window Functions & Analytical Operations
+# Day 32 — Advanced Window Functions & Analytical Operations
 
 <div align="center">
 
@@ -16,9 +16,9 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
-1. Introduction
+1. Introduction 
 2. What are Window Functions?
 3. Why Window Functions Matter
 4. Learning Objectives
