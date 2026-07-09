@@ -364,3 +364,387 @@ After completing this section, you should understand:
 
 > **"Feature engineering transforms raw observations into meaningful variables that better capture business behavior and improve analytical outcomes."**
 
+# 8. Binning Data with `cut()`
+
+Continuous numerical values are often grouped into categories.
+
+Suppose customer ages range from 18 to 80.
+
+Instead of analyzing every individual age, group them into age brackets.
+
+```python id="cut01"
+df["Age Group"] = pd.cut(
+    df["Age"],
+    bins=[0,18,30,45,60,100],
+    labels=[
+        "Child",
+        "Young Adult",
+        "Adult",
+        "Middle Age",
+        "Senior"
+    ]
+)
+```
+
+### Output
+
+| Age | Age Group   |
+| --: | ----------- |
+|  22 | Young Adult |
+|  38 | Adult       |
+|  67 | Senior      |
+
+Binning simplifies reporting and visualization.
+
+---
+
+# 9. Quantile Binning with `qcut()`
+
+Unlike `cut()`, `qcut()` creates bins containing approximately the same number of observations.
+
+```python id="qcut01"
+df["Sales Tier"] = pd.qcut(
+    df["Sales"],
+    q=4,
+    labels=[
+        "Low",
+        "Medium",
+        "High",
+        "Premium"
+    ]
+)
+```
+
+Output
+
+| Sales | Sales Tier |
+| ----: | ---------- |
+|  2500 | Low        |
+|  6200 | Medium     |
+|  9800 | High       |
+| 14500 | Premium    |
+
+Useful for:
+
+* Customer segmentation
+* Credit scoring
+* Marketing campaigns
+
+---
+
+# 10. One-Hot Encoding
+
+Machine learning algorithms usually require numerical inputs.
+
+Categorical values such as:
+
+| City   |
+| ------ |
+| Delhi  |
+| Mumbai |
+| Delhi  |
+
+can be converted into dummy variables.
+
+```python id="onehot01"
+encoded = pd.get_dummies(
+    df,
+    columns=["City"]
+)
+```
+
+Output
+
+| City_Delhi | City_Mumbai |
+| ---------- | ----------- |
+| 1          | 0           |
+| 0          | 1           |
+| 1          | 0           |
+
+Each category becomes a separate binary column.
+
+---
+
+## Drop First Category
+
+To reduce redundancy:
+
+```python id="onehot02"
+encoded = pd.get_dummies(
+    df,
+    columns=["City"],
+    drop_first=True
+)
+```
+
+---
+
+# 11. Label Encoding
+
+Sometimes categories have an inherent order.
+
+Example:
+
+| Education    |
+| ------------ |
+| School       |
+| Graduate     |
+| Postgraduate |
+
+Encode them manually.
+
+```python id="label01"
+education_map = {
+    "School":1,
+    "Graduate":2,
+    "Postgraduate":3
+}
+
+df["Education"] = (
+    df["Education"]
+      .map(education_map)
+)
+```
+
+Output
+
+| Education |
+| --------: |
+|         1 |
+|         2 |
+|         3 |
+
+Label encoding is appropriate only when categories have a meaningful order.
+
+---
+
+# 12. Scaling Numerical Features
+
+Machine learning models often perform better when features have similar scales.
+
+Example:
+
+| Feature |  Value |
+| ------- | -----: |
+| Salary  | 850000 |
+| Age     |     25 |
+
+The large difference in magnitude can affect certain algorithms.
+
+---
+
+## Min-Max Normalization
+
+Scale values between 0 and 1.
+
+```python id="scale01"
+from sklearn.preprocessing import MinMaxScaler
+
+scaler = MinMaxScaler()
+
+df["Scaled Sales"] = (
+    scaler.fit_transform(
+        df[["Sales"]]
+    )
+)
+```
+
+---
+
+## Standardization (Z-Score)
+
+Standardization centers data around a mean of 0 with a standard deviation of 1.
+
+```python id="scale02"
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+df["Standard Sales"] = (
+    scaler.fit_transform(
+        df[["Sales"]]
+    )
+)
+```
+
+---
+
+# 13. Business Feature Engineering
+
+Real-world analytics often requires creating domain-specific features.
+
+### Customer Tenure
+
+```python id="business01"
+df["Tenure"] = (
+    (
+        pd.Timestamp.today()
+        -
+        df["Signup Date"]
+    ).dt.days
+)
+```
+
+---
+
+### Discount Percentage
+
+```python id="business02"
+df["Discount %"] = (
+    (
+        df["MRP"]
+        -
+        df["Selling Price"]
+    )
+    /
+    df["MRP"]
+) * 100
+```
+
+---
+
+### Average Revenue Per Customer
+
+```python id="business03"
+df["ARPC"] = (
+    df["Revenue"]
+    /
+    df["Customers"]
+)
+```
+
+---
+
+### Profit Category
+
+```python id="business04"
+df["Profit Category"] = pd.cut(
+    df["Profit"],
+    bins=[-100000,0,10000,50000,1000000],
+    labels=[
+        "Loss",
+        "Low Profit",
+        "Medium Profit",
+        "High Profit"
+    ]
+)
+```
+
+---
+
+# 14. Preparing Data for Machine Learning
+
+A typical preprocessing workflow:
+
+```text id="workflow01"
+Raw Data
+     │
+     ▼
+Handle Missing Values
+     │
+     ▼
+Remove Duplicates
+     │
+     ▼
+Feature Engineering
+     │
+     ▼
+Encoding
+     │
+     ▼
+Scaling
+     │
+     ▼
+Train/Test Split
+     │
+     ▼
+Machine Learning Model
+```
+
+Feature engineering bridges raw data and predictive modeling.
+
+---
+
+# Business Example
+
+An online retailer wants to predict customer churn.
+
+Analysts create:
+
+* Customer tenure
+* Average order value
+* Purchase frequency
+* Discount percentage
+* Customer spending tier
+
+Then:
+
+* Encode categorical variables.
+* Scale numerical features.
+* Train predictive models.
+
+The engineered features improve model performance compared with using raw data alone.
+
+---
+
+# Best Practices
+
+✔ Engineer features that solve business problems.
+
+✔ Use `qcut()` for balanced customer segmentation.
+
+✔ Use One-Hot Encoding for nominal categories.
+
+✔ Use Label Encoding only for ordinal data.
+
+✔ Scale numerical features before training distance-based models.
+
+---
+
+# Common Mistakes
+
+### Using Label Encoding for Unordered Categories
+
+Incorrect:
+
+```text id="mistake01"
+Red = 1
+
+Blue = 2
+
+Green = 3
+```
+
+This incorrectly implies an order.
+
+Prefer One-Hot Encoding for nominal categories.
+
+---
+
+### Scaling Before Handling Missing Values
+
+Always clean missing values before applying scalers.
+
+---
+
+### Creating Too Many Dummy Variables
+
+High-cardinality columns (e.g., thousands of unique cities) can create an excessive number of columns.
+
+Consider grouping rare categories or using alternative encoding techniques.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Bin continuous variables using `cut()`.
+* Create quantile-based groups with `qcut()`.
+* Apply One-Hot Encoding.
+* Perform Label Encoding.
+* Scale and standardize numerical features.
+* Engineer business-oriented variables.
+* Prepare datasets for machine learning.
+
+> **"Well-designed features capture meaningful business patterns, enabling more accurate analysis, better decision-making, and stronger machine learning models."**
