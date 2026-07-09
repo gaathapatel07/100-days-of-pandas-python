@@ -646,3 +646,427 @@ You have now learned how to:
 * Build moving averages for trend analysis.
 
 > **"Time-series analysis transforms chronological observations into meaningful trends, enabling organizations to monitor performance, identify patterns, and forecast future outcomes."**
+
+# 16. Trend Analysis
+
+One of the primary goals of time series analysis is to identify **long-term trends**.
+
+A trend represents the general direction in which data moves over time.
+
+Example:
+
+| Month |  Sales |
+| ----- | -----: |
+| Jan   | 120000 |
+| Feb   | 125000 |
+| Mar   | 131000 |
+| Apr   | 138000 |
+
+This dataset shows an **upward trend**.
+
+A simple way to visualize the trend is with a moving average.
+
+```python id="trend01"
+df["Trend"] = (
+    df["Sales"]
+      .rolling(30)
+      .mean()
+)
+```
+
+The moving average smooths daily fluctuations and highlights the long-term direction.
+
+---
+
+# 17. Seasonality Analysis
+
+Seasonality refers to patterns that repeat at regular intervals.
+
+Examples:
+
+* Higher retail sales during festivals.
+* Increased electricity usage during summer.
+* Weekend restaurant sales.
+* Monthly salary payments.
+
+Extract useful date components.
+
+```python id="season01"
+df["Month"] = df.index.month
+
+df["Day"] = df.index.day
+
+df["Weekday"] = df.index.day_name()
+```
+
+Average sales by month.
+
+```python id="season02"
+monthly_avg = (
+    df.groupby("Month")["Sales"]
+      .mean()
+)
+```
+
+Average sales by weekday.
+
+```python id="season03"
+weekday_avg = (
+    df.groupby("Weekday")["Sales"]
+      .mean()
+)
+```
+
+---
+
+# 18. Time-Based Grouping
+
+Instead of creating new columns manually, Pandas provides **`pd.Grouper()`**.
+
+Monthly revenue.
+
+```python id="group01"
+df.groupby(
+    pd.Grouper(freq="M")
+)["Sales"].sum()
+```
+
+Quarterly revenue.
+
+```python id="group02"
+df.groupby(
+    pd.Grouper(freq="Q")
+)["Sales"].sum()
+```
+
+Yearly revenue.
+
+```python id="group03"
+df.groupby(
+    pd.Grouper(freq="Y")
+)["Sales"].sum()
+```
+
+This is cleaner than extracting year and month separately.
+
+---
+
+# 19. Business Calendar Operations
+
+Many organizations analyze business days instead of calendar days.
+
+Count business days.
+
+```python id="calendar01"
+business_days = pd.bdate_range(
+    start="2026-01-01",
+    end="2026-01-31"
+)
+```
+
+Create a business-day frequency.
+
+```python id="calendar02"
+df = df.asfreq("B")
+```
+
+`"B"` represents **Business Days**.
+
+Useful for:
+
+* Banking
+* Stock markets
+* Corporate reporting
+
+---
+
+# 20. Combining Time Series Operations
+
+Professional analytics often combines several operations.
+
+```python id="combine01"
+report = (
+    df
+    .resample("M")
+    .sum()
+    .assign(
+        MA3=lambda x:
+        x["Sales"]
+          .rolling(3)
+          .mean()
+    )
+)
+```
+
+This pipeline:
+
+* Resamples monthly.
+* Calculates total sales.
+* Adds a 3-month moving average.
+
+---
+
+# 21. Enterprise Case Study
+
+## Scenario
+
+You are a **Senior Business Analyst** at **RetailHub**.
+
+The company stores:
+
+* Daily sales
+* Website traffic
+* Marketing spend
+* Customer registrations
+
+Management requests:
+
+* Monthly revenue.
+* Quarterly growth.
+* Rolling sales average.
+* Best-performing weekdays.
+* Seasonal demand patterns.
+
+---
+
+## Business Questions
+
+### Question 1
+
+Monthly revenue.
+
+```python id="case01"
+monthly_sales = (
+    df["Sales"]
+      .resample("M")
+      .sum()
+)
+```
+
+---
+
+### Question 2
+
+30-day moving average.
+
+```python id="case02"
+df["MA30"] = (
+    df["Sales"]
+      .rolling(30)
+      .mean()
+)
+```
+
+---
+
+### Question 3
+
+Previous day's sales.
+
+```python id="case03"
+df["Yesterday"] = (
+    df["Sales"]
+      .shift(1)
+)
+```
+
+---
+
+### Question 4
+
+Average weekday sales.
+
+```python id="case04"
+df.groupby(
+    df.index.day_name()
+)["Sales"].mean()
+```
+
+---
+
+### Question 5
+
+Quarterly sales.
+
+```python id="case05"
+df.groupby(
+    pd.Grouper(freq="Q")
+)["Sales"].sum()
+```
+
+---
+
+# 22. Business Insights
+
+After analyzing the time-series data, analysts discover:
+
+* Sales consistently increase during the fourth quarter.
+* Weekend revenue is significantly higher than weekday revenue.
+* The 30-day moving average reveals a sustained upward trend.
+* Marketing campaigns lead to short-term spikes in customer registrations.
+* Quarterly reports help management plan inventory and staffing more effectively.
+
+---
+
+# 23. Practice Exercises
+
+## Beginner
+
+1. Convert a column to `datetime`.
+2. Set a `DatetimeIndex`.
+3. Select data for a specific month.
+4. Resample daily data into monthly totals.
+5. Calculate a 7-day moving average.
+
+---
+
+## Intermediate
+
+6. Compute quarterly sales.
+7. Create lag features.
+8. Build an expanding average.
+9. Group by weekday.
+10. Generate business-day frequencies.
+
+---
+
+## Advanced
+
+11. Build a forecasting-ready dataset.
+12. Create rolling statistics with multiple window sizes.
+13. Analyze monthly seasonality.
+14. Build a reusable time-series pipeline.
+15. Generate executive KPI reports.
+
+---
+
+# 24. Interview Questions
+
+## Beginner
+
+1. What is time-series data?
+2. What is a `DatetimeIndex`?
+3. What does `resample()` do?
+4. What is a rolling average?
+5. What is a lag feature?
+
+---
+
+## Intermediate
+
+6. Difference between `rolling()` and `expanding()`?
+7. Difference between `resample()` and `groupby()`?
+8. Why use `shift()`?
+9. What is seasonality?
+10. What is a business-day frequency?
+
+---
+
+## Advanced
+
+11. Design a time-series analytics workflow.
+12. Explain trend and seasonality.
+13. How would you prepare time-series data for forecasting?
+14. How do moving averages help businesses?
+15. How do time-series techniques improve decision-making?
+
+---
+
+# 25. Cheat Sheet
+
+| Task                 | Syntax                 |
+| -------------------- | ---------------------- |
+| Convert to DateTime  | `pd.to_datetime()`     |
+| Set DateTime Index   | `set_index()`          |
+| Resample             | `resample()`           |
+| Frequency Conversion | `asfreq()`             |
+| Rolling Average      | `rolling().mean()`     |
+| Expanding Average    | `expanding().mean()`   |
+| Shift                | `shift()`              |
+| Lag Feature          | `shift(1)`             |
+| Lead Feature         | `shift(-1)`            |
+| Business Days        | `pd.bdate_range()`     |
+| Time Grouper         | `pd.Grouper(freq="M")` |
+
+---
+
+# 26. Mini Project
+
+## Retail Sales Time-Series Dashboard
+
+Using any retail, finance, healthcare, logistics, or stock market dataset:
+
+Complete the following tasks:
+
+* Convert dates to `DatetimeIndex`.
+* Resample daily data into weekly and monthly summaries.
+* Calculate 7-day, 30-day, and 90-day moving averages.
+* Create lag and lead features.
+* Analyze monthly and weekday seasonality.
+* Generate quarterly revenue reports.
+* Build a reusable time-series pipeline.
+* Write **five executive-level business insights**.
+* Recommend **three strategies** for improving forecasting accuracy.
+
+### Example Business Insights
+
+* Fourth-quarter sales consistently exceeded other quarters.
+* Weekend demand was significantly higher than weekday demand.
+* Moving averages highlighted steady long-term revenue growth.
+* Lag features revealed strong short-term sales dependencies.
+* Monthly summaries simplified executive reporting.
+
+---
+
+# 27. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Advanced Time Series Analysis** in Pandas.
+
+You learned how to:
+
+* Create and work with `DatetimeIndex`.
+* Resample data at different frequencies.
+* Calculate rolling and expanding statistics.
+* Build lag and lead features.
+* Analyze trends and seasonality.
+* Group data using time frequencies.
+* Prepare datasets for forecasting.
+
+These techniques are widely used in finance, demand forecasting, operations, IoT analytics, and business intelligence.
+
+---
+
+# 28. What's Next?
+
+In **Day 32**, you'll learn **Advanced Window Functions & Analytical Operations**.
+
+Topics include:
+
+* Rolling Window Functions
+* Expanding Window Functions
+* Exponentially Weighted Moving (EWM)
+* Cumulative Operations
+* Ranking
+* Percentile Ranking
+* Quantiles
+* Advanced Statistical Analysis
+* Business KPI Calculations
+* Financial Analytics
+
+These concepts are heavily used in financial modeling, risk analysis, KPI reporting, customer analytics, and production-grade data pipelines.
+
+---
+
+<div align="center">
+
+# 🎉 Day 31 Complete!
+
+You've mastered **Time Series Analysis**, a cornerstone of modern analytics.
+
+From date indexing and resampling to rolling statistics and seasonality analysis, you now have the tools to explore and prepare chronological data for forecasting and business intelligence.
+
+⭐ **Next → Day 32: Advanced Window Functions & Analytical Operations** 📈🐼
+
+</div>
