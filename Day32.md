@@ -385,3 +385,338 @@ After completing this section, you should understand:
 
 > **"Window functions enrich every record with contextual insights, enabling analysts to measure progress, compare performance, and identify meaningful patterns without losing detail."**
 
+# 8. Advanced Rolling Statistics
+
+Rolling windows are not limited to averages.
+
+Pandas supports many statistical calculations over moving windows.
+
+Example:
+
+Calculate a **7-day rolling standard deviation**.
+
+```python id="roll01"
+df["Rolling Std"] = (
+    df["Sales"]
+      .rolling(7)
+      .std()
+)
+```
+
+Output
+
+| Date  | Sales | Rolling Std |
+| ----- | ----: | ----------: |
+| Day 1 |  5200 |         NaN |
+| Day 7 |  6100 |      450.21 |
+| Day 8 |  5900 |      430.12 |
+
+Rolling standard deviation measures short-term variability.
+
+---
+
+## Rolling Minimum
+
+```python id="roll02"
+df["Rolling Min"] = (
+    df["Sales"]
+      .rolling(7)
+      .min()
+)
+```
+
+---
+
+## Rolling Maximum
+
+```python id="roll03"
+df["Rolling Max"] = (
+    df["Sales"]
+      .rolling(7)
+      .max()
+)
+```
+
+---
+
+## Rolling Median
+
+```python id="roll04"
+df["Rolling Median"] = (
+    df["Sales"]
+      .rolling(7)
+      .median()
+)
+```
+
+---
+
+# 9. Expanding Statistics
+
+Unlike rolling windows, expanding windows include **all observations from the beginning**.
+
+Running average.
+
+```python id="expand01"
+df["Running Mean"] = (
+    df["Sales"]
+      .expanding()
+      .mean()
+)
+```
+
+Running maximum.
+
+```python id="expand02"
+df["Running Max"] = (
+    df["Sales"]
+      .expanding()
+      .max()
+)
+```
+
+Running standard deviation.
+
+```python id="expand03"
+df["Running Std"] = (
+    df["Sales"]
+      .expanding()
+      .std()
+)
+```
+
+These metrics are useful for long-term performance tracking.
+
+---
+
+# 10. Exponentially Weighted Moving (EWM)
+
+Traditional moving averages assign equal weight to every observation.
+
+Exponentially Weighted Moving (EWM) gives **greater importance to recent observations**.
+
+Example:
+
+```python id="ewm01"
+df["EWM"] = (
+    df["Sales"]
+      .ewm(span=7)
+      .mean()
+)
+```
+
+Recent sales influence the average more than older sales.
+
+---
+
+## Why Use EWM?
+
+Compared with a simple moving average:
+
+* Responds faster to recent changes.
+* Smooths noisy data.
+* Widely used in financial markets.
+* Common in forecasting models.
+
+---
+
+# 11. Window Functions with `groupby()`
+
+Window calculations can also be performed **within groups**.
+
+Example:
+
+Running sales total by region.
+
+```python id="group01"
+df["Regional Running Sales"] = (
+    df.groupby("Region")["Sales"]
+      .cumsum()
+)
+```
+
+Output
+
+| Region | Sales | Running Sales |
+| ------ | ----: | ------------: |
+| North  |  5200 |          5200 |
+| North  |  6100 |         11300 |
+| South  |  4800 |          4800 |
+
+Each region maintains its own cumulative total.
+
+---
+
+## Rolling Average by Group
+
+```python id="group02"
+df["Regional Average"] = (
+    df.groupby("Region")["Sales"]
+      .transform(
+          lambda x:
+          x.rolling(3).mean()
+      )
+)
+```
+
+Each region receives an independent rolling calculation.
+
+---
+
+# 12. KPI Tracking
+
+Businesses often monitor Key Performance Indicators (KPIs) over time.
+
+Example:
+
+Running revenue.
+
+```python id="kpi01"
+df["Revenue KPI"] = (
+    df["Revenue"]
+      .cumsum()
+)
+```
+
+Customer growth.
+
+```python id="kpi02"
+df["Customer Growth"] = (
+    df["Customers"]
+      .pct_change()
+)
+```
+
+Running profit margin.
+
+```python id="kpi03"
+df["Profit Margin"] = (
+    df["Profit"]
+    /
+    df["Revenue"]
+) * 100
+```
+
+These KPIs support executive dashboards.
+
+---
+
+# 13. Financial Analytics
+
+Window functions are widely used in finance.
+
+Calculate daily return.
+
+```python id="finance01"
+df["Daily Return"] = (
+    df["Close"]
+      .pct_change()
+)
+```
+
+Calculate cumulative return.
+
+```python id="finance02"
+df["Cumulative Return"] = (
+    (
+        1 +
+        df["Daily Return"]
+    )
+    .cumprod()
+    - 1
+)
+```
+
+Calculate a 20-day moving average.
+
+```python id="finance03"
+df["MA20"] = (
+    df["Close"]
+      .rolling(20)
+      .mean()
+)
+```
+
+These metrics help analysts evaluate investment performance.
+
+---
+
+# 14. Comparing Rolling vs Expanding vs EWM
+
+| Feature     | Rolling        | Expanding       | EWM                             |
+| ----------- | -------------- | --------------- | ------------------------------- |
+| Window Size | Fixed          | Growing         | Infinite (weighted)             |
+| Older Data  | Removed        | Retained        | Retained with decreasing weight |
+| Recent Data | Equal Weight   | Equal Weight    | Higher Weight                   |
+| Common Use  | Moving Average | Running Metrics | Financial Forecasting           |
+
+---
+
+# Business Example
+
+A retail company wants to monitor:
+
+* Weekly sales trends.
+* Running annual revenue.
+* Regional cumulative performance.
+* Customer growth.
+* Profit margins.
+
+Using rolling, expanding, and exponentially weighted calculations, analysts build dashboards that reveal both short-term fluctuations and long-term trends.
+
+---
+
+# Best Practices
+
+✔ Sort data before window calculations.
+
+✔ Choose window sizes based on business requirements.
+
+✔ Use EWM when recent observations should have more influence.
+
+✔ Apply window functions within groups for segmented analysis.
+
+✔ Validate cumulative calculations after transformations.
+
+---
+
+# Common Mistakes
+
+### Using Window Functions on Unsorted Data
+
+Always sort chronologically before applying rolling or expanding calculations.
+
+```python id="mistake01"
+df = df.sort_values("Date")
+```
+
+---
+
+### Choosing an Inappropriate Window Size
+
+A 365-day rolling average may hide important weekly patterns.
+
+Select window sizes that align with the business problem.
+
+---
+
+### Ignoring Missing Values
+
+Rolling and expanding calculations may produce `NaN` values at the beginning.
+
+Handle these appropriately before visualization or modeling.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Calculate advanced rolling statistics.
+* Use expanding windows.
+* Apply Exponentially Weighted Moving averages.
+* Combine window functions with `groupby()`.
+* Build KPI tracking metrics.
+* Perform financial analytics using window calculations.
+
+> **"Advanced window functions allow analysts to monitor performance over time, identify trends, and generate dynamic business insights while preserving every original observation."**
