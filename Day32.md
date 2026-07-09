@@ -720,3 +720,431 @@ You have now learned how to:
 * Perform financial analytics using window calculations.
 
 > **"Advanced window functions allow analysts to monitor performance over time, identify trends, and generate dynamic business insights while preserving every original observation."**
+
+# 15. Customer Segmentation Using Percentiles
+
+One of the most common business applications of window functions is customer segmentation.
+
+Suppose we want to classify customers based on total spending.
+
+```python id="segment01"
+df["Percentile"] = (
+    df["Sales"]
+      .rank(pct=True)
+)
+```
+
+Example
+
+| Customer | Sales | Percentile |
+| -------- | ----: | ---------: |
+| Alice    |  9200 |       1.00 |
+| Rahul    |  8100 |       0.80 |
+| Priya    |  6400 |       0.60 |
+| Riya     |  4200 |       0.40 |
+
+Now classify customers.
+
+```python id="segment02"
+df["Customer Tier"] = (
+    pd.cut(
+        df["Percentile"],
+        bins=[0,0.50,0.80,1],
+        labels=[
+            "Bronze",
+            "Silver",
+            "Gold"
+        ]
+    )
+)
+```
+
+Output
+
+| Customer | Tier   |
+| -------- | ------ |
+| Alice    | Gold   |
+| Rahul    | Gold   |
+| Priya    | Silver |
+| Riya     | Bronze |
+
+This technique is commonly used in CRM systems and loyalty programs.
+
+---
+
+# 16. Building KPI Dashboards
+
+Window functions are essential for business dashboards.
+
+Example:
+
+```python id="kpi01"
+dashboard = (
+    df
+    .assign(
+        Running_Revenue=lambda x:
+        x["Revenue"].cumsum(),
+
+        MA30=lambda x:
+        x["Revenue"].rolling(30).mean(),
+
+        Growth=lambda x:
+        x["Revenue"].pct_change()*100
+    )
+)
+```
+
+Generated KPIs include:
+
+* Running Revenue
+* Moving Average
+* Growth Rate
+
+These metrics help executives monitor business performance over time.
+
+---
+
+# 17. Enterprise Analytical Workflow
+
+Large organizations often process data through multiple analytical stages.
+
+```text id="workflow01"
+Raw Data
+     │
+     ▼
+Data Cleaning
+     │
+     ▼
+Feature Engineering
+     │
+     ▼
+Window Functions
+     │
+     ▼
+KPIs
+     │
+     ▼
+Executive Dashboard
+     │
+     ▼
+Business Decisions
+```
+
+Each stage adds analytical value without losing the original observations.
+
+---
+
+# 18. Performance Optimization
+
+Window calculations can become expensive on large datasets.
+
+### Sort Before Window Operations
+
+```python id="perf01"
+df = (
+    df.sort_values("Date")
+)
+```
+
+---
+
+### Use Appropriate Data Types
+
+```python id="perf02"
+df["Region"] = (
+    df["Region"]
+      .astype("category")
+)
+```
+
+---
+
+### Avoid Recomputing Metrics
+
+Instead of repeatedly calculating:
+
+```python id="perf03"
+df["Sales"].rolling(30).mean()
+```
+
+Store the result once.
+
+```python id="perf04"
+df["MA30"] = (
+    df["Sales"]
+      .rolling(30)
+      .mean()
+)
+```
+
+Reuse the calculated column throughout your analysis.
+
+---
+
+# 19. Enterprise Case Study
+
+## Scenario
+
+You are a **Senior Data Analyst** at **RetailHub**.
+
+The company tracks:
+
+* Daily Sales
+* Revenue
+* Profit
+* Customers
+* Marketing Spend
+
+Management requests an executive dashboard.
+
+---
+
+## Business Questions
+
+### Question 1
+
+Calculate cumulative revenue.
+
+```python id="case01"
+df["Running Revenue"] = (
+    df["Revenue"]
+      .cumsum()
+)
+```
+
+---
+
+### Question 2
+
+Calculate a 30-day moving average.
+
+```python id="case02"
+df["MA30"] = (
+    df["Revenue"]
+      .rolling(30)
+      .mean()
+)
+```
+
+---
+
+### Question 3
+
+Rank stores by profit.
+
+```python id="case03"
+df["Profit Rank"] = (
+    df["Profit"]
+      .rank(
+          ascending=False
+      )
+)
+```
+
+---
+
+### Question 4
+
+Create customer spending percentiles.
+
+```python id="case04"
+df["Customer Percentile"] = (
+    df["Sales"]
+      .rank(
+          pct=True
+      )
+)
+```
+
+---
+
+### Question 5
+
+Compute cumulative customer growth.
+
+```python id="case05"
+df["Customer Growth"] = (
+    df["Customers"]
+      .pct_change()
+      .cumsum()
+)
+```
+
+---
+
+# 20. Business Insights
+
+After applying advanced window functions, analysts discover:
+
+* Revenue is growing steadily despite short-term fluctuations.
+* The 30-day moving average smooths daily volatility and reveals long-term trends.
+* A small percentage of customers generate a significant share of revenue.
+* Regional rankings highlight the highest-performing business units.
+* KPI dashboards enable faster and more informed executive decisions.
+
+---
+
+# 21. Practice Exercises
+
+## Beginner
+
+1. Calculate a running total.
+2. Compute a cumulative maximum.
+3. Rank employees by salary.
+4. Find the median using `quantile()`.
+5. Calculate a 7-day moving average.
+
+---
+
+## Intermediate
+
+6. Create percentile ranks.
+7. Build rolling standard deviations.
+8. Calculate exponentially weighted averages.
+9. Rank observations within groups.
+10. Compute cumulative sales by region.
+
+---
+
+## Advanced
+
+11. Build a KPI dashboard.
+12. Create customer segmentation using percentiles.
+13. Design a financial analytics workflow.
+14. Optimize window calculations for large datasets.
+15. Develop a reusable analytics pipeline.
+
+---
+
+# 22. Interview Questions
+
+## Beginner
+
+1. What is a window function?
+2. Difference between `cumsum()` and `sum()`?
+3. What does `rank()` do?
+4. What is a rolling window?
+5. What is an expanding window?
+
+---
+
+## Intermediate
+
+6. Difference between rolling and expanding calculations?
+7. What is EWM?
+8. Why use percentile ranking?
+9. Difference between `rank()` and `dense rank()`?
+10. How do window functions differ from `groupby()`?
+
+---
+
+## Advanced
+
+11. Design a KPI dashboard using window functions.
+12. Explain customer segmentation using percentiles.
+13. Compare rolling averages and EWM.
+14. Optimize analytical workflows for millions of records.
+15. Explain how window functions support executive decision-making.
+
+---
+
+# 23. Cheat Sheet
+
+| Task              | Syntax                 |
+| ----------------- | ---------------------- |
+| Running Total     | `cumsum()`             |
+| Running Product   | `cumprod()`            |
+| Running Maximum   | `cummax()`             |
+| Running Minimum   | `cummin()`             |
+| Rank              | `rank()`               |
+| Dense Rank        | `rank(method="dense")` |
+| Percentile Rank   | `rank(pct=True)`       |
+| Rolling Mean      | `rolling().mean()`     |
+| Rolling Std       | `rolling().std()`      |
+| Expanding Mean    | `expanding().mean()`   |
+| EWM               | `ewm().mean()`         |
+| Percentage Change | `pct_change()`         |
+
+---
+
+# 24. Mini Project
+
+## Executive KPI Analytics Dashboard
+
+Using any retail, banking, finance, healthcare, or e-commerce dataset:
+
+Complete the following tasks:
+
+* Calculate cumulative revenue.
+* Build rolling 7-day, 30-day, and 90-day averages.
+* Create expanding statistics.
+* Apply EWM to smooth trends.
+* Rank customers by spending.
+* Segment customers using percentile ranks.
+* Generate KPI metrics.
+* Build a reusable analytical pipeline.
+* Write **five executive-level business insights**.
+* Recommend **three strategic improvements** based on KPI trends.
+
+### Example Business Insights
+
+* The top 20% of customers contributed the majority of revenue.
+* Rolling averages revealed steady long-term growth despite daily fluctuations.
+* EWM responded more quickly to recent market changes than simple moving averages.
+* Regional cumulative sales highlighted consistently strong-performing markets.
+* KPI dashboards enabled proactive monitoring of business performance.
+
+---
+
+# 25. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Advanced Window Functions & Analytical Operations** in Pandas.
+
+You learned how to:
+
+* Calculate cumulative metrics.
+* Apply rolling and expanding windows.
+* Use exponentially weighted averages.
+* Rank observations and calculate percentiles.
+* Build KPI dashboards.
+* Perform financial and customer analytics.
+* Create enterprise-ready analytical workflows.
+
+These techniques are fundamental for business intelligence, financial modeling, customer analytics, forecasting, and executive reporting.
+
+---
+
+# 26. What's Next?
+
+In **Day 33**, you'll learn **Advanced Feature Engineering & Data Transformation**.
+
+Topics include:
+
+* Creating New Features
+* Binning with `cut()` and `qcut()`
+* One-Hot Encoding
+* Label Encoding
+* Dummy Variables
+* Scaling & Normalization
+* Standardization
+* Mathematical Transformations
+* Business Feature Engineering
+* Machine Learning Data Preparation
+
+These concepts bridge the gap between raw datasets and machine learning-ready data.
+
+---
+
+<div align="center">
+
+# 🎉 Day 32 Complete!
+
+You've mastered **Window Functions & Analytical Operations**, one of the most valuable analytical skill sets in Pandas.
+
+From cumulative metrics and rolling windows to KPI dashboards and customer segmentation, you can now build sophisticated analytical workflows while preserving every original record.
+
+⭐ **Next → Day 33: Advanced Feature Engineering & Data Transformation** 🚀🐼
+
+</div>
