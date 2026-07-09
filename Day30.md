@@ -776,3 +776,457 @@ You have now learned how to:
 * Validate cleaned datasets.
 
 > **"Effective data cleaning preserves valuable information while eliminating inconsistencies that could lead to misleading conclusions."**
+
+# 17. Enterprise Data Cleaning Workflow
+
+Real-world organizations follow a structured data-cleaning process before performing analytics or training machine learning models.
+
+Typical workflow:
+
+```text id="workflow01"
+Raw Dataset
+      │
+      ▼
+Detect Missing Values
+      │
+      ▼
+Handle Missing Values
+      │
+      ▼
+Remove Duplicate Records
+      │
+      ▼
+Standardize Text & Formats
+      │
+      ▼
+Validate Data Types
+      │
+      ▼
+Check Business Rules
+      │
+      ▼
+Export Clean Dataset
+```
+
+Each stage improves the quality and reliability of the dataset.
+
+---
+
+# 18. Building a Complete Cleaning Pipeline
+
+Instead of cleaning step by step, combine operations into a reusable pipeline.
+
+```python id="pipeline01"
+def clean_dataset(df):
+
+    return (
+        df
+        .drop_duplicates()
+        .assign(
+            City=lambda x:
+            x["City"]
+              .str.strip()
+              .str.title()
+        )
+        .assign(
+            Sales=lambda x:
+            x["Sales"]
+              .fillna(
+                  x["Sales"].median()
+              )
+        )
+        .reset_index(drop=True)
+    )
+```
+
+Run the pipeline.
+
+```python id="pipeline02"
+clean_df = clean_dataset(df)
+```
+
+Reusable pipelines reduce repetitive code and improve maintainability.
+
+---
+
+# 19. Data Validation Checklist
+
+Cleaning is incomplete without validation.
+
+### Check Missing Values
+
+```python id="valid05"
+df.isna().sum()
+```
+
+---
+
+### Check Duplicate Rows
+
+```python id="valid06"
+df.duplicated().sum()
+```
+
+---
+
+### Verify Data Types
+
+```python id="valid07"
+df.dtypes
+```
+
+---
+
+### Review Summary Statistics
+
+```python id="valid08"
+df.describe(
+    include="all"
+)
+```
+
+---
+
+### Verify Unique Categories
+
+```python id="valid09"
+df["City"].unique()
+```
+
+Validation helps detect remaining inconsistencies before reporting.
+
+---
+
+# 20. Performance Optimization
+
+Large datasets require efficient cleaning strategies.
+
+---
+
+## Vectorized Operations
+
+Instead of loops:
+
+```python id="perf01"
+for city in df["City"]:
+    city = city.title()
+```
+
+Use:
+
+```python id="perf02"
+df["City"] = (
+    df["City"]
+      .str.title()
+)
+```
+
+Vectorized methods are much faster.
+
+---
+
+## Convert Data Types
+
+```python id="perf03"
+df["Region"] = (
+    df["Region"]
+      .astype("category")
+)
+```
+
+This reduces memory usage for repeated values.
+
+---
+
+## Clean Only Necessary Columns
+
+Avoid transforming every column unnecessarily.
+
+Example:
+
+```python id="perf04"
+df["Customer"] = (
+    df["Customer"]
+      .str.strip()
+)
+```
+
+Target only columns requiring cleanup.
+
+---
+
+# 21. Enterprise Case Study
+
+## Scenario
+
+You are a **Senior Data Analyst** at **RetailHub**.
+
+The sales dataset contains:
+
+* Missing sales values.
+* Duplicate orders.
+* Inconsistent city names.
+* Invalid customer ages.
+* Extra spaces in customer names.
+
+Management requires a clean dataset before generating executive dashboards.
+
+---
+
+## Business Questions
+
+### Question 1
+
+Count missing values.
+
+```python id="case01"
+df.isna().sum()
+```
+
+---
+
+### Question 2
+
+Fill missing sales with the median.
+
+```python id="case02"
+df["Sales"] = (
+    df["Sales"]
+      .fillna(
+          df["Sales"].median()
+      )
+)
+```
+
+---
+
+### Question 3
+
+Remove duplicate records.
+
+```python id="case03"
+df = (
+    df.drop_duplicates()
+)
+```
+
+---
+
+### Question 4
+
+Standardize city names.
+
+```python id="case04"
+df["City"] = (
+    df["City"]
+      .str.strip()
+      .str.title()
+)
+```
+
+---
+
+### Question 5
+
+Create a reusable cleaning function.
+
+```python id="case05"
+def prepare_data(dataframe):
+
+    dataframe = (
+        dataframe
+        .drop_duplicates()
+    )
+
+    dataframe["City"] = (
+        dataframe["City"]
+          .str.strip()
+          .str.title()
+    )
+
+    dataframe["Sales"] = (
+        dataframe["Sales"]
+          .fillna(
+              dataframe["Sales"].median()
+          )
+    )
+
+    return dataframe
+```
+
+---
+
+# 22. Business Insights
+
+After cleaning the dataset, analysts discover:
+
+* Missing values no longer distort sales calculations.
+* Duplicate orders are removed, preventing revenue overestimation.
+* Standardized city names improve regional reporting.
+* Consistent data types simplify downstream analysis.
+* Reusable cleaning pipelines reduce manual effort and improve reproducibility.
+
+---
+
+# 23. Practice Exercises
+
+## Beginner
+
+1. Detect missing values.
+2. Count missing values.
+3. Remove rows with missing values.
+4. Fill missing values with zero.
+5. Remove duplicate rows.
+
+---
+
+## Intermediate
+
+6. Fill missing values using the mean.
+7. Fill missing values using the median.
+8. Standardize city names.
+9. Remove duplicates using specific columns.
+10. Validate data types after cleaning.
+
+---
+
+## Advanced
+
+11. Build a reusable cleaning pipeline.
+12. Compare different imputation strategies.
+13. Optimize a large dataset using categories.
+14. Create a complete validation report.
+15. Write five recommendations for improving data quality.
+
+---
+
+# 24. Interview Questions
+
+## Beginner
+
+1. What is a missing value?
+2. Difference between `NaN`, `None`, and `NaT`?
+3. What does `isna()` return?
+4. What is `fillna()`?
+5. What is `dropna()`?
+
+---
+
+## Intermediate
+
+6. Difference between Forward Fill and Backward Fill?
+7. When should interpolation be used?
+8. How do you detect duplicates?
+9. Why standardize text values?
+10. How do you validate a cleaned dataset?
+
+---
+
+## Advanced
+
+11. Design a complete data-cleaning workflow.
+12. Compare mean, median, and mode imputation.
+13. How would you clean a dataset with 100 million rows?
+14. How do data quality issues affect machine learning models?
+15. What practices ensure reproducible data-cleaning pipelines?
+
+---
+
+# 25. Cheat Sheet
+
+| Task                | Syntax                     |
+| ------------------- | -------------------------- |
+| Detect Missing      | `isna()`                   |
+| Detect Non-Missing  | `notna()`                  |
+| Count Missing       | `isna().sum()`             |
+| Remove Missing      | `dropna()`                 |
+| Fill Missing        | `fillna()`                 |
+| Forward Fill        | `ffill()`                  |
+| Backward Fill       | `bfill()`                  |
+| Interpolate         | `interpolate()`            |
+| Detect Duplicates   | `duplicated()`             |
+| Remove Duplicates   | `drop_duplicates()`        |
+| Standardize Text    | `.str.strip().str.title()` |
+| Validate Data Types | `dtypes`                   |
+
+---
+
+# 26. Mini Project
+
+## Customer Data Quality Improvement Pipeline
+
+Using any retail, banking, healthcare, HR, or telecom dataset:
+
+Complete the following tasks:
+
+* Detect missing values.
+* Measure the percentage of missing data.
+* Apply appropriate imputation techniques.
+* Detect and remove duplicate records.
+* Standardize categorical text columns.
+* Validate data types.
+* Build a reusable cleaning pipeline.
+* Export the cleaned dataset.
+* Write **five executive-level business insights**.
+* Recommend **three improvements** for future data collection and quality assurance.
+
+### Example Business Insights
+
+* Median imputation preserved the distribution of sales values.
+* Removing duplicate transactions prevented inflated revenue calculations.
+* Standardized city names improved regional reporting accuracy.
+* Automated cleaning reduced manual preprocessing time.
+* A reusable pipeline ensured consistent data preparation across reporting cycles.
+
+---
+
+# 27. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Advanced Missing Data Handling & Data Cleaning** in Pandas.
+
+You learned how to:
+
+* Detect and quantify missing values.
+* Remove or impute missing data appropriately.
+* Apply Forward Fill, Backward Fill, and interpolation.
+* Detect and remove duplicate records.
+* Standardize text values.
+* Validate cleaned datasets.
+* Build reusable data-cleaning pipelines.
+
+These skills are fundamental for business intelligence, data engineering, machine learning, and every real-world analytics project.
+
+---
+
+# 28. What's Next?
+
+In **Day 30**, you'll learn **Advanced Input & Output (I/O), File Formats & Data Serialization**.
+
+Topics include:
+
+* Reading CSV, Excel, JSON, HTML, XML, and Parquet files
+* Writing data to multiple formats
+* Compression (`gzip`, `zip`, `bz2`)
+* Reading large files in chunks
+* Working with SQL databases
+* Clipboard operations
+* Pickle serialization
+* Efficient file handling and performance optimization
+
+These concepts are essential for building end-to-end data pipelines and integrating Pandas with databases, cloud storage, and enterprise systems.
+
+---
+
+<div align="center">
+
+# 🎉 Day 29 Complete!
+
+You've mastered one of the most critical phases of any analytics workflow—**data cleaning**.
+
+By learning to detect, clean, validate, and standardize datasets, you now have the skills to prepare reliable, high-quality data for reporting, dashboards, statistical analysis, and machine learning.
+
+⭐ **Next → Day 30: Advanced Input & Output (I/O), File Formats & Data Serialization** 📂🐼
+
+</div>
