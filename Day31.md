@@ -1,4 +1,4 @@
-# 🐼 Day 31 — Advanced Time Series Analysis in Pandas
+# Day 31 — Advanced Time Series Analysis in Pandas
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents  
 
 1. Introduction
 2. What is Time Series Data?
