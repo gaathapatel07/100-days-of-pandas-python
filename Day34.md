@@ -364,3 +364,451 @@ After completing this section, you should understand:
 
 > **"Reliable analytics begins with validated data. Every rule enforced today prevents inaccurate decisions tomorrow."**
 
+# 8. Duplicate Validation
+
+Duplicate records can inflate revenue, customer counts, and business KPIs.
+
+Detect duplicate rows.
+
+```python id="dup01"
+duplicates = (
+    df[df.duplicated()]
+)
+```
+
+Count duplicates.
+
+```python id="dup02"
+df.duplicated().sum()
+```
+
+---
+
+## Check Duplicates Using Specific Columns
+
+Customer IDs should be unique.
+
+```python id="dup03"
+duplicate_ids = (
+    df[
+        df.duplicated(
+            subset=["Customer ID"],
+            keep=False
+        )
+    ]
+)
+```
+
+Output
+
+| Customer ID | Name  |
+| ----------: | ----- |
+|         101 | Alice |
+|         101 | Alice |
+
+---
+
+# 9. Range Validation
+
+Many business fields have acceptable ranges.
+
+Example:
+
+| Column     | Valid Range |
+| ---------- | ----------- |
+| Age        | 18–100      |
+| Discount % | 0–100       |
+| Sales      | ≥ 0         |
+| Rating     | 1–5         |
+
+---
+
+## Discount Validation
+
+```python id="range01"
+invalid_discount = (
+    df[
+        (df["Discount"] < 0)
+        |
+        (df["Discount"] > 100)
+    ]
+)
+```
+
+---
+
+## Rating Validation
+
+```python id="range02"
+invalid_rating = (
+    df[
+        ~df["Rating"].between(1,5)
+    ]
+)
+```
+
+---
+
+# 10. Regular Expression (Regex) Validation
+
+Regex helps validate structured text.
+
+Examples:
+
+* Email
+* Phone Number
+* PIN Code
+* Product Code
+* Invoice Number
+
+---
+
+## Email Validation
+
+```python id="regex01"
+email_pattern = (
+    r"^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+)
+
+invalid_email = (
+    df[
+        ~df["Email"]
+        .str.match(
+            email_pattern,
+            na=False
+        )
+    ]
+)
+```
+
+---
+
+## Indian PIN Code Validation
+
+```python id="regex02"
+pin_pattern = r"^[1-9][0-9]{5}$"
+
+invalid_pin = (
+    df[
+        ~df["PIN Code"]
+        .astype(str)
+        .str.match(
+            pin_pattern,
+            na=False
+        )
+    ]
+)
+```
+
+---
+
+## Phone Number Validation
+
+```python id="regex03"
+phone_pattern = r"^[6-9][0-9]{9}$"
+
+invalid_phone = (
+    df[
+        ~df["Phone"]
+        .astype(str)
+        .str.match(
+            phone_pattern,
+            na=False
+        )
+    ]
+)
+```
+
+---
+
+# 11. Uniqueness Constraints
+
+Certain business fields must always be unique.
+
+Examples:
+
+* Customer ID
+* Employee ID
+* Invoice Number
+* Order ID
+
+Check uniqueness.
+
+```python id="unique01"
+df["Order ID"].is_unique
+```
+
+Output
+
+```text id="unique02"
+True
+```
+
+Find duplicate order IDs.
+
+```python id="unique03"
+duplicate_orders = (
+    df[
+        df["Order ID"]
+        .duplicated(
+            keep=False
+        )
+    ]
+)
+```
+
+---
+
+# 12. Cross-Field Validation
+
+Sometimes one field depends on another.
+
+Example:
+
+Revenue should equal:
+
+```text id="cross01"
+Quantity × Price
+```
+
+Validate:
+
+```python id="cross02"
+invalid_rows = (
+    df[
+        df["Revenue"]
+        !=
+        (
+            df["Quantity"]
+            *
+            df["Price"]
+        )
+    ]
+)
+```
+
+---
+
+## Date Validation
+
+Delivery Date should be after Order Date.
+
+```python id="cross03"
+invalid_dates = (
+    df[
+        df["Delivery Date"]
+        <
+        df["Order Date"]
+    ]
+)
+```
+
+---
+
+## Profit Validation
+
+Profit should not exceed Revenue.
+
+```python id="cross04"
+invalid_profit = (
+    df[
+        df["Profit"]
+        >
+        df["Revenue"]
+    ]
+)
+```
+
+---
+
+# 13. Outlier Detection
+
+Outliers are unusually high or low values.
+
+---
+
+## Using the IQR Method
+
+Calculate quartiles.
+
+```python id="outlier01"
+Q1 = df["Sales"].quantile(0.25)
+
+Q3 = df["Sales"].quantile(0.75)
+
+IQR = Q3 - Q1
+```
+
+Determine limits.
+
+```python id="outlier02"
+lower = Q1 - 1.5 * IQR
+
+upper = Q3 + 1.5 * IQR
+```
+
+Detect outliers.
+
+```python id="outlier03"
+outliers = (
+    df[
+        (df["Sales"] < lower)
+        |
+        (df["Sales"] > upper)
+    ]
+)
+```
+
+---
+
+# 14. Data Quality Score
+
+Measure overall dataset quality.
+
+Example:
+
+```python id="score01"
+total_cells = (
+    df.shape[0]
+    *
+    df.shape[1]
+)
+
+missing = (
+    df.isna()
+      .sum()
+      .sum()
+)
+
+quality_score = (
+    1 -
+    missing / total_cells
+) * 100
+```
+
+Output
+
+```text id="score02"
+97.6%
+```
+
+Organizations often track this score over time.
+
+---
+
+# 15. Validation Report
+
+Summarize validation results.
+
+```python id="report01"
+report = {
+    "Missing Values":
+        df.isna().sum().sum(),
+
+    "Duplicate Rows":
+        df.duplicated().sum(),
+
+    "Invalid Ages":
+        len(invalid_age),
+
+    "Invalid Emails":
+        len(invalid_email),
+
+    "Outliers":
+        len(outliers)
+}
+```
+
+Convert into a DataFrame.
+
+```python id="report02"
+validation_report = (
+    pd.DataFrame(
+        report.items(),
+        columns=[
+            "Check",
+            "Count"
+        ]
+    )
+)
+```
+
+Example
+
+| Check          | Count |
+| -------------- | ----: |
+| Missing Values |    12 |
+| Duplicate Rows |     3 |
+| Invalid Emails |     4 |
+| Outliers       |     7 |
+
+---
+
+# Business Example
+
+A healthcare organization validates patient records before generating reports.
+
+Validation includes:
+
+* Unique Patient ID.
+* Valid age range.
+* Correct email format.
+* Admission date before discharge date.
+* No duplicate medical record numbers.
+* Detect unusual billing amounts.
+
+Only validated records are used for operational dashboards and regulatory reporting.
+
+---
+
+# Best Practices
+
+✔ Validate unique identifiers before joins.
+
+✔ Use regex for structured text fields.
+
+✔ Apply cross-field validation for business logic.
+
+✔ Investigate outliers before removing them.
+
+✔ Generate validation reports for every ETL pipeline.
+
+---
+
+# Common Mistakes
+
+### Treating Every Outlier as an Error
+
+Some outliers represent legitimate business events, such as unusually large purchases or seasonal spikes.
+
+Investigate before removing them.
+
+---
+
+### Validating Only Individual Columns
+
+Many errors appear only when comparing multiple fields, such as Delivery Date occurring before Order Date.
+
+Always include cross-field validation.
+
+---
+
+### Ignoring Validation Reports
+
+Running validation without documenting the results makes it difficult to monitor data quality over time.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Detect duplicate records.
+* Validate ranges and constraints.
+* Validate structured text using regex.
+* Enforce uniqueness.
+* Perform cross-field validation.
+* Detect outliers using the IQR method.
+* Generate data quality reports.
+
+> **"Data validation is more than finding errors—it is the process of building confidence that every analysis is based on accurate, consistent, and trustworthy information."**
