@@ -378,3 +378,452 @@ After completing this section, you should understand:
 * How file handling supports data integration workflows.
 
 > **"Effective data analysis begins with efficient data ingestion. The ability to import, integrate, and export information from multiple sources is a fundamental skill in modern analytics."**
+# 8. Reading Data from SQL Databases
+
+Most enterprise data is stored in relational databases.
+
+Common databases include:
+
+* MySQL
+* PostgreSQL
+* SQL Server
+* Oracle
+* SQLite
+
+Pandas can read SQL tables directly.
+
+---
+
+## Read an Entire Table
+
+```python id="sql01"
+import sqlite3
+
+conn = sqlite3.connect(
+    "sales.db"
+)
+
+df = pd.read_sql(
+    "SELECT * FROM Orders",
+    conn
+)
+```
+
+---
+
+## Read Filtered Data
+
+```python id="sql02"
+query = """
+SELECT
+    CustomerID,
+    Sales,
+    Region
+FROM Orders
+WHERE Sales > 5000
+"""
+
+df = pd.read_sql(
+    query,
+    conn
+)
+```
+
+Reading only required records improves performance.
+
+---
+
+## Write Data to SQL
+
+```python id="sql03"
+df.to_sql(
+    "CleanOrders",
+    conn,
+    if_exists="replace",
+    index=False
+)
+```
+
+`if_exists` options:
+
+| Option    | Meaning                            |
+| --------- | ---------------------------------- |
+| `fail`    | Raise an error if the table exists |
+| `replace` | Drop and recreate the table        |
+| `append`  | Add new rows                       |
+
+---
+
+# 9. Reading Data from APIs
+
+Many companies expose data through REST APIs.
+
+Examples:
+
+* Weather services
+* Stock market APIs
+* Payment gateways
+* CRM platforms
+* Social media APIs
+
+---
+
+## Request Data
+
+```python id="api01"
+import requests
+
+response = requests.get(
+    "https://api.example.com/orders"
+)
+
+data = response.json()
+```
+
+Convert to DataFrame.
+
+```python id="api02"
+df = pd.DataFrame(data)
+```
+
+---
+
+## Flatten Nested API Responses
+
+```python id="api03"
+from pandas import json_normalize
+
+df = json_normalize(data)
+```
+
+---
+
+# 10. Reading Parquet Files
+
+Parquet is a highly efficient columnar storage format.
+
+Advantages:
+
+* Smaller file size
+* Faster reading
+* Better compression
+* Optimized for analytics
+
+Read Parquet.
+
+```python id="parquet01"
+df = pd.read_parquet(
+    "sales.parquet"
+)
+```
+
+Write Parquet.
+
+```python id="parquet02"
+df.to_parquet(
+    "clean_sales.parquet"
+)
+```
+
+Parquet is widely used in Spark, Hadoop, Snowflake, and cloud data lakes.
+
+---
+
+# 11. Working with Compressed Files
+
+Pandas can read compressed files directly.
+
+Read ZIP.
+
+```python id="zip01"
+df = pd.read_csv(
+    "sales.zip",
+    compression="zip"
+)
+```
+
+---
+
+Read GZIP.
+
+```python id="zip02"
+df = pd.read_csv(
+    "sales.csv.gz",
+    compression="gzip"
+)
+```
+
+Compression reduces storage requirements and transfer times.
+
+---
+
+# 12. Batch Processing Multiple Files
+
+Businesses often receive many files every day.
+
+Example directory:
+
+```text id="batch01"
+January.csv
+
+February.csv
+
+March.csv
+```
+
+Read all CSV files.
+
+```python id="batch02"
+import glob
+
+files = glob.glob(
+    "data/*.csv"
+)
+
+dfs = []
+
+for file in files:
+
+    temp = pd.read_csv(file)
+
+    dfs.append(temp)
+```
+
+Combine them.
+
+```python id="batch03"
+sales = pd.concat(
+    dfs,
+    ignore_index=True
+)
+```
+
+---
+
+# 13. Combining Data from Multiple Sources
+
+Suppose:
+
+* Orders → CSV
+* Customers → SQL
+* Inventory → Excel
+
+Read each source.
+
+```python id="combine01"
+orders = pd.read_csv(
+    "orders.csv"
+)
+
+customers = pd.read_sql(
+    "SELECT * FROM Customers",
+    conn
+)
+
+inventory = pd.read_excel(
+    "inventory.xlsx"
+)
+```
+
+Merge datasets.
+
+```python id="combine02"
+combined = (
+    orders
+      .merge(
+          customers,
+          on="Customer ID"
+      )
+      .merge(
+          inventory,
+          on="Product ID"
+      )
+)
+```
+
+Integrated datasets provide a complete business view.
+
+---
+
+# 14. Enterprise ETL Pipeline
+
+ETL stands for:
+
+* **Extract**
+* **Transform**
+* **Load**
+
+Workflow:
+
+```text id="etl01"
+CSV
+
+↓
+
+Excel
+
+↓
+
+API
+
+↓
+
+SQL Database
+
+↓
+
+Cleaning
+
+↓
+
+Transformation
+
+↓
+
+Validation
+
+↓
+
+Aggregation
+
+↓
+
+Reporting Database
+
+↓
+
+Dashboard
+```
+
+ETL pipelines automate data integration.
+
+---
+
+# 15. File Handling Performance Tips
+
+### Read Only Needed Columns
+
+```python id="perf01"
+df = pd.read_csv(
+    "sales.csv",
+    usecols=[
+        "Sales",
+        "Region"
+    ]
+)
+```
+
+---
+
+### Specify Data Types
+
+```python id="perf02"
+df = pd.read_csv(
+
+    "sales.csv",
+
+    dtype={
+        "Region":"category",
+        "Quantity":"int16"
+    }
+)
+```
+
+This reduces memory usage during import.
+
+---
+
+### Read Large Files in Chunks
+
+```python id="perf03"
+chunks = pd.read_csv(
+
+    "large.csv",
+
+    chunksize=50000
+)
+
+for chunk in chunks:
+
+    print(chunk.shape)
+```
+
+---
+
+# Business Example
+
+A multinational retailer receives:
+
+* Daily sales from CSV files.
+* Customer information from PostgreSQL.
+* Inventory reports from Excel.
+* Product metadata from an API.
+* Historical archives in Parquet format.
+
+Engineers:
+
+* Import each dataset.
+* Clean and validate records.
+* Merge all sources.
+* Store the integrated data in a warehouse.
+* Refresh executive dashboards automatically.
+
+---
+
+# Best Practices
+
+✔ Use Parquet for large analytical datasets.
+
+✔ Read only required columns.
+
+✔ Process large datasets in chunks.
+
+✔ Standardize schemas before merging.
+
+✔ Validate imported data before analysis.
+
+---
+
+# Common Mistakes
+
+### Reading Entire Databases
+
+Avoid:
+
+```python id="mistake01"
+SELECT *
+```
+
+on extremely large production tables unless necessary.
+
+Retrieve only the required columns and rows.
+
+---
+
+### Mixing Data Types
+
+Ensure key columns (such as Customer ID) have matching data types across all sources before merging.
+
+---
+
+### Ignoring File Compression
+
+Compressed formats reduce storage costs and improve transfer efficiency.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Read SQL databases.
+* Import data from APIs.
+* Work with Parquet files.
+* Read compressed files.
+* Process multiple files automatically.
+* Integrate data from multiple sources.
+* Understand ETL workflows.
+* Optimize file handling performance.
+
+> **"Modern analytics depends on integrating data from diverse systems. Efficient file handling and ETL pipelines transform disconnected sources into unified, analysis-ready datasets."**
+
