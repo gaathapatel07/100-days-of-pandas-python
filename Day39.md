@@ -337,3 +337,409 @@ After completing this section, you should understand:
 
 > **"Handling missing data is not simply about filling blanks—it is about making informed decisions that preserve the integrity and usefulness of the dataset."**
 
+# 8. Mean, Median & Mode Imputation
+
+Instead of removing missing values, we often replace them with statistically meaningful values.
+
+## Mean Imputation
+
+Best for normally distributed numerical data.
+
+```python id="impute01"
+df["Age"] = (
+    df["Age"]
+      .fillna(
+          df["Age"].mean()
+      )
+)
+```
+
+Example
+
+| Original Age |
+| ------------ |
+| 25           |
+| 30           |
+| NaN          |
+| 40           |
+
+Mean = 31.67
+
+After imputation:
+
+|   Age |
+| ----: |
+|    25 |
+|    30 |
+| 31.67 |
+|    40 |
+
+---
+
+## Median Imputation
+
+Preferred when outliers exist.
+
+```python id="impute02"
+df["Salary"] = (
+    df["Salary"]
+      .fillna(
+          df["Salary"].median()
+      )
+)
+```
+
+Median is more robust than the mean.
+
+---
+
+## Mode Imputation
+
+Useful for categorical variables.
+
+```python id="impute03"
+df["City"] = (
+    df["City"]
+      .fillna(
+          df["City"].mode()[0]
+      )
+)
+```
+
+Example
+
+| City   |
+| ------ |
+| Delhi  |
+| Mumbai |
+| Delhi  |
+| NaN    |
+
+Mode = Delhi
+
+---
+
+# 9. Forward Fill (`ffill`)
+
+Forward fill copies the previous valid value.
+
+```python id="ffill01"
+df = df.ffill()
+```
+
+Example
+
+| Date | Sales |
+| ---- | ----: |
+| Jan  |   500 |
+| Feb  |   NaN |
+| Mar  |   620 |
+
+After:
+
+| Date | Sales |
+| ---- | ----: |
+| Jan  |   500 |
+| Feb  |   500 |
+| Mar  |   620 |
+
+Useful for time-series datasets.
+
+---
+
+# 10. Backward Fill (`bfill`)
+
+Backward fill copies the next valid value.
+
+```python id="bfill01"
+df = df.bfill()
+```
+
+Example
+
+| Date | Sales |
+| ---- | ----: |
+| Jan  |   500 |
+| Feb  |   NaN |
+| Mar  |   620 |
+
+After:
+
+| Date | Sales |
+| ---- | ----: |
+| Jan  |   500 |
+| Feb  |   620 |
+| Mar  |   620 |
+
+---
+
+# 11. Interpolation
+
+Interpolation estimates missing numerical values based on surrounding observations.
+
+```python id="interp01"
+df["Temperature"] = (
+    df["Temperature"]
+      .interpolate()
+)
+```
+
+Example
+
+| Day | Temp |
+| --- | ---: |
+| 1   |   20 |
+| 2   |  NaN |
+| 3   |   24 |
+
+Result
+
+| Day | Temp |
+| --- | ---: |
+| 1   |   20 |
+| 2   |   22 |
+| 3   |   24 |
+
+Useful for:
+
+* Weather data
+* Stock prices
+* Sensor readings
+* Time-series analysis
+
+---
+
+# 12. Conditional Imputation
+
+Replace missing values differently depending on business rules.
+
+Example:
+
+Fill missing salary based on department median.
+
+```python id="cond01"
+df["Salary"] = (
+    df.groupby("Department")["Salary"]
+      .transform(
+          lambda x: x.fillna(
+              x.median()
+          )
+      )
+)
+```
+
+This preserves department-specific characteristics.
+
+---
+
+# 13. Advanced Duplicate Handling
+
+Check duplicates based on selected columns.
+
+```python id="dup01"
+duplicates = (
+    df[
+        df.duplicated(
+            subset=[
+                "Customer ID",
+                "Order Date"
+            ],
+            keep=False
+        )
+    ]
+)
+```
+
+---
+
+## Keep Latest Record
+
+```python id="dup02"
+df = (
+    df.sort_values(
+        "Order Date"
+    )
+    .drop_duplicates(
+        subset="Customer ID",
+        keep="last"
+    )
+)
+```
+
+Useful for customer master data.
+
+---
+
+# 14. Text Standardization
+
+Real-world text data is often inconsistent.
+
+Example:
+
+| Original |
+| -------- |
+| Delhi    |
+| DELHI    |
+| delhi    |
+| Delhi    |
+
+Standardize:
+
+```python id="text01"
+df["City"] = (
+    df["City"]
+      .str.strip()
+      .str.title()
+)
+```
+
+Output
+
+| City  |
+| ----- |
+| Delhi |
+| Delhi |
+| Delhi |
+| Delhi |
+
+---
+
+## Lowercase
+
+```python id="text02"
+df["Email"] = (
+    df["Email"]
+      .str.lower()
+)
+```
+
+---
+
+## Remove Extra Spaces
+
+```python id="text03"
+df["Name"] = (
+    df["Name"]
+      .str.strip()
+)
+```
+
+---
+
+# 15. Data Consistency Checks
+
+Ensure related fields follow business rules.
+
+---
+
+## Revenue Check
+
+```python id="check01"
+invalid = (
+    df[
+        df["Revenue"]
+        !=
+        (
+            df["Quantity"]
+            *
+            df["Price"]
+        )
+    ]
+)
+```
+
+---
+
+## Age Validation
+
+```python id="check02"
+invalid = (
+    df[
+        ~df["Age"].between(
+            18,
+            100
+        )
+    ]
+)
+```
+
+---
+
+## Discount Validation
+
+```python id="check03"
+invalid = (
+    df[
+        ~df["Discount"].between(
+            0,
+            100
+        )
+    ]
+)
+```
+
+---
+
+# Business Example
+
+A healthcare organization receives patient data from multiple hospitals.
+
+Cleaning steps:
+
+* Fill missing ages using department median.
+* Standardize hospital names.
+* Remove duplicate patient IDs.
+* Validate admission and discharge dates.
+* Check billing totals.
+
+Only validated records are loaded into the reporting system.
+
+---
+
+# Best Practices
+
+✔ Choose imputation methods based on data distribution.
+
+✔ Use forward/backward fill only for sequential or time-series data.
+
+✔ Standardize text before grouping or joining datasets.
+
+✔ Validate business rules after cleaning.
+
+✔ Document every transformation.
+
+---
+
+# Common Mistakes
+
+### Using Mean with Highly Skewed Data
+
+For skewed distributions (e.g., salaries), the median is often a better choice because it is less affected by extreme values.
+
+---
+
+### Forward Filling Unrelated Records
+
+Only use `ffill()` when adjacent records are logically connected (such as time-series observations).
+
+---
+
+### Ignoring Text Inconsistencies
+
+Values like `"Delhi"`, `"delhi"`, and `" DELHI "` represent the same city but will be treated as different categories unless standardized.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Apply mean, median, and mode imputation.
+* Use forward fill and backward fill.
+* Interpolate missing values.
+* Perform conditional imputation.
+* Handle duplicates intelligently.
+* Standardize text.
+* Validate business consistency rules.
+
+> **"Effective data cleaning combines statistical methods with business understanding to create datasets that are accurate, consistent, and ready for reliable analysis."**
