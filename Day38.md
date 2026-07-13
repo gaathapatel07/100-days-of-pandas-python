@@ -1,5 +1,5 @@
 
-# 🐼 Day 38 — Advanced Data Aggregation & Business Analytics
+# Day 38 — Advanced Data Aggregation & Business Analytics
 
 <div align="center">
 
@@ -17,7 +17,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. What is Data Aggregation?
@@ -319,3 +319,436 @@ After completing this section, you should understand:
 * Why aggregation is central to business analytics.
 
 > **"Aggregation transforms detailed operational data into concise business intelligence, enabling organizations to monitor performance, identify trends, and make informed decisions."**
+
+# 8. Custom Aggregation Functions
+
+Sometimes built-in aggregation functions (`sum`, `mean`, `max`) are not enough.
+
+You can create custom functions.
+
+Example:
+
+Calculate the range of sales.
+
+```python id="custom01"
+def sales_range(series):
+    return (
+        series.max()
+        -
+        series.min()
+    )
+
+df.groupby(
+    "Region"
+)["Sales"].agg(
+    sales_range
+)
+```
+
+Output
+
+| Region | Sales Range |
+| ------ | ----------: |
+| North  |        8600 |
+| South  |        9200 |
+
+---
+
+## Multiple Custom Functions
+
+```python id="custom02"
+summary = (
+    df.groupby("Region")
+      .agg(
+          Total=("Sales","sum"),
+          Average=("Sales","mean"),
+          Range=("Sales",sales_range)
+      )
+)
+```
+
+---
+
+# 9. Advanced Pivot Tables
+
+Pivot tables summarize data across multiple dimensions.
+
+Example:
+
+```python id="pivot01"
+pd.pivot_table(
+    df,
+    values="Sales",
+    index="Region",
+    columns="Category",
+    aggfunc="sum"
+)
+```
+
+Output
+
+| Region | Furniture | Technology |
+| ------ | --------: | ---------: |
+| North  |    520000 |     610000 |
+| South  |    470000 |     590000 |
+
+---
+
+## Multiple Aggregations
+
+```python id="pivot02"
+pd.pivot_table(
+    df,
+    values="Sales",
+    index="Region",
+    columns="Category",
+    aggfunc=[
+        "sum",
+        "mean"
+    ]
+)
+```
+
+---
+
+## Fill Missing Values
+
+```python id="pivot03"
+pd.pivot_table(
+    df,
+    values="Sales",
+    index="Region",
+    columns="Category",
+    aggfunc="sum",
+    fill_value=0
+)
+```
+
+---
+
+# 10. Crosstab Analysis
+
+Crosstabs compare categorical variables.
+
+Example:
+
+```python id="cross01"
+pd.crosstab(
+    df["Region"],
+    df["Category"]
+)
+```
+
+Output
+
+| Region | Furniture | Technology |
+| ------ | --------- | ---------: |
+| North  | 35        |         49 |
+| South  | 28        |         67 |
+
+---
+
+## Normalize Crosstab
+
+```python id="cross02"
+pd.crosstab(
+    df["Region"],
+    df["Category"],
+    normalize="index"
+)
+```
+
+Shows percentages instead of counts.
+
+---
+
+# 11. Cohort Analysis
+
+Cohort analysis groups customers based on a shared characteristic, such as their first purchase month.
+
+Example:
+
+```python id="cohort01"
+df["Order Month"] = (
+    df["Order Date"]
+      .dt.to_period("M")
+)
+
+cohort = (
+    df.groupby("Order Month")
+      ["Customer ID"]
+      .nunique()
+)
+```
+
+Output
+
+| Order Month | Customers |
+| ----------- | --------: |
+| 2026-01     |       520 |
+| 2026-02     |       610 |
+| 2026-03     |       590 |
+
+Cohort analysis is widely used for customer retention studies.
+
+---
+
+# 12. Customer Segmentation
+
+Identify customer value.
+
+Revenue by customer.
+
+```python id="segment01"
+customer_sales = (
+    df.groupby(
+        "Customer"
+    )["Revenue"]
+      .sum()
+)
+```
+
+Segment using quartiles.
+
+```python id="segment02"
+tiers = pd.qcut(
+    customer_sales,
+    q=4,
+    labels=[
+        "Bronze",
+        "Silver",
+        "Gold",
+        "Platinum"
+    ]
+)
+```
+
+Example
+
+| Customer | Tier     |
+| -------- | -------- |
+| Alice    | Platinum |
+| Rahul    | Gold     |
+| Priya    | Silver   |
+| Aman     | Bronze   |
+
+---
+
+# 13. Business KPI Calculations
+
+Common KPIs include:
+
+---
+
+## Total Revenue
+
+```python id="kpi01"
+total_revenue = (
+    df["Revenue"]
+      .sum()
+)
+```
+
+---
+
+## Average Order Value
+
+```python id="kpi02"
+avg_order = (
+    df["Revenue"]
+      .mean()
+)
+```
+
+---
+
+## Profit Margin
+
+```python id="kpi03"
+profit_margin = (
+    (
+        df["Profit"].sum()
+        /
+        df["Revenue"].sum()
+    )
+    * 100
+)
+```
+
+---
+
+## Customer Count
+
+```python id="kpi04"
+customers = (
+    df["Customer ID"]
+      .nunique()
+)
+```
+
+---
+
+# 14. Funnel Analysis
+
+Businesses often track customer progression through different stages.
+
+Example:
+
+| Stage         | Users |
+| ------------- | ----: |
+| Website Visit | 10000 |
+| Product View  |  6200 |
+| Add to Cart   |  2400 |
+| Checkout      |  1800 |
+| Purchase      |  1450 |
+
+Represent as a DataFrame.
+
+```python id="funnel01"
+funnel = pd.DataFrame({
+
+    "Stage":[
+        "Visit",
+        "View",
+        "Cart",
+        "Checkout",
+        "Purchase"
+    ],
+
+    "Users":[
+        10000,
+        6200,
+        2400,
+        1800,
+        1450
+    ]
+})
+```
+
+Calculate conversion rate.
+
+```python id="funnel02"
+funnel["Conversion %"] = (
+    funnel["Users"]
+    /
+    funnel.loc[0,"Users"]
+) * 100
+```
+
+Output
+
+| Stage    | Conversion % |
+| -------- | -----------: |
+| Visit    |          100 |
+| View     |           62 |
+| Cart     |           24 |
+| Checkout |           18 |
+| Purchase |         14.5 |
+
+---
+
+# 15. Sales Performance Analytics
+
+Top-performing regions.
+
+```python id="sales01"
+df.groupby(
+    "Region"
+)["Revenue"]\
+.sum()\
+.sort_values(
+    ascending=False
+)
+```
+
+Top-performing products.
+
+```python id="sales02"
+df.groupby(
+    "Product"
+)["Revenue"]\
+.sum()\
+.nlargest(10)
+```
+
+Monthly sales.
+
+```python id="sales03"
+df.groupby(
+    "Month"
+)["Revenue"]\
+.sum()
+```
+
+These summaries support executive reporting and business planning.
+
+---
+
+# Business Example
+
+An e-commerce company wants to understand:
+
+* Which regions generate the most revenue?
+* Which customer segments are most valuable?
+* Where customers drop off during checkout?
+* Which product categories perform best?
+* How monthly sales change over time?
+
+Using GroupBy, Pivot Tables, Crosstabs, KPI calculations, and Funnel Analysis, analysts create executive reports that guide pricing, inventory planning, and marketing campaigns.
+
+---
+
+# Best Practices
+
+✔ Use pivot tables for multidimensional summaries.
+
+✔ Use crosstabs for categorical comparisons.
+
+✔ Calculate KPIs consistently across reporting periods.
+
+✔ Segment customers using meaningful business metrics.
+
+✔ Validate aggregated results before presenting them.
+
+---
+
+# Common Mistakes
+
+### Using Too Many Dimensions in Pivot Tables
+
+Adding excessive index and column levels can make reports difficult to read.
+
+Keep pivot tables focused on the business question.
+
+---
+
+### Ignoring Customer Segmentation
+
+Analyzing all customers together may hide important behavioral differences.
+
+Segmenting customers often reveals valuable insights.
+
+---
+
+### Reporting KPIs Without Context
+
+A revenue figure alone provides limited information.
+
+Compare KPIs across regions, products, or time periods to add meaningful context.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Build custom aggregation functions.
+* Create advanced pivot tables.
+* Perform crosstab analysis.
+* Conduct basic cohort analysis.
+* Segment customers.
+* Calculate business KPIs.
+* Perform funnel analysis.
+* Analyze sales performance.
+
+> **"Business analytics transforms aggregated data into strategic insights, helping organizations understand customers, measure performance, and make informed decisions."**
