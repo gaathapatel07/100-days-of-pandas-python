@@ -347,3 +347,410 @@ After completing this section, you should understand:
 
 > **"Time-series analysis begins with correctly structured dates. A well-prepared DateTime index enables powerful analysis, efficient filtering, and meaningful business insights."**
 
+# 9. Resampling Time Series
+
+Resampling changes the frequency of time-series data.
+
+Examples:
+
+* Daily → Monthly
+* Daily → Weekly
+* Hourly → Daily
+* Monthly → Quarterly
+
+---
+
+## Monthly Sales
+
+```python id="resample01"
+monthly_sales = (
+    df["Sales"]
+      .resample("M")
+      .sum()
+)
+```
+
+Output
+
+| Month |  Sales |
+| ----- | -----: |
+| Jan   | 152000 |
+| Feb   | 168000 |
+| Mar   | 175000 |
+
+---
+
+## Weekly Average
+
+```python id="resample02"
+weekly_avg = (
+    df["Sales"]
+      .resample("W")
+      .mean()
+)
+```
+
+---
+
+## Quarterly Revenue
+
+```python id="resample03"
+quarterly = (
+    df["Revenue"]
+      .resample("Q")
+      .sum()
+)
+```
+
+---
+
+## Common Resampling Frequencies
+
+| Frequency | Code  |
+| --------- | ----- |
+| Daily     | `D`   |
+| Weekly    | `W`   |
+| Monthly   | `M`   |
+| Quarterly | `Q`   |
+| Yearly    | `Y`   |
+| Hourly    | `H`   |
+| Minutes   | `min` |
+
+---
+
+# 10. Rolling Windows
+
+Rolling windows calculate statistics over a moving window.
+
+---
+
+## 7-Day Moving Average
+
+```python id="rolling01"
+df["7-Day Average"] = (
+    df["Sales"]
+      .rolling(window=7)
+      .mean()
+)
+```
+
+---
+
+## 30-Day Rolling Sum
+
+```python id="rolling02"
+df["30-Day Sales"] = (
+    df["Sales"]
+      .rolling(30)
+      .sum()
+)
+```
+
+---
+
+## Rolling Maximum
+
+```python id="rolling03"
+df["Highest Week"] = (
+    df["Sales"]
+      .rolling(7)
+      .max()
+)
+```
+
+Rolling statistics smooth short-term fluctuations and reveal longer-term trends.
+
+---
+
+# 11. Expanding Windows
+
+Unlike rolling windows, expanding windows include **all previous observations**.
+
+---
+
+## Expanding Mean
+
+```python id="expand01"
+df["Average Sales"] = (
+    df["Sales"]
+      .expanding()
+      .mean()
+)
+```
+
+---
+
+## Expanding Maximum
+
+```python id="expand02"
+df["Highest So Far"] = (
+    df["Sales"]
+      .expanding()
+      .max()
+)
+```
+
+Applications:
+
+* Cumulative performance
+* Lifetime averages
+* Running statistics
+
+---
+
+# 12. Time Shifting
+
+Shift data forward or backward.
+
+---
+
+## Previous Day Sales
+
+```python id="shift01"
+df["Yesterday"] = (
+    df["Sales"]
+      .shift(1)
+)
+```
+
+---
+
+## Next Day Sales
+
+```python id="shift02"
+df["Tomorrow"] = (
+    df["Sales"]
+      .shift(-1)
+)
+```
+
+Example
+
+| Date  | Sales | Yesterday |
+| ----- | ----: | --------: |
+| Jan 1 |   500 |       NaN |
+| Jan 2 |   620 |       500 |
+| Jan 3 |   590 |       620 |
+
+---
+
+# 13. Lag Features
+
+Lag features are widely used in forecasting models.
+
+Create a one-day lag.
+
+```python id="lag01"
+df["Lag 1"] = (
+    df["Sales"]
+      .shift(1)
+)
+```
+
+Three-day lag.
+
+```python id="lag02"
+df["Lag 3"] = (
+    df["Sales"]
+      .shift(3)
+)
+```
+
+Seven-day lag.
+
+```python id="lag03"
+df["Lag 7"] = (
+    df["Sales"]
+      .shift(7)
+)
+```
+
+Lag features help machine learning models learn historical patterns.
+
+---
+
+# 14. Moving Averages
+
+Moving averages smooth noisy data.
+
+---
+
+## Simple Moving Average
+
+```python id="ma01"
+df["SMA"] = (
+    df["Sales"]
+      .rolling(7)
+      .mean()
+)
+```
+
+---
+
+## Exponential Moving Average
+
+Recent observations receive greater weight.
+
+```python id="ma02"
+df["EMA"] = (
+    df["Sales"]
+      .ewm(span=7)
+      .mean()
+)
+```
+
+Applications:
+
+* Stock prices
+* Sales forecasting
+* Demand prediction
+* Sensor monitoring
+
+---
+
+# 15. Seasonal Analysis
+
+Extract seasonal behavior.
+
+Monthly sales.
+
+```python id="season01"
+monthly = (
+    df.groupby(
+        df.index.month
+    )["Sales"]
+      .mean()
+)
+```
+
+Weekday analysis.
+
+```python id="season02"
+weekday = (
+    df.groupby(
+        df.index.day_name()
+    )["Sales"]
+      .mean()
+)
+```
+
+Quarterly performance.
+
+```python id="season03"
+quarter = (
+    df.groupby(
+        df.index.quarter
+    )["Revenue"]
+      .sum()
+)
+```
+
+These analyses identify recurring patterns throughout the year.
+
+---
+
+# Business Trend Analysis
+
+Compare monthly revenue.
+
+```python id="trend01"
+trend = (
+    df.resample("M")
+      ["Revenue"]
+      .sum()
+)
+```
+
+Calculate monthly growth.
+
+```python id="trend02"
+growth = (
+    trend.pct_change()
+    * 100
+)
+```
+
+Output
+
+| Month | Growth % |
+| ----- | -------: |
+| Feb   |      6.2 |
+| Mar   |      3.9 |
+| Apr   |     -1.5 |
+
+This helps businesses monitor performance over time.
+
+---
+
+# Business Example
+
+A supermarket chain analyzes daily sales.
+
+Analysts:
+
+* Resample daily sales into monthly totals.
+* Calculate 7-day moving averages.
+* Create lag features for forecasting.
+* Analyze weekday purchasing behavior.
+* Measure month-over-month growth.
+
+These insights support inventory planning and staffing decisions.
+
+---
+
+# Best Practices
+
+✔ Convert dates to a DateTime index before resampling.
+
+✔ Use rolling averages to smooth noisy data.
+
+✔ Create lag features for forecasting models.
+
+✔ Compare seasonal performance across months and quarters.
+
+✔ Interpret moving averages alongside raw values.
+
+---
+
+# Common Mistakes
+
+### Resampling Without a DateTime Index
+
+`resample()` requires a DateTime index.
+
+```python
+df = df.set_index("Order Date")
+```
+
+---
+
+### Using Large Rolling Windows on Small Datasets
+
+A 365-day rolling average is unlikely to be meaningful for a dataset containing only 30 days of observations.
+
+Choose a window size appropriate for the data.
+
+---
+
+### Forgetting That `shift()` Introduces Missing Values
+
+The first row after `shift(1)` becomes `NaN`.
+
+Plan how these missing values will be handled before modeling.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Resample time-series data.
+* Compute rolling statistics.
+* Calculate expanding statistics.
+* Shift observations through time.
+* Create lag features.
+* Apply moving averages.
+* Analyze seasonality.
+* Measure business trends over time.
+
+> **"Time-series analysis transforms chronological records into meaningful trends, enabling organizations to forecast demand, monitor performance, and make proactive business decisions."**
