@@ -1180,12 +1180,11 @@ These techniques are essential for preparing reliable datasets for analytics, re
 
 <div align="center">
 
-# 🎉 Day 38 Complete!
+# Day 38 Complete!
 
 You've mastered **Advanced Data Aggregation & Business Analytics**, enabling you to convert operational data into executive-ready reports and actionable business insights.
 
 By combining aggregation, KPIs, segmentation, and reporting, you've developed one of the most valuable skill sets for Data Analysts and BI professionals.
 
-⭐ **Next → Day 39: Advanced Missing Data Handling & Data Cleaning Strategies** 🧹🐼
 
 </div>
