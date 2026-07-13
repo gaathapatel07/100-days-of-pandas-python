@@ -1,5 +1,5 @@
 
-# 🐼 Day 41 — Advanced File Handling & Data Integration in Pandas
+# Day 41 — Advanced File Handling & Data Integration in Pandas
 
 <div align="center">
 
@@ -17,7 +17,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Why File Handling Matters
@@ -1291,7 +1291,7 @@ Topics include:
 * Functional programming with Pandas
 * Reusable data workflows
 * Debugging chained operations
-* Production-ready pipeline architecture
+* Production- ready pipeline architecture
 * Enterprise data transformation patterns
 
 Mastering method chaining will help you write cleaner, more maintainable, and production-ready Pandas code.
@@ -1300,12 +1300,10 @@ Mastering method chaining will help you write cleaner, more maintainable, and pr
 
 <div align="center">
 
-# 🎉 Day 41 Complete!
+# Day 41 Complete!
 
 You've mastered **Advanced File Handling & Data Integration**, enabling you to build efficient ETL pipelines and integrate data from multiple enterprise systems.
 
 By combining imports, exports, SQL, APIs, Parquet, and automated workflows, you're now equipped to handle real-world data engineering tasks with confidence.
-
-⭐ **Next → Day 42: Advanced Pandas Method Chaining & Pipeline Design** 🔗🐼
 
 </div>
