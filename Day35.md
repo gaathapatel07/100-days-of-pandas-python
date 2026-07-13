@@ -678,3 +678,403 @@ You have now learned how to:
 * Benchmark Pandas performance.
 
 > **"Efficient Pandas code is not just about writing fewer lines—it is about processing more data with less memory and in less time."**
+
+# 16. Enterprise Performance Optimization Workflow
+
+Large organizations follow a structured optimization process before deploying data pipelines.
+
+```text id="workflow01"
+Raw Dataset
+      │
+      ▼
+Memory Profiling
+      │
+      ▼
+Optimize Data Types
+      │
+      ▼
+Convert Categories
+      │
+      ▼
+Vectorize Operations
+      │
+      ▼
+Chunk Processing
+      │
+      ▼
+Performance Benchmarking
+      │
+      ▼
+Production Deployment
+```
+
+Each optimization step improves speed, scalability, and resource utilization.
+
+---
+
+# 17. Building an Optimization Pipeline
+
+Instead of optimizing manually every time, create a reusable function.
+
+```python id="pipeline01"
+def optimize_dataframe(df):
+
+    # Convert repeated strings
+    if "Region" in df.columns:
+        df["Region"] = (
+            df["Region"]
+              .astype("category")
+        )
+
+    # Optimize integers
+    if "Age" in df.columns:
+        df["Age"] = (
+            pd.to_numeric(
+                df["Age"],
+                downcast="integer"
+            )
+        )
+
+    # Optimize floats
+    if "Sales" in df.columns:
+        df["Sales"] = (
+            pd.to_numeric(
+                df["Sales"],
+                downcast="float"
+            )
+        )
+
+    return df
+```
+
+Run the optimization.
+
+```python id="pipeline02"
+optimized_df = optimize_dataframe(df)
+```
+
+This creates a consistent optimization workflow for multiple datasets.
+
+---
+
+# 18. Memory Profiling
+
+Measure memory before and after optimization.
+
+Before:
+
+```python id="memory01"
+before = (
+    df.memory_usage(
+        deep=True
+    )
+    .sum()
+)
+```
+
+After:
+
+```python id="memory02"
+after = (
+    optimized_df
+    .memory_usage(
+        deep=True
+    )
+    .sum()
+)
+```
+
+Calculate savings.
+
+```python id="memory03"
+saved = (
+    before - after
+)
+
+print(
+    f"Memory Saved: {saved / 1024**2:.2f} MB"
+)
+```
+
+Tracking improvements helps evaluate optimization strategies.
+
+---
+
+# 19. Performance Tuning Checklist
+
+Before processing a large dataset, review the following checklist:
+
+| Check                             | Status |
+| --------------------------------- | ------ |
+| Measure memory usage              | ☐      |
+| Optimize numeric types            | ☐      |
+| Convert repeated text to category | ☐      |
+| Replace loops with vectorization  | ☐      |
+| Use `query()` for filtering       | ☐      |
+| Use `eval()` for expressions      | ☐      |
+| Process files in chunks           | ☐      |
+| Benchmark execution time          | ☐      |
+
+Following this checklist helps prevent common performance issues.
+
+---
+
+# 20. Enterprise Case Study
+
+## Scenario
+
+You are a **Senior Data Engineer** at **RetailHub**.
+
+Every night, a pipeline processes:
+
+* 150 million sales records
+* 30 million customers
+* 10 years of historical data
+
+The original pipeline:
+
+* Loads the full dataset into memory.
+* Uses loops for calculations.
+* Stores repeated text as object data.
+* Takes over three hours to complete.
+
+The engineering team optimizes the workflow.
+
+---
+
+## Business Questions
+
+### Question 1
+
+Measure memory usage.
+
+```python id="case01"
+df.memory_usage(
+    deep=True
+)
+```
+
+---
+
+### Question 2
+
+Convert regions to categories.
+
+```python id="case02"
+df["Region"] = (
+    df["Region"]
+      .astype("category")
+)
+```
+
+---
+
+### Question 3
+
+Replace loops.
+
+```python id="case03"
+df["Revenue"] = (
+    df["Quantity"]
+    *
+    df["Price"]
+)
+```
+
+---
+
+### Question 4
+
+Read data in chunks.
+
+```python id="case04"
+chunks = pd.read_csv(
+    "sales.csv",
+    chunksize=100000
+)
+```
+
+---
+
+### Question 5
+
+Benchmark execution time.
+
+```python id="case05"
+import time
+
+start = time.time()
+
+# Processing logic
+
+end = time.time()
+
+print(end - start)
+```
+
+---
+
+# 21. Business Insights
+
+After optimization, the analytics team observes:
+
+* Memory consumption decreases substantially after converting repeated string columns to categorical data.
+* Vectorized calculations execute much faster than equivalent row-by-row loops.
+* Chunk processing enables datasets larger than available RAM to be analyzed successfully.
+* Memory profiling identifies inefficient columns early in the pipeline.
+* Performance benchmarking helps engineers verify the impact of each optimization.
+
+---
+
+# 22. Practice Exercises
+
+## Beginner
+
+1. Measure DataFrame memory usage.
+2. Convert a numeric column to a smaller integer type.
+3. Convert a float column to `float32`.
+4. Convert a repeated string column to `category`.
+5. Compare memory before and after optimization.
+
+---
+
+## Intermediate
+
+6. Replace a loop with vectorized operations.
+7. Filter using `query()`.
+8. Calculate a new column using `eval()`.
+9. Read a CSV file in chunks.
+10. Benchmark execution time.
+
+---
+
+## Advanced
+
+11. Build an optimization pipeline.
+12. Optimize a large retail dataset.
+13. Compare vectorization and `apply()` performance.
+14. Profile a large DataFrame.
+15. Create a performance tuning checklist for an ETL pipeline.
+
+---
+
+# 23. Interview Questions
+
+## Beginner
+
+1. Why is memory optimization important in Pandas?
+2. What does `memory_usage()` return?
+3. When should you use categorical data?
+4. What is vectorization?
+5. Why avoid loops in Pandas?
+
+---
+
+## Intermediate
+
+6. Compare `apply()` and vectorized operations.
+7. What does `query()` do?
+8. When should `eval()` be used?
+9. Why process files in chunks?
+10. What are sparse data structures?
+
+---
+
+## Advanced
+
+11. Design a scalable Pandas pipeline for 100 million rows.
+12. Explain how data types affect memory usage.
+13. How would you optimize an ETL pipeline?
+14. Compare chunk processing and loading an entire dataset.
+15. Describe your strategy for benchmarking and improving Pandas performance.
+
+---
+
+# 24. Cheat Sheet
+
+| Task             | Syntax                                   |
+| ---------------- | ---------------------------------------- |
+| Memory Usage     | `memory_usage(deep=True)`                |
+| Downcast Integer | `pd.to_numeric(..., downcast="integer")` |
+| Downcast Float   | `pd.to_numeric(..., downcast="float")`   |
+| Category         | `.astype("category")`                    |
+| Vectorization    | `df["A"] * df["B"]`                      |
+| Query            | `query()`                                |
+| Eval             | `eval()`                                 |
+| Chunk Processing | `chunksize=`                             |
+| Sparse Type      | `.astype("Sparse[int]")`                 |
+| Benchmark        | `time.time()`                            |
+
+---
+
+# 25. Mini Project
+
+## High-Performance Sales Analytics Pipeline
+
+Using any retail, banking, healthcare, logistics, or telecom dataset:
+
+Complete the following tasks:
+
+* Measure initial memory usage.
+* Optimize numeric data types.
+* Convert repeated text columns to categories.
+* Replace loop-based calculations with vectorized operations.
+* Use `query()` for filtering.
+* Calculate derived columns using `eval()`.
+* Read large files using chunk processing.
+* Benchmark execution time before and after optimization.
+* Write **five executive-level business insights**.
+* Recommend **three performance improvements** for future scalability.
+
+### Example Business Insights
+
+* Converting repeated text columns to categorical data significantly reduced memory usage.
+* Vectorized calculations improved processing speed compared with iterative approaches.
+* Chunk processing enabled efficient handling of datasets exceeding available memory.
+* Downcasting numeric types reduced storage requirements without affecting analytical results.
+* Regular performance benchmarking identified optimization opportunities throughout the pipeline.
+
+---
+
+# 26. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Advanced Performance Optimization & Memory Management** in Pandas.
+
+You learned how to:
+
+* Measure memory consumption.
+* Optimize numeric data types.
+* Use categorical variables effectively.
+* Replace loops with vectorized operations.
+* Apply `query()` and `eval()` for efficient computations.
+* Process massive datasets in chunks.
+* Benchmark and optimize performance.
+
+These skills are essential for production ETL pipelines, cloud analytics, large-scale business intelligence, and enterprise data engineering.
+
+---
+
+# 27. What's Next?
+
+In **Day 36**, you'll learn **Advanced Visualization with Pandas**.
+
+Topics include:
+
+* Built-in Pandas plotting
+* Line, Bar, Area, Histogram, Box, Scatter, and Pie charts
+* Subplots
+* Plot customization
+* Time-series visualization
+* Grouped visualizations
+* Business dashboards
+* Statistical visualizations
+* Best visualization practices
+
+Visualization is a crucial step in communicating insights effectively and supports exploratory data analysis, executive reporting, and storytelling with data.
+
+---
+
+<div align="center">
+
