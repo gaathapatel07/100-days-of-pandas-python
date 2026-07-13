@@ -324,3 +324,409 @@ After completing this section, you should understand:
 
 > **"Exploratory Data Analysis is the foundation of every successful analytics project. Understanding your data first leads to more reliable insights and better decisions."**
 
+# 8. Missing Value Analysis
+
+Missing data is one of the most common issues in real-world datasets.
+
+Determine missing values in each column.
+
+```python id="missing01"
+df.isna().sum()
+```
+
+Example
+
+| Column | Missing Values |
+| ------ | -------------: |
+| Age    |             12 |
+| Sales  |              0 |
+| Region |              3 |
+
+---
+
+## Missing Value Percentage
+
+```python id="missing02"
+(
+    df.isna().sum()
+    /
+    len(df)
+) * 100
+```
+
+This helps prioritize which columns need cleaning.
+
+---
+
+## Visualizing Missing Patterns
+
+Sort missing values.
+
+```python id="missing03"
+missing = (
+    df.isna()
+      .sum()
+      .sort_values(
+          ascending=False
+      )
+)
+```
+
+This quickly highlights the columns with the highest number of missing entries.
+
+---
+
+# 9. Duplicate Analysis
+
+Duplicate records can distort KPIs.
+
+Count duplicates.
+
+```python id="duplicate01"
+df.duplicated().sum()
+```
+
+Display duplicates.
+
+```python id="duplicate02"
+duplicates = (
+    df[
+        df.duplicated(
+            keep=False
+        )
+    ]
+)
+```
+
+Remove duplicates.
+
+```python id="duplicate03"
+df = (
+    df.drop_duplicates()
+)
+```
+
+---
+
+# 10. Univariate Analysis
+
+Univariate analysis studies **one variable at a time**.
+
+Example:
+
+Sales distribution.
+
+```python id="uni01"
+df["Sales"].describe()
+```
+
+Unique categories.
+
+```python id="uni02"
+df["Region"].value_counts()
+```
+
+Relative frequency.
+
+```python id="uni03"
+df["Region"].value_counts(
+    normalize=True
+)
+```
+
+Output
+
+| Region | Percentage |
+| ------ | ---------: |
+| North  |       0.35 |
+| South  |       0.28 |
+| East   |       0.22 |
+| West   |       0.15 |
+
+---
+
+# 11. Bivariate Analysis
+
+Bivariate analysis examines relationships between **two variables**.
+
+Average sales by region.
+
+```python id="bi01"
+df.groupby(
+    "Region"
+)["Sales"].mean()
+```
+
+Average profit by category.
+
+```python id="bi02"
+df.groupby(
+    "Category"
+)["Profit"].mean()
+```
+
+Cross-tabulation.
+
+```python id="bi03"
+pd.crosstab(
+    df["Region"],
+    df["Category"]
+)
+```
+
+This reveals relationships between categorical variables.
+
+---
+
+# 12. Correlation Analysis
+
+Correlation measures the strength of relationships between numerical variables.
+
+Compute the correlation matrix.
+
+```python id="corr01"
+df.corr(
+    numeric_only=True
+)
+```
+
+Example
+
+|          | Sales | Profit | Quantity |
+| -------- | ----: | -----: | -------: |
+| Sales    |  1.00 |   0.82 |     0.67 |
+| Profit   |  0.82 |   1.00 |     0.45 |
+| Quantity |  0.67 |   0.45 |     1.00 |
+
+---
+
+## Strong Correlation
+
+```text id="corr02"
++1.0
+```
+
+Strong positive relationship.
+
+---
+
+## Weak Correlation
+
+```text id="corr03"
+0.05
+```
+
+Very little relationship.
+
+---
+
+## Negative Correlation
+
+```text id="corr04"
+-0.75
+```
+
+One variable increases while the other decreases.
+
+---
+
+# 13. Outlier Analysis
+
+Outliers can influence averages and machine learning models.
+
+Calculate quartiles.
+
+```python id="outlier01"
+Q1 = (
+    df["Sales"]
+      .quantile(0.25)
+)
+
+Q3 = (
+    df["Sales"]
+      .quantile(0.75)
+)
+```
+
+Calculate IQR.
+
+```python id="outlier02"
+IQR = Q3 - Q1
+```
+
+Determine boundaries.
+
+```python id="outlier03"
+lower = Q1 - 1.5 * IQR
+
+upper = Q3 + 1.5 * IQR
+```
+
+Detect outliers.
+
+```python id="outlier04"
+outliers = (
+    df[
+        (df["Sales"] < lower)
+        |
+        (df["Sales"] > upper)
+    ]
+)
+```
+
+Always investigate outliers before removing them.
+
+---
+
+# 14. Distribution Analysis
+
+Measure skewness.
+
+```python id="dist01"
+df["Sales"].skew()
+```
+
+Interpretation:
+
+| Value | Meaning      |
+| ----: | ------------ |
+|   ≈ 0 | Symmetric    |
+|   > 0 | Right-skewed |
+|   < 0 | Left-skewed  |
+
+---
+
+Measure kurtosis.
+
+```python id="dist02"
+df["Sales"].kurt()
+```
+
+Kurtosis describes the heaviness of the distribution tails.
+
+---
+
+# 15. Business-Driven EDA
+
+Professional analysts explore data based on business questions.
+
+Examples:
+
+**Revenue by Region**
+
+```python id="business01"
+df.groupby(
+    "Region"
+)["Revenue"].sum()
+```
+
+---
+
+**Top Products**
+
+```python id="business02"
+df.groupby(
+    "Product"
+)["Revenue"]\
+.sum()\
+.sort_values(
+    ascending=False
+)
+.head(10)
+```
+
+---
+
+**Monthly Revenue**
+
+```python id="business03"
+df.groupby(
+    "Month"
+)["Revenue"].sum()
+```
+
+---
+
+**Customer Spending**
+
+```python id="business04"
+df.groupby(
+    "Customer"
+)["Revenue"].sum()
+```
+
+Business-focused EDA connects statistical findings to real decision-making.
+
+---
+
+# Business Example
+
+An e-commerce company explores its sales dataset.
+
+Analysts investigate:
+
+* Missing customer information.
+* Duplicate transactions.
+* Best-selling product categories.
+* Correlation between discount and profit.
+* Revenue trends across regions.
+* High-value customer segments.
+
+These insights guide pricing, marketing, and inventory decisions.
+
+---
+
+# Best Practices
+
+✔ Check missing values before analysis.
+
+✔ Investigate duplicates carefully.
+
+✔ Combine statistical summaries with business understanding.
+
+✔ Analyze both numerical and categorical variables.
+
+✔ Validate unusual findings before reporting them.
+
+---
+
+# Common Mistakes
+
+### Assuming Correlation Implies Causation
+
+A strong correlation does **not** prove that one variable causes another.
+
+Additional analysis is required to establish causal relationships.
+
+---
+
+### Removing Every Outlier
+
+Some outliers represent legitimate business events, such as exceptionally large orders or promotional campaigns.
+
+Review them before deciding whether to exclude them.
+
+---
+
+### Ignoring Categorical Variables
+
+EDA should include both numerical and categorical data.
+
+Frequency tables and group-based summaries often reveal valuable business insights.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Analyze missing values.
+* Detect duplicate records.
+* Perform univariate analysis.
+* Perform bivariate analysis.
+* Measure correlations.
+* Detect outliers.
+* Analyze distributions.
+* Conduct business-focused exploratory analysis.
+
+> **"Effective EDA combines statistical techniques with business understanding, allowing analysts to uncover patterns, identify risks, and discover opportunities hidden within the data."**
