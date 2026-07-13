@@ -1,4 +1,4 @@
-# 🐼 Day 37 — Advanced Exploratory Data Analysis (EDA) with Pandas
+# Day 37 — Advanced Exploratory Data Analysis (EDA) with Pandas
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. What is Exploratory Data Analysis?
