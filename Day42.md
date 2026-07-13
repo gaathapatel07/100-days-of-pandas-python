@@ -379,3 +379,490 @@ After completing this section, you should understand:
 
 > **"Method chaining transforms scattered data manipulation into a clean, readable workflow that is easier to understand, test, and maintain."**
 
+# 8. The `pipe()` Function
+
+The `pipe()` method passes a DataFrame to a custom function, making pipelines modular and reusable.
+
+Basic syntax:
+
+```python id="pipe01"
+result = (
+    df
+    .pipe(function_name)
+)
+```
+
+---
+
+## Example
+
+Create a custom function.
+
+```python id="pipe02"
+def remove_negative_sales(df):
+
+    return (
+        df[
+            df["Sales"] >= 0
+        ]
+    )
+```
+
+Use it in a pipeline.
+
+```python id="pipe03"
+result = (
+
+    df
+
+    .pipe(
+        remove_negative_sales
+    )
+
+)
+```
+
+---
+
+## Passing Arguments
+
+Functions can accept additional parameters.
+
+```python id="pipe04"
+def filter_sales(df, limit):
+
+    return (
+        df[
+            df["Sales"] > limit
+        ]
+    )
+```
+
+Use:
+
+```python id="pipe05"
+result = (
+
+    df
+
+    .pipe(
+        filter_sales,
+        limit=5000
+    )
+
+)
+```
+
+---
+
+# 9. Creating Custom Transformation Functions
+
+Reusable functions make pipelines cleaner.
+
+Example:
+
+```python id="custom01"
+def add_profit(df):
+
+    return (
+
+        df.assign(
+
+            Profit=
+            df["Revenue"]
+            -
+            df["Cost"]
+
+        )
+
+    )
+```
+
+Another function:
+
+```python id="custom02"
+def sort_profit(df):
+
+    return (
+
+        df.sort_values(
+
+            "Profit",
+
+            ascending=False
+
+        )
+
+    )
+```
+
+Pipeline:
+
+```python id="custom03"
+result = (
+
+    df
+
+    .pipe(add_profit)
+
+    .pipe(sort_profit)
+
+)
+```
+
+---
+
+# 10. Functional Programming with Pandas
+
+Instead of modifying data step by step:
+
+```python id="functional01"
+df = df.dropna()
+
+df = df.sort_values("Sales")
+
+df = df.reset_index(drop=True)
+```
+
+Use:
+
+```python id="functional02"
+result = (
+
+    df
+
+    .dropna()
+
+    .sort_values(
+        "Sales"
+    )
+
+    .reset_index(
+        drop=True
+    )
+
+)
+```
+
+Functional programming avoids unintended side effects and improves readability.
+
+---
+
+# 11. Debugging Pipelines
+
+Long pipelines can be difficult to debug.
+
+---
+
+## Save Intermediate Results
+
+```python id="debug01"
+step1 = (
+
+    df
+
+    .dropna()
+
+)
+
+step2 = (
+
+    step1
+
+    .query(
+        "Sales > 5000"
+    )
+
+)
+```
+
+---
+
+## Inspect Shape
+
+```python id="debug02"
+print(
+    df.shape
+)
+```
+
+After filtering:
+
+```python id="debug03"
+print(
+    step2.shape
+)
+```
+
+---
+
+## Use `pipe()` for Debugging
+
+```python id="debug04"
+def check_rows(df):
+
+    print(df.shape)
+
+    return df
+```
+
+Pipeline:
+
+```python id="debug05"
+result = (
+
+    df
+
+    .pipe(check_rows)
+
+    .dropna()
+
+    .pipe(check_rows)
+
+)
+```
+
+This lets you inspect the DataFrame without interrupting the pipeline.
+
+---
+
+# 12. Reusable Data Pipelines
+
+Example:
+
+```python id="pipeline01"
+def sales_pipeline(df):
+
+    return (
+
+        df
+
+        .drop_duplicates()
+
+        .dropna()
+
+        .assign(
+
+            Profit=lambda x:
+
+            x["Revenue"]
+
+            -
+
+            x["Cost"]
+
+        )
+
+        .query(
+            "Profit > 0"
+        )
+
+    )
+```
+
+Execute:
+
+```python id="pipeline02"
+clean_sales = (
+    sales_pipeline(df)
+)
+```
+
+Reusable pipelines improve consistency across projects.
+
+---
+
+# 13. Enterprise Pipeline Pattern
+
+Professional projects often separate transformations into logical stages.
+
+```text id="pattern01"
+Load Data
+
+↓
+
+Clean Data
+
+↓
+
+Validate Data
+
+↓
+
+Feature Engineering
+
+↓
+
+Aggregation
+
+↓
+
+Visualization
+
+↓
+
+Reporting
+
+↓
+
+Machine Learning
+```
+
+Each stage should perform a single responsibility.
+
+---
+
+# 14. Pipeline Performance Tips
+
+### Avoid Unnecessary Copies
+
+Prefer chaining methods over creating many temporary DataFrames.
+
+---
+
+### Filter Early
+
+Instead of processing the full dataset:
+
+```python id="perf01"
+result = (
+
+    df
+
+    .query(
+        "Sales > 1000"
+    )
+
+    .groupby(
+        "Region"
+    )
+
+    .sum()
+
+)
+```
+
+Filtering first reduces later computations.
+
+---
+
+### Vectorized Operations
+
+Avoid loops.
+
+Instead:
+
+```python id="perf02"
+df["Profit"] = (
+
+    df["Revenue"]
+
+    -
+
+    df["Cost"]
+
+)
+```
+
+Vectorized operations are significantly faster.
+
+---
+
+# 15. Business Example
+
+A financial analyst prepares a quarterly report.
+
+Pipeline:
+
+```python id="business01"
+report = (
+
+    df
+
+    .drop_duplicates()
+
+    .dropna()
+
+    .assign(
+
+        Profit=lambda x:
+
+        x["Revenue"]
+
+        -
+
+        x["Cost"]
+
+    )
+
+    .query(
+        "Profit > 1000"
+    )
+
+    .groupby(
+        "Region"
+    )
+
+    .agg(
+
+        Revenue=("Revenue","sum"),
+
+        Profit=("Profit","sum")
+
+    )
+
+)
+```
+
+This pipeline performs cleaning, transformation, filtering, aggregation, and reporting in one readable workflow.
+
+---
+
+# Best Practices
+
+✔ Keep functions small and focused.
+
+✔ Use `pipe()` for reusable logic.
+
+✔ Keep one transformation per line.
+
+✔ Test custom functions independently.
+
+✔ Build modular pipelines instead of long scripts.
+
+---
+
+# Common Mistakes
+
+### Writing Huge Functions
+
+Avoid one function that performs every transformation.
+
+Break the workflow into smaller reusable functions.
+
+---
+
+### Mutating the Original DataFrame
+
+Prefer returning a new transformed DataFrame instead of modifying the original in place.
+
+---
+
+### Ignoring Readability
+
+A slightly longer but well-structured pipeline is usually easier to maintain than a compact but difficult-to-read implementation.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Use `pipe()`.
+* Build reusable transformation functions.
+* Apply functional programming concepts.
+* Debug pipelines.
+* Design reusable workflows.
+* Optimize pipeline performance.
+
+> **"Well-designed data pipelines are modular, reusable, and easy to understand. Clean pipeline design reduces bugs, improves collaboration, and simplifies maintenance."**
