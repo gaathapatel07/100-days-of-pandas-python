@@ -327,3 +327,345 @@ After completing this section, you should understand:
 
 > **"The purpose of visualization is not simply to create attractive charts—it is to communicate meaningful insights clearly and accurately."**
 
+# 8. Histograms
+
+Histograms display the distribution of numerical data.
+
+Example:
+
+Analyze customer ages.
+
+```python id="hist01"
+df["Age"].plot(
+    kind="hist",
+    bins=20
+)
+```
+
+Output:
+
+A histogram showing how customers are distributed across different age groups.
+
+---
+
+## Customize Histogram
+
+```python id="hist02"
+df["Sales"].plot(
+    kind="hist",
+    bins=15,
+    figsize=(8,5),
+    title="Sales Distribution"
+)
+```
+
+Applications:
+
+* Customer age analysis
+* Income distribution
+* Sales distribution
+* Exam scores
+
+---
+
+# 9. Box Plots
+
+Box plots summarize data using:
+
+* Minimum
+* First Quartile (Q1)
+* Median
+* Third Quartile (Q3)
+* Maximum
+* Outliers
+
+```python id="box01"
+df.plot(
+    y="Sales",
+    kind="box"
+)
+```
+
+Output:
+
+A box plot highlighting spread and outliers.
+
+---
+
+## Multiple Box Plots
+
+```python id="box02"
+df.plot(
+    y=[
+        "Sales",
+        "Profit"
+    ],
+    kind="box"
+)
+```
+
+Useful for comparing distributions.
+
+---
+
+# 10. Scatter Plots
+
+Scatter plots visualize relationships between two numerical variables.
+
+Example:
+
+```python id="scatter01"
+df.plot(
+    x="Sales",
+    y="Profit",
+    kind="scatter"
+)
+```
+
+Applications:
+
+* Sales vs Profit
+* Height vs Weight
+* Marketing Spend vs Revenue
+* Experience vs Salary
+
+---
+
+## Identify Correlation
+
+Strong upward trend:
+
+Positive correlation
+
+Strong downward trend:
+
+Negative correlation
+
+Random points:
+
+Little or no correlation
+
+---
+
+# 11. Pie Charts
+
+Pie charts display proportional contributions.
+
+Example:
+
+Regional sales.
+
+```python id="pie01"
+df.set_index(
+    "Region"
+).plot(
+    y="Sales",
+    kind="pie",
+    autopct="%1.1f%%"
+)
+```
+
+Applications:
+
+* Market share
+* Revenue contribution
+* Expense breakdown
+* Customer segmentation
+
+---
+
+# 12. Density (KDE) Plots
+
+Kernel Density Estimation (KDE) creates a smooth distribution curve.
+
+```python id="kde01"
+df["Sales"].plot(
+    kind="density"
+)
+```
+
+Useful for:
+
+* Understanding distributions
+* Comparing datasets
+* Detecting skewness
+
+---
+
+# 13. Hexbin Plots
+
+Scatter plots become cluttered with large datasets.
+
+Hexbin plots group nearby points into hexagonal bins.
+
+```python id="hex01"
+df.plot(
+    x="Sales",
+    y="Profit",
+    kind="hexbin",
+    gridsize=20
+)
+```
+
+Applications:
+
+* Large datasets
+* Transaction analysis
+* Customer behavior
+* Financial analytics
+
+---
+
+# 14. Creating Subplots
+
+Display multiple visualizations together.
+
+```python id="subplot01"
+df.plot(
+    subplots=True,
+    figsize=(10,8)
+)
+```
+
+Each numerical column receives its own chart.
+
+---
+
+## Selected Columns
+
+```python id="subplot02"
+df[
+    [
+        "Sales",
+        "Profit"
+    ]
+].plot(
+    subplots=True,
+    layout=(2,1),
+    figsize=(8,6)
+)
+```
+
+Useful for KPI dashboards.
+
+---
+
+# 15. Plot Customization
+
+Customize chart appearance.
+
+```python id="custom01"
+df.plot(
+    x="Date",
+    y="Sales",
+    kind="line",
+    figsize=(12,6),
+    title="Monthly Sales",
+    xlabel="Month",
+    ylabel="Revenue",
+    grid=True,
+    legend=True
+)
+```
+
+Common customization options:
+
+| Parameter | Purpose            |
+| --------- | ------------------ |
+| `title`   | Chart title        |
+| `xlabel`  | X-axis label       |
+| `ylabel`  | Y-axis label       |
+| `figsize` | Figure size        |
+| `grid`    | Grid lines         |
+| `legend`  | Display legend     |
+| `rot`     | Rotate axis labels |
+
+---
+
+# Choosing the Right Chart
+
+| Data Type                      | Recommended Chart |
+| ------------------------------ | ----------------- |
+| Time Series                    | Line Chart        |
+| Category Comparison            | Bar Chart         |
+| Distribution                   | Histogram         |
+| Outlier Detection              | Box Plot          |
+| Relationship Between Variables | Scatter Plot      |
+| Percentage Contribution        | Pie Chart         |
+| Large Scatter Dataset          | Hexbin Plot       |
+| Distribution Curve             | Density Plot      |
+
+---
+
+# Business Example
+
+A banking institution analyzes customer data.
+
+Visualizations include:
+
+* Histogram of customer ages.
+* Box plot of account balances.
+* Scatter plot of income vs loan amount.
+* Pie chart of account types.
+* KDE plot of monthly spending.
+
+These charts help analysts understand customer behavior and identify unusual patterns.
+
+---
+
+# Best Practices
+
+✔ Select charts based on the type of data.
+
+✔ Label axes clearly.
+
+✔ Add descriptive titles.
+
+✔ Keep charts uncluttered.
+
+✔ Use subplots for dashboard-style reporting.
+
+---
+
+# Common Mistakes
+
+### Using Pie Charts with Too Many Categories
+
+Pie charts become difficult to interpret with many slices.
+
+If there are more than five or six categories, consider using a bar chart.
+
+---
+
+### Ignoring Outliers
+
+Always inspect box plots before drawing conclusions from averages.
+
+---
+
+### Overlapping Labels
+
+Rotate labels when necessary.
+
+```python id="mistake01"
+rot=45
+```
+
+to improve readability.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Create histograms.
+* Analyze distributions with box plots.
+* Explore relationships using scatter plots.
+* Display proportions with pie charts.
+* Visualize density distributions.
+* Handle large datasets using hexbin plots.
+* Build dashboards using subplots.
+* Customize Pandas visualizations.
+
+> **"Effective visualizations transform raw numbers into intuitive stories, helping analysts uncover trends, relationships, and opportunities that might otherwise remain hidden."**
