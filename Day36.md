@@ -669,3 +669,437 @@ You have now learned how to:
 * Customize Pandas visualizations.
 
 > **"Effective visualizations transform raw numbers into intuitive stories, helping analysts uncover trends, relationships, and opportunities that might otherwise remain hidden."**
+
+# 16. Dashboard Design Principles
+
+Business dashboards should answer important questions quickly.
+
+A good dashboard should:
+
+* Highlight key performance indicators (KPIs)
+* Compare performance over time
+* Reveal trends and patterns
+* Support business decisions
+
+Example dashboard layout:
+
+```text id="dashboard01"
++---------------------------------------------+
+|            Monthly Sales Dashboard          |
++---------------------------------------------+
+| Revenue | Profit | Orders | Customers       |
++---------------------------------------------+
+| Line Chart: Sales Trend                     |
++---------------------------------------------+
+| Bar Chart: Regional Sales                   |
++---------------------------------------------+
+| Pie Chart: Category Contribution            |
++---------------------------------------------+
+| Box Plot: Sales Distribution                |
++---------------------------------------------+
+```
+
+Keep dashboards simple and focused.
+
+---
+
+# 17. Enterprise Visualization Workflow
+
+Professional organizations follow a structured reporting workflow.
+
+```text id="workflow01"
+Raw Data
+     │
+     ▼
+Data Cleaning
+     │
+     ▼
+Aggregation
+     │
+     ▼
+Feature Engineering
+     │
+     ▼
+Visualization
+     │
+     ▼
+Business Dashboard
+     │
+     ▼
+Executive Decision
+```
+
+Visualization is the bridge between analysis and decision-making.
+
+---
+
+# 18. Performance Optimization for Plotting
+
+Large datasets can make charts slow.
+
+### Aggregate Before Plotting
+
+Instead of plotting millions of rows:
+
+```python id="perf01"
+df.plot(
+    x="Date",
+    y="Sales"
+)
+```
+
+Aggregate first.
+
+```python id="perf02"
+monthly = (
+    df.groupby("Month")["Sales"]
+      .sum()
+)
+
+monthly.plot()
+```
+
+---
+
+### Select Required Columns
+
+```python id="perf03"
+df[
+    [
+        "Sales",
+        "Profit"
+    ]
+].plot()
+```
+
+Avoid plotting unnecessary columns.
+
+---
+
+### Sample Very Large Data
+
+```python id="perf04"
+sample = (
+    df.sample(
+        n=10000,
+        random_state=42
+    )
+)
+
+sample.plot(
+    x="Sales",
+    y="Profit",
+    kind="scatter"
+)
+```
+
+Sampling often preserves overall patterns while improving performance.
+
+---
+
+# 19. Common Visualization Mistakes
+
+### Using the Wrong Chart
+
+| Goal         | Recommended Chart          |
+| ------------ | -------------------------- |
+| Trend        | Line Chart                 |
+| Comparison   | Bar Chart                  |
+| Distribution | Histogram                  |
+| Relationship | Scatter Plot               |
+| Composition  | Pie Chart (few categories) |
+
+---
+
+### Too Many Colors
+
+Limit colors to emphasize important information.
+
+Avoid distracting color palettes that reduce readability.
+
+---
+
+### Missing Labels
+
+Always include:
+
+* Chart title
+* X-axis label
+* Y-axis label
+* Legend (when necessary)
+
+---
+
+### Misleading Axis Scales
+
+Be cautious when changing axis limits, as truncated scales can exaggerate or minimize differences.
+
+Ensure scales accurately represent the data.
+
+---
+
+# 20. Enterprise Case Study
+
+## Scenario
+
+You are a **Senior Business Analyst** at **RetailHub**.
+
+The executive team wants a monthly dashboard.
+
+Available data:
+
+* Sales
+* Profit
+* Orders
+* Customers
+* Product Category
+* Region
+
+---
+
+## Business Questions
+
+### Question 1
+
+Monthly sales trend.
+
+```python id="case01"
+monthly = (
+    df.groupby("Month")["Sales"]
+      .sum()
+)
+
+monthly.plot(
+    kind="line"
+)
+```
+
+---
+
+### Question 2
+
+Regional sales.
+
+```python id="case02"
+df.groupby("Region")["Sales"]\
+  .sum()\
+  .plot(kind="bar")
+```
+
+---
+
+### Question 3
+
+Revenue contribution.
+
+```python id="case03"
+df.groupby("Category")["Revenue"]\
+  .sum()\
+  .plot(
+      kind="pie",
+      autopct="%1.1f%%"
+  )
+```
+
+---
+
+### Question 4
+
+Sales distribution.
+
+```python id="case04"
+df["Sales"].plot(
+    kind="hist",
+    bins=20
+)
+```
+
+---
+
+### Question 5
+
+Sales vs Profit.
+
+```python id="case05"
+df.plot(
+    x="Sales",
+    y="Profit",
+    kind="scatter"
+)
+```
+
+---
+
+# 21. Business Insights
+
+After creating the dashboard, analysts identify:
+
+* Revenue consistently increases during the final quarter.
+* The North region generates the highest sales.
+* A small number of product categories contribute most of the revenue.
+* Sales distribution is right-skewed, indicating a few high-value transactions.
+* Higher sales generally correspond to higher profit, though some high-sales orders have relatively low profitability.
+
+---
+
+# 22. Practice Exercises
+
+## Beginner
+
+1. Create a line chart.
+2. Create a bar chart.
+3. Plot a histogram.
+4. Create a box plot.
+5. Create a pie chart.
+
+---
+
+## Intermediate
+
+6. Compare two variables with a scatter plot.
+7. Create multiple subplots.
+8. Customize titles and axis labels.
+9. Plot grouped sales by region.
+10. Build a simple dashboard.
+
+---
+
+## Advanced
+
+11. Visualize time-series data.
+12. Build a business reporting dashboard.
+13. Compare multiple KPIs in one report.
+14. Optimize plotting for a large dataset.
+15. Design an executive-level visualization workflow.
+
+---
+
+# 23. Interview Questions
+
+## Beginner
+
+1. Why is visualization important?
+2. When should you use a line chart?
+3. What does a histogram show?
+4. When is a box plot useful?
+5. What information does a scatter plot provide?
+
+---
+
+## Intermediate
+
+6. How do you customize Pandas plots?
+7. Why are subplots useful?
+8. How do you visualize time-series data?
+9. What is the purpose of KDE plots?
+10. When should you use a hexbin plot?
+
+---
+
+## Advanced
+
+11. Design an executive dashboard for retail analytics.
+12. How do you choose the right chart for a business problem?
+13. How would you visualize millions of records efficiently?
+14. Explain common visualization mistakes and how to avoid them.
+15. Compare Pandas plotting with specialized visualization libraries.
+
+---
+
+# 24. Cheat Sheet
+
+| Task           | Syntax                 |
+| -------------- | ---------------------- |
+| Line Chart     | `plot(kind="line")`    |
+| Bar Chart      | `plot(kind="bar")`     |
+| Horizontal Bar | `plot(kind="barh")`    |
+| Area Chart     | `plot(kind="area")`    |
+| Histogram      | `plot(kind="hist")`    |
+| Box Plot       | `plot(kind="box")`     |
+| Scatter Plot   | `plot(kind="scatter")` |
+| Pie Chart      | `plot(kind="pie")`     |
+| Density Plot   | `plot(kind="density")` |
+| Hexbin Plot    | `plot(kind="hexbin")`  |
+| Subplots       | `subplots=True`        |
+
+---
+
+# 25. Mini Project
+
+## Executive Sales Dashboard
+
+Using any retail, banking, healthcare, telecom, HR, or logistics dataset:
+
+Complete the following tasks:
+
+* Create a line chart for sales trends.
+* Compare regional performance with a bar chart.
+* Show category contribution using a pie chart.
+* Analyze distributions with a histogram and box plot.
+* Explore relationships using a scatter plot.
+* Build a dashboard with multiple subplots.
+* Customize titles, labels, and legends.
+* Optimize plotting for large datasets.
+* Write **five executive-level business insights**.
+* Recommend **three visualization improvements** for future reporting.
+
+### Example Business Insights
+
+* Sales show consistent year-over-year growth.
+* The North region contributes the highest revenue.
+* A small number of product categories generate the majority of sales.
+* Most transactions fall within a moderate sales range, with a few high-value outliers.
+* Strong positive correlation exists between sales and profit, though exceptions indicate opportunities for margin improvement.
+
+---
+
+# 26. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Advanced Visualization with Pandas**.
+
+You learned how to:
+
+* Create line, bar, area, histogram, box, scatter, pie, density, and hexbin plots.
+* Customize charts for clarity and readability.
+* Build dashboards using subplots.
+* Choose appropriate chart types for different business questions.
+* Optimize plotting for large datasets.
+
+These skills are essential for exploratory data analysis (EDA), executive reporting, business intelligence, and communicating analytical findings.
+
+---
+
+# 27. What's Next?
+
+In **Day 37**, you'll learn **Advanced Exploratory Data Analysis (EDA) with Pandas**.
+
+Topics include:
+
+* Systematic EDA workflow
+* Univariate analysis
+* Bivariate analysis
+* Multivariate analysis
+* Correlation analysis
+* Missing data analysis
+* Outlier analysis
+* Business-focused EDA
+* Automated profiling
+* Generating actionable insights
+
+Mastering EDA will help you discover patterns, detect anomalies, and prepare datasets for visualization, statistical analysis, and machine learning.
+
+---
+
+<div align="center">
+
+# 🎉 Day 36 Complete!
+
+You've mastered **Advanced Visualization with Pandas**, giving you the ability to transform complex datasets into clear, actionable visual stories.
+
+By combining efficient analysis with effective visualization, you're now equipped to communicate insights that support data-driven decision-making.
+
+⭐ **Next → Day 37: Advanced Exploratory Data Analysis (EDA) with Pandas** 🔍📊🐼
+
+</div>
