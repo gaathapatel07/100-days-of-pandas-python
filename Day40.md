@@ -754,3 +754,414 @@ You have now learned how to:
 * Measure business trends over time.
 
 > **"Time-series analysis transforms chronological records into meaningful trends, enabling organizations to forecast demand, monitor performance, and make proactive business decisions."**
+# 16. Enterprise Time Series Analytics Workflow
+
+Organizations analyze time-based data using a structured workflow.
+
+```text id="workflow01"
+Raw Time-Series Data
+         │
+         ▼
+DateTime Conversion
+         │
+         ▼
+DateTime Index
+         │
+         ▼
+Data Cleaning
+         │
+         ▼
+Resampling
+         │
+         ▼
+Rolling Statistics
+         │
+         ▼
+Feature Engineering
+         │
+         ▼
+Trend & Seasonality Analysis
+         │
+         ▼
+Forecasting / Dashboard
+```
+
+Following a consistent workflow improves forecasting accuracy and reporting reliability.
+
+---
+
+# 17. Forecasting Preparation Pipeline
+
+Before building forecasting models, prepare the dataset.
+
+```python id="pipeline01"
+def prepare_time_series(df):
+
+    df["Order Date"] = pd.to_datetime(
+        df["Order Date"]
+    )
+
+    df = df.set_index(
+        "Order Date"
+    )
+
+    df["Lag 1"] = (
+        df["Sales"]
+          .shift(1)
+    )
+
+    df["7-Day MA"] = (
+        df["Sales"]
+          .rolling(7)
+          .mean()
+    )
+
+    df["Month"] = (
+        df.index.month
+    )
+
+    return df
+```
+
+Execute:
+
+```python id="pipeline02"
+ts_df = prepare_time_series(df)
+```
+
+This prepares the dataset for forecasting and advanced analytics.
+
+---
+
+# 18. Time-Series Performance Optimization
+
+Large time-series datasets require efficient processing.
+
+### Sort by Date
+
+```python id="perf01"
+df = df.sort_index()
+```
+
+Many time-based operations assume chronological order.
+
+---
+
+### Select Required Columns
+
+```python id="perf02"
+sales = df[
+    ["Sales"]
+]
+```
+
+Processing fewer columns improves performance.
+
+---
+
+### Downsample Before Visualization
+
+Instead of plotting millions of daily records:
+
+```python id="perf03"
+monthly = (
+    df["Sales"]
+      .resample("M")
+      .sum()
+)
+```
+
+Visualize the monthly totals rather than every individual observation.
+
+---
+
+### Optimize Date Parsing
+
+When importing CSV files:
+
+```python id="perf04"
+df = pd.read_csv(
+    "sales.csv",
+    parse_dates=[
+        "Order Date"
+    ]
+)
+```
+
+Parsing dates during import is generally more efficient than converting them later.
+
+---
+
+# 19. Enterprise Case Study
+
+## Scenario
+
+You are a **Senior Business Analyst** at **RetailHub**.
+
+Management wants to understand:
+
+* Sales trends
+* Seasonal demand
+* Quarterly growth
+* Weekly purchasing behavior
+* Forecast readiness
+
+Available data:
+
+* Order Date
+* Sales
+* Revenue
+* Profit
+* Quantity
+
+---
+
+## Business Questions
+
+### Question 1
+
+Calculate monthly revenue.
+
+```python id="case01"
+monthly = (
+    df["Revenue"]
+      .resample("M")
+      .sum()
+)
+```
+
+---
+
+### Question 2
+
+Compute a 30-day moving average.
+
+```python id="case02"
+df["30-Day MA"] = (
+    df["Sales"]
+      .rolling(30)
+      .mean()
+)
+```
+
+---
+
+### Question 3
+
+Create lag features.
+
+```python id="case03"
+df["Lag 7"] = (
+    df["Sales"]
+      .shift(7)
+)
+```
+
+---
+
+### Question 4
+
+Analyze weekday sales.
+
+```python id="case04"
+weekday_sales = (
+    df.groupby(
+        df.index.day_name()
+    )["Sales"]
+      .mean()
+)
+```
+
+---
+
+### Question 5
+
+Calculate monthly growth.
+
+```python id="case05"
+monthly_growth = (
+    monthly
+      .pct_change()
+      * 100
+)
+```
+
+---
+
+# 20. Business Insights
+
+After analyzing the data, the team discovers:
+
+* Sales steadily increase during the fourth quarter.
+* Weekend sales exceed weekday averages.
+* A seven-day moving average highlights the long-term sales trend by smoothing daily fluctuations.
+* Monthly growth rates reveal periods of rapid expansion and seasonal slowdowns.
+* Lag features improve the quality of forecasting models by incorporating historical information.
+
+---
+
+# 21. Practice Exercises
+
+## Beginner
+
+1. Convert a column to DateTime.
+2. Set a DateTime index.
+3. Filter records for a specific month.
+4. Extract the year and month.
+5. Calculate monthly sales totals.
+
+---
+
+## Intermediate
+
+6. Resample daily data to weekly totals.
+7. Compute a rolling average.
+8. Create lag features.
+9. Calculate month-over-month growth.
+10. Analyze quarterly revenue.
+
+---
+
+## Advanced
+
+11. Build a forecasting preparation pipeline.
+12. Create rolling and expanding statistics.
+13. Analyze seasonal trends.
+14. Optimize time-series processing for a large dataset.
+15. Prepare a forecasting-ready dataset.
+
+---
+
+# 22. Interview Questions
+
+## Beginner
+
+1. What is time-series data?
+2. Why use a DateTime index?
+3. What does `resample()` do?
+4. What is a rolling window?
+5. Why create lag features?
+
+---
+
+## Intermediate
+
+6. Explain the difference between rolling and expanding windows.
+7. What is a moving average?
+8. How do you measure month-over-month growth?
+9. Why is chronological ordering important?
+10. When should you resample data?
+
+---
+
+## Advanced
+
+11. Design a forecasting pipeline for retail sales.
+12. Explain seasonality with business examples.
+13. Compare simple and exponential moving averages.
+14. How would you optimize time-series analysis for millions of records?
+15. How do lag features improve predictive models?
+
+---
+
+# 23. Cheat Sheet
+
+| Task           | Syntax                   |
+| -------------- | ------------------------ |
+| Convert Date   | `pd.to_datetime()`       |
+| Set Date Index | `set_index()`            |
+| Filter by Date | `loc[]`                  |
+| Extract Year   | `index.year`             |
+| Extract Month  | `index.month`            |
+| Resample       | `resample()`             |
+| Rolling Mean   | `rolling().mean()`       |
+| Expanding Mean | `expanding().mean()`     |
+| Shift          | `shift()`                |
+| Moving Average | `rolling(window).mean()` |
+| Exponential MA | `ewm().mean()`           |
+| Growth Rate    | `pct_change()`           |
+
+---
+
+# 24. Mini Project
+
+## Retail Sales Forecast Preparation
+
+Using any retail, banking, healthcare, logistics, finance, or IoT dataset:
+
+Complete the following tasks:
+
+* Convert date columns to DateTime.
+* Set a DateTime index.
+* Resample daily data into monthly summaries.
+* Calculate rolling averages.
+* Generate expanding statistics.
+* Create lag features.
+* Analyze seasonal patterns.
+* Calculate month-over-month growth.
+* Build a forecasting preparation pipeline.
+* Write **five executive-level business insights**.
+* Recommend **three business actions** based on observed trends.
+
+### Example Business Insights
+
+* Revenue peaks during festive months, indicating strong seasonal demand.
+* Weekend sales consistently exceed weekday sales.
+* Moving averages reveal sustained long-term growth despite short-term fluctuations.
+* Monthly growth rates identify both expansion periods and temporary declines.
+* Historical sales patterns provide valuable features for forecasting future demand.
+
+---
+
+# 25. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Advanced Time Series Analysis with Pandas**.
+
+You learned how to:
+
+* Convert and index DateTime data.
+* Filter time-based records.
+* Resample datasets.
+* Compute rolling and expanding statistics.
+* Create lag features.
+* Apply moving averages.
+* Analyze seasonality.
+* Prepare datasets for forecasting.
+
+These skills are essential for forecasting, financial analysis, demand planning, operations, and business intelligence.
+
+---
+
+# 26. What's Next?
+
+In **Day 41**, you'll learn **Advanced File Handling & Data Integration in Pandas**.
+
+Topics include:
+
+* Reading and writing CSV, Excel, JSON, and Parquet files
+* Working with SQL databases
+* Reading data from APIs
+* Combining multiple files
+* Batch file processing
+* Compression formats
+* Efficient data import/export
+* Enterprise ETL workflows
+* Data integration best practices
+
+These techniques are essential for building real-world data pipelines that collect and integrate information from multiple sources.
+
+---
+
+<div align="center">
+
+# 🎉 Day 40 Complete!
+
+You've mastered **Advanced Time Series Analysis**, giving you the skills to analyze trends, seasonality, growth, and forecasting-ready data.
+
+By combining time-based filtering, rolling statistics, lag features, and resampling, you're now equipped to work with real-world business time-series datasets.
+
+⭐ **Next → Day 41: Advanced File Handling & Data Integration** 📁🐼
+
+</div>
