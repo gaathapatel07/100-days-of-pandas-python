@@ -730,3 +730,423 @@ You have now learned how to:
 * Conduct business-focused exploratory analysis.
 
 > **"Effective EDA combines statistical techniques with business understanding, allowing analysts to uncover patterns, identify risks, and discover opportunities hidden within the data."**
+
+# 16. Enterprise EDA Workflow
+
+Professional organizations follow a structured exploratory workflow before any reporting or modeling.
+
+```text id="workflow01"
+Raw Dataset
+      │
+      ▼
+Initial Inspection
+      │
+      ▼
+Data Quality Assessment
+      │
+      ▼
+Missing Value Analysis
+      │
+      ▼
+Duplicate Detection
+      │
+      ▼
+Statistical Summary
+      │
+      ▼
+Relationship Analysis
+      │
+      ▼
+Business Insights
+      │
+      ▼
+Visualization & Reporting
+      │
+      ▼
+Machine Learning / Dashboard
+```
+
+Following a consistent workflow improves reproducibility and reduces the chance of overlooking important issues.
+
+---
+
+# 17. Automated EDA Report
+
+Instead of manually checking every aspect of a dataset, create a reusable function.
+
+```python id="auto01"
+def eda_summary(df):
+
+    summary = {
+        "Rows": len(df),
+        "Columns": len(df.columns),
+        "Missing Values":
+            df.isna().sum().sum(),
+        "Duplicate Rows":
+            df.duplicated().sum(),
+        "Memory Usage (MB)":
+            round(
+                df.memory_usage(
+                    deep=True
+                ).sum() / 1024**2,
+                2
+            )
+    }
+
+    return pd.DataFrame(
+        summary.items(),
+        columns=[
+            "Metric",
+            "Value"
+        ]
+    )
+```
+
+Run the report.
+
+```python id="auto02"
+eda_report = eda_summary(df)
+
+print(eda_report)
+```
+
+Example Output
+
+| Metric            | Value |
+| ----------------- | ----: |
+| Rows              | 50000 |
+| Columns           |    12 |
+| Missing Values    |    15 |
+| Duplicate Rows    |     3 |
+| Memory Usage (MB) |  4.82 |
+
+---
+
+# 18. EDA Checklist
+
+Before beginning visualization or machine learning, review the following checklist.
+
+| Task                        | Status |
+| --------------------------- | ------ |
+| Inspect dataset structure   | ☐      |
+| Check data types            | ☐      |
+| Review missing values       | ☐      |
+| Remove duplicates           | ☐      |
+| Generate summary statistics | ☐      |
+| Analyze distributions       | ☐      |
+| Check correlations          | ☐      |
+| Detect outliers             | ☐      |
+| Review business KPIs        | ☐      |
+| Document observations       | ☐      |
+
+This checklist helps ensure that no critical step is missed.
+
+---
+
+# 19. Performance Optimization During EDA
+
+EDA on large datasets should be efficient.
+
+### Sample Large Datasets
+
+```python id="perf01"
+sample = df.sample(
+    n=10000,
+    random_state=42
+)
+```
+
+Sampling speeds up exploratory analysis while preserving overall patterns.
+
+---
+
+### Analyze Only Required Columns
+
+```python id="perf02"
+df[
+    [
+        "Sales",
+        "Profit"
+    ]
+].describe()
+```
+
+Avoid unnecessary computations on unrelated columns.
+
+---
+
+### Use Efficient Data Types
+
+```python id="perf03"
+df["Region"] = (
+    df["Region"]
+      .astype("category")
+)
+```
+
+Efficient data types reduce memory usage during exploration.
+
+---
+
+# 20. Enterprise Case Study
+
+## Scenario
+
+You are a **Senior Data Analyst** at **RetailHub**.
+
+The company has launched operations in multiple new cities.
+
+Management wants a complete exploratory analysis before creating executive dashboards.
+
+Available data:
+
+* Orders
+* Revenue
+* Profit
+* Customers
+* Region
+* Product Category
+* Discounts
+
+---
+
+## Business Questions
+
+### Question 1
+
+Generate descriptive statistics.
+
+```python id="case01"
+df.describe(
+    include="all"
+)
+```
+
+---
+
+### Question 2
+
+Analyze missing values.
+
+```python id="case02"
+df.isna().sum()
+```
+
+---
+
+### Question 3
+
+Identify duplicate records.
+
+```python id="case03"
+df.duplicated().sum()
+```
+
+---
+
+### Question 4
+
+Measure relationships between numerical variables.
+
+```python id="case04"
+df.corr(
+    numeric_only=True
+)
+```
+
+---
+
+### Question 5
+
+Identify the highest revenue regions.
+
+```python id="case05"
+df.groupby(
+    "Region"
+)["Revenue"]\
+.sum()\
+.sort_values(
+    ascending=False
+)
+```
+
+---
+
+# 21. Business Insights
+
+After completing the EDA, analysts identify:
+
+* Revenue is concentrated in a small number of regions.
+* Most products generate moderate sales, while a few products contribute disproportionately to total revenue.
+* Missing values are limited and can be addressed without major data loss.
+* Profit is positively correlated with revenue, though some high-revenue products have relatively low profit margins.
+* Customer purchasing behavior varies across regions, suggesting opportunities for localized marketing strategies.
+
+---
+
+# 22. Practice Exercises
+
+## Beginner
+
+1. Display the first and last five rows.
+2. Check the shape of the dataset.
+3. Review data types.
+4. Generate descriptive statistics.
+5. Count missing values.
+
+---
+
+## Intermediate
+
+6. Remove duplicate records.
+7. Calculate missing value percentages.
+8. Perform correlation analysis.
+9. Detect outliers using the IQR method.
+10. Analyze category frequencies.
+
+---
+
+## Advanced
+
+11. Build an automated EDA report.
+12. Create an EDA checklist.
+13. Perform business-focused exploratory analysis.
+14. Optimize EDA for a large dataset.
+15. Document business insights from a real-world dataset.
+
+---
+
+# 23. Interview Questions
+
+## Beginner
+
+1. What is Exploratory Data Analysis?
+2. Why is EDA important?
+3. What does `describe()` return?
+4. How do you identify missing values?
+5. Why check duplicate records?
+
+---
+
+## Intermediate
+
+6. Explain univariate and bivariate analysis.
+7. What is correlation analysis?
+8. How do you detect outliers?
+9. Why is data type validation important during EDA?
+10. How would you summarize a new dataset?
+
+---
+
+## Advanced
+
+11. Design a complete EDA workflow for a retail dataset.
+12. How would you perform EDA on a dataset with 100 million rows?
+13. Explain how EDA supports machine learning projects.
+14. How would you automate EDA reporting?
+15. What are the most common mistakes analysts make during EDA?
+
+---
+
+# 24. Cheat Sheet
+
+| Task               | Syntax               |
+| ------------------ | -------------------- |
+| First Rows         | `head()`             |
+| Last Rows          | `tail()`             |
+| Random Sample      | `sample()`           |
+| Shape              | `shape`              |
+| Data Types         | `dtypes`             |
+| Dataset Info       | `info()`             |
+| Summary Statistics | `describe()`         |
+| Missing Values     | `isna().sum()`       |
+| Duplicates         | `duplicated().sum()` |
+| Correlation        | `corr()`             |
+| Value Counts       | `value_counts()`     |
+| Quantiles          | `quantile()`         |
+
+---
+
+# 25. Mini Project
+
+## Complete Exploratory Data Analysis Report
+
+Using any retail, banking, healthcare, HR, telecom, logistics, or e-commerce dataset:
+
+Complete the following tasks:
+
+* Inspect dataset structure.
+* Validate data types.
+* Analyze missing values.
+* Detect duplicate records.
+* Generate descriptive statistics.
+* Analyze numerical distributions.
+* Perform correlation analysis.
+* Detect outliers.
+* Build an automated EDA summary.
+* Document **five executive-level business insights**.
+* Recommend **three areas for further investigation**.
+
+### Example Business Insights
+
+* Revenue is concentrated among a relatively small number of products.
+* Certain regions consistently outperform others in sales.
+* Missing values are minimal and unlikely to significantly affect overall analysis.
+* Profit margins vary considerably across product categories.
+* Strong relationships between selected business metrics suggest opportunities for targeted optimization.
+
+---
+
+# 26. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Advanced Exploratory Data Analysis (EDA)** with Pandas.
+
+You learned how to:
+
+* Explore new datasets systematically.
+* Assess data quality.
+* Analyze missing values and duplicates.
+* Generate descriptive statistics.
+* Perform univariate and bivariate analysis.
+* Measure correlations.
+* Detect outliers.
+* Automate EDA reporting.
+
+These techniques form the foundation of every successful analytics, visualization, and machine learning project.
+
+---
+
+# 27. What's Next?
+
+In **Day 38**, you'll learn **Advanced Data Aggregation & Business Analytics**.
+
+Topics include:
+
+* Advanced `groupby()` techniques
+* Multi-level aggregation
+* Custom aggregation functions
+* Pivot tables vs GroupBy
+* Cohort analysis
+* Customer segmentation
+* Business KPI calculations
+* Funnel analysis
+* Sales performance analytics
+* Executive reporting
+
+These techniques are widely used in business intelligence, financial reporting, customer analytics, and executive dashboards.
+
+---
+
+<div align="center">
+
+# Day 37 Complete!
+
+You've mastered **Exploratory Data Analysis (EDA)**, one of the most valuable skills for every Data Analyst and Data Scientist.
+
+By systematically exploring data before reporting or modeling, you can identify issues early, uncover meaningful business patterns, and build more reliable analytical solutions.
+
+ **Next → Day 38: Advanced Data Aggregation & Business Analytics** 
+
+</div>
