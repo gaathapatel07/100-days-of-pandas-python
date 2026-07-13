@@ -1,4 +1,4 @@
-# 🐼 Day 39 — Advanced Missing Data Handling & Data Cleaning Strategies
+# Day 39 — Advanced Missing Data Handling & Data Cleaning Strategies
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+# Table of Contents
 
 1. Introduction
 2. Understanding Missing Data
