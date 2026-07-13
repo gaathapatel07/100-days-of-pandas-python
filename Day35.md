@@ -343,3 +343,338 @@ After completing this section, you should understand:
 * How efficient data types enable faster analytics.
 
 > **"Performance optimization begins with understanding how data is stored. Efficient data types reduce memory usage, improve execution speed, and make large-scale analytics practical."**
+
+# 8. Vectorization vs Loops
+
+One of the biggest performance advantages of Pandas is **vectorization**.
+
+Instead of processing one row at a time, vectorized operations process entire columns at once.
+
+---
+
+## ❌ Using a Loop
+
+```python id="loop01"
+for i in range(len(df)):
+    df.loc[i, "Revenue"] = (
+        df.loc[i, "Quantity"] *
+        df.loc[i, "Price"]
+    )
+```
+
+This is slow because every iteration accesses the DataFrame individually.
+
+---
+
+## ✅ Vectorized Approach
+
+```python id="vector01"
+df["Revenue"] = (
+    df["Quantity"] *
+    df["Price"]
+)
+```
+
+Advantages:
+
+* Faster execution
+* Cleaner code
+* Lower overhead
+* Better scalability
+
+---
+
+# 9. `apply()` vs Vectorized Operations
+
+`apply()` is useful for custom logic but is usually slower than built-in vectorized operations.
+
+---
+
+## Using `apply()`
+
+```python id="apply01"
+df["Tax"] = (
+    df["Sales"]
+      .apply(
+          lambda x: x * 0.18
+      )
+)
+```
+
+---
+
+## Preferred Vectorized Version
+
+```python id="apply02"
+df["Tax"] = (
+    df["Sales"] * 0.18
+)
+```
+
+Whenever possible, prefer built-in arithmetic and string methods.
+
+---
+
+# 10. Efficient Filtering with `query()`
+
+Instead of:
+
+```python id="query01"
+filtered = df[
+    (df["Sales"] > 5000)
+    &
+    (df["Region"] == "North")
+]
+```
+
+Use:
+
+```python id="query02"
+filtered = df.query(
+    "Sales > 5000 and Region == 'North'"
+)
+```
+
+Benefits:
+
+* Cleaner syntax
+* Easier to read
+* Can be faster for complex filtering
+
+---
+
+# 11. Faster Calculations with `eval()`
+
+Suppose you want to calculate revenue.
+
+Traditional approach:
+
+```python id="eval01"
+df["Revenue"] = (
+    df["Quantity"] *
+    df["Price"]
+)
+```
+
+Using `eval()`:
+
+```python id="eval02"
+df.eval(
+    "Revenue = Quantity * Price",
+    inplace=True
+)
+```
+
+Advantages:
+
+* Reduced temporary objects
+* Lower memory usage
+* Faster on large DataFrames
+
+---
+
+# 12. Chunk Processing
+
+Very large datasets may not fit into memory.
+
+Process them in smaller chunks.
+
+```python id="chunk01"
+chunks = pd.read_csv(
+    "large_sales.csv",
+    chunksize=50000
+)
+
+for chunk in chunks:
+
+    print(
+        chunk.shape
+    )
+```
+
+Each chunk is processed independently.
+
+Example workflow:
+
+```python id="chunk02"
+total_sales = 0
+
+for chunk in pd.read_csv(
+    "large_sales.csv",
+    chunksize=50000
+):
+
+    total_sales += (
+        chunk["Sales"].sum()
+    )
+
+print(total_sales)
+```
+
+This approach allows processing datasets much larger than available RAM.
+
+---
+
+# 13. Sparse Data Structures
+
+Some datasets contain many repeated or missing values.
+
+Example:
+
+| Customer | Coupon Used |
+| -------- | ----------- |
+| A        | 0           |
+| B        | 0           |
+| C        | 0           |
+| D        | 1           |
+| E        | 0           |
+
+Convert to sparse storage.
+
+```python id="sparse01"
+df["Coupon Used"] = (
+    df["Coupon Used"]
+      .astype(
+          "Sparse[int]"
+      )
+)
+```
+
+Sparse arrays reduce memory consumption when most values are identical or missing.
+
+---
+
+# 14. Performance Benchmarking
+
+Measure execution time using the `time` module.
+
+```python id="bench01"
+import time
+
+start = time.time()
+
+df["Revenue"] = (
+    df["Quantity"] *
+    df["Price"]
+)
+
+end = time.time()
+
+print(
+    end - start
+)
+```
+
+For Jupyter Notebook users:
+
+```python id="bench02"
+%%time
+
+df["Revenue"] = (
+    df["Quantity"] *
+    df["Price"]
+)
+```
+
+This displays execution time directly.
+
+---
+
+# 15. Comparing Common Approaches
+
+| Task               | Slower               | Faster           |
+| ------------------ | -------------------- | ---------------- |
+| Row calculations   | Loops                | Vectorization    |
+| Filtering          | Boolean indexing     | `query()`        |
+| Column expressions | Multiple assignments | `eval()`         |
+| Large files        | Read all at once     | Chunk processing |
+| Repeated strings   | Object               | Category         |
+| Sparse values      | Dense arrays         | Sparse arrays    |
+
+---
+
+# Business Example
+
+A banking institution processes **100 million transactions** every month.
+
+Instead of:
+
+* Reading the entire file
+* Using loops
+* Storing repeated strings
+
+The engineering team:
+
+* Reads data in chunks.
+* Uses vectorized calculations.
+* Converts categorical columns.
+* Uses `query()` for filtering.
+* Benchmarks every optimization.
+
+As a result, processing time is significantly reduced while memory usage remains manageable.
+
+---
+
+# Best Practices
+
+✔ Prefer vectorized operations over loops.
+
+✔ Use `query()` for complex filtering.
+
+✔ Use `eval()` for large mathematical expressions.
+
+✔ Process massive datasets in chunks.
+
+✔ Benchmark performance before and after optimization.
+
+---
+
+# Common Mistakes
+
+### Overusing `apply()`
+
+`apply()` is powerful but not always the fastest option.
+
+Always check if a vectorized alternative exists.
+
+---
+
+### Reading Gigantic Files Into Memory
+
+Instead of:
+
+```python id="mistake01"
+pd.read_csv(
+    "huge_file.csv"
+)
+```
+
+Prefer:
+
+```python id="mistake02"
+chunksize=50000
+```
+
+---
+
+### Benchmarking Small Datasets
+
+Optimization benefits become noticeable mainly on medium and large datasets.
+
+Always benchmark with representative data sizes.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+* Replace loops with vectorized operations.
+* Compare `apply()` and vectorization.
+* Filter efficiently using `query()`.
+* Compute expressions using `eval()`.
+* Process large datasets in chunks.
+* Use sparse data structures.
+* Benchmark Pandas performance.
+
+> **"Efficient Pandas code is not just about writing fewer lines—it is about processing more data with less memory and in less time."**
