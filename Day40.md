@@ -1,4 +1,4 @@
-# 🐼 Day 40 — Advanced Time Series Analysis with Pandas
+#  Day 40 — Advanced Time Series Analysis with Pandas
 
 <div align="center">
 
@@ -16,7 +16,7 @@
 
 ---
 
-# 📚 Table of Contents
+#  Table of Contents
 
 1. Introduction
 2. What is Time Series Data?
@@ -1154,14 +1154,13 @@ These techniques are essential for building real-world data pipelines that colle
 
 ---
 
+
 <div align="center">
 
-# 🎉 Day 40 Complete!
+# Day 40 Complete!
 
 You've mastered **Advanced Time Series Analysis**, giving you the skills to analyze trends, seasonality, growth, and forecasting-ready data.
 
 By combining time-based filtering, rolling statistics, lag features, and resampling, you're now equipped to work with real-world business time-series datasets.
-
-⭐ **Next → Day 41: Advanced File Handling & Data Integration** 📁🐼
 
 </div>
