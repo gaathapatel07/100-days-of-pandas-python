@@ -1094,12 +1094,11 @@ Mastering EDA will help you discover patterns, detect anomalies, and prepare dat
 
 <div align="center">
 
-# 🎉 Day 36 Complete!
+# Day 36 Complete!
 
 You've mastered **Advanced Visualization with Pandas**, giving you the ability to transform complex datasets into clear, actionable visual stories.
 
 By combining efficient analysis with effective visualization, you're now equipped to communicate insights that support data-driven decision-making.
 
-⭐ **Next → Day 37: Advanced Exploratory Data Analysis (EDA) with Pandas** 🔍📊🐼
 
 </div>
