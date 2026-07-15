@@ -1,6 +1,6 @@
-# 🐼 Day 45 — Advanced Feature Engineering with Pandas
+# Day 45 — Advanced Feature Engineering with Pandas
 
-## 📖 Introduction
+## Introduction
 
 Feature Engineering is the process of creating new input variables (features) from raw data to improve analytical insights and machine learning model performance.
 
@@ -10,7 +10,7 @@ Feature engineering combines domain knowledge with data transformation technique
 
 ---
 
-# 📚 Topics Covered
+#  Topics Covered
 
 - What is Feature Engineering?
 - Why Feature Engineering Matters
@@ -310,7 +310,7 @@ After completing this section, you should understand:
 
 ---
 
-## Next (Day 45 – Part 2)
+
 
 The next section covers:
 
@@ -323,7 +323,7 @@ The next section covers:
 - Rolling Features
 - Advanced Feature Engineering# 🐼 Day 45 — Advanced Feature Engineering with Pandas
 
-## 📖 Introduction
+## ntroduction
 
 Feature Engineering is the process of creating new input variables (features) from raw data to improve analytical insights and machine learning model performance.
 
