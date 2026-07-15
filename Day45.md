@@ -323,7 +323,7 @@ The next section covers:
 - Rolling Features
 - Advanced Feature Engineering# Day 45 — Advanced Feature Engineering with Pandas
 
-## ntroduction
+## Introduction
 
 Feature Engineering is the process of creating new input variables (features) from raw data to improve analytical insights and machine learning model performance.
 
