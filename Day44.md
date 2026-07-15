@@ -1085,7 +1085,7 @@ Complete the following tasks:
 
 # 26. Summary
 
-Congratulations! 🎉
+Congratulations! 
 
 Today you mastered **Advanced Data Validation & Quality Assurance**.
 
