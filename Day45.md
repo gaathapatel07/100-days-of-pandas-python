@@ -645,3 +645,417 @@ The next section covers:
 - Group-Based Features
 - Rolling Features
 - Advanced Feature Engineering
+
+# 8. One-Hot Encoding
+
+Machine Learning algorithms cannot directly process categorical variables.
+
+One-Hot Encoding converts each category into a separate binary column.
+
+Example Dataset
+
+| City |
+|------|
+|Delhi|
+|Mumbai|
+|Delhi|
+|Pune|
+
+Apply One-Hot Encoding.
+
+```python
+encoded = pd.get_dummies(
+    df,
+    columns=["City"]
+)
+```
+
+Output
+
+| City_Delhi | City_Mumbai | City_Pune |
+|------------|------------|-----------|
+|1|0|0|
+|0|1|0|
+|1|0|0|
+|0|0|1|
+
+---
+
+# 9. Label Encoding
+
+Instead of creating multiple columns, Label Encoding assigns an integer to each category.
+
+```python
+from sklearn.preprocessing import LabelEncoder
+
+encoder = LabelEncoder()
+
+df["Department"] = encoder.fit_transform(
+    df["Department"]
+)
+```
+
+Example
+
+| Department | Encoded |
+|------------|--------:|
+|HR|0|
+|IT|1|
+|Sales|2|
+
+**Use Label Encoding only when the encoded numbers do not imply an incorrect ordering or when the model can handle categorical labels appropriately.**
+
+---
+
+# 10. Binning (Discretization)
+
+Continuous variables can be divided into groups.
+
+Example:
+
+```python
+df["Age Group"] = pd.cut(
+
+    df["Age"],
+
+    bins=[0,18,35,60,100],
+
+    labels=[
+        "Child",
+        "Young Adult",
+        "Adult",
+        "Senior"
+    ]
+
+)
+```
+
+Output
+
+| Age | Age Group |
+|----:|-----------|
+|16|Child|
+|24|Young Adult|
+|48|Adult|
+|72|Senior|
+
+---
+
+## Equal Frequency Binning
+
+```python
+df["Income Group"] = pd.qcut(
+
+    df["Income"],
+
+    q=4,
+
+    labels=[
+        "Low",
+        "Medium",
+        "High",
+        "Very High"
+    ]
+
+)
+```
+
+Useful when each bin should contain roughly the same number of observations.
+
+---
+
+# 11. Interaction Features
+
+Interaction features combine two or more variables.
+
+Example:
+
+```python
+df["Sales_per_Customer"] = (
+
+    df["Sales"]
+
+    /
+
+    df["Customers"]
+
+)
+```
+
+Revenue per employee.
+
+```python
+df["Revenue_per_Employee"] = (
+
+    df["Revenue"]
+
+    /
+
+    df["Employees"]
+
+)
+```
+
+These features often provide more useful information than the original variables alone.
+
+---
+
+# 12. Polynomial Features
+
+Polynomial features capture non-linear relationships.
+
+Example:
+
+```python
+from sklearn.preprocessing import PolynomialFeatures
+
+poly = PolynomialFeatures(
+    degree=2,
+    include_bias=False
+)
+
+new_features = poly.fit_transform(
+
+    df[["Sales"]]
+
+)
+```
+
+Generated features:
+
+- Sales
+- Sales²
+
+For two variables (Sales, Profit), the output includes:
+
+- Sales
+- Profit
+- Sales²
+- Sales × Profit
+- Profit²
+
+Polynomial features are useful when relationships are non-linear.
+
+---
+
+# 13. Group-Based Features
+
+Features can be created using grouped statistics.
+
+Average sales by region.
+
+```python
+df["Regional Average"] = (
+
+    df.groupby("Region")["Sales"]
+
+      .transform("mean")
+
+)
+```
+
+Maximum salary by department.
+
+```python
+df["Department Max Salary"] = (
+
+    df.groupby("Department")["Salary"]
+
+      .transform("max")
+
+)
+```
+
+Median order value.
+
+```python
+df["Median Order"] = (
+
+    df.groupby("Category")["Revenue"]
+
+      .transform("median")
+
+)
+```
+
+These features provide contextual information.
+
+---
+
+# 14. Rolling Features
+
+Useful for time-series forecasting.
+
+7-day moving average.
+
+```python
+df["Sales MA 7"] = (
+
+    df["Sales"]
+
+      .rolling(7)
+
+      .mean()
+
+)
+```
+
+30-day rolling maximum.
+
+```python
+df["Rolling Max"] = (
+
+    df["Sales"]
+
+      .rolling(30)
+
+      .max()
+
+)
+```
+
+Cumulative sales.
+
+```python
+df["Cumulative Sales"] = (
+
+    df["Sales"]
+
+      .cumsum()
+
+)
+```
+
+Rolling features help capture trends over time.
+
+---
+
+# 15. Advanced Feature Engineering Pipeline
+
+```python
+df = (
+
+    df
+
+    .assign(
+
+        Profit=lambda x:
+
+            x["Revenue"] - x["Cost"],
+
+        Profit_Margin=lambda x:
+
+            (
+                x["Profit"]
+
+                /
+
+                x["Revenue"]
+
+            ) * 100,
+
+        Average_Price=lambda x:
+
+            x["Revenue"]
+
+            /
+
+            x["Quantity"]
+
+    )
+
+)
+```
+
+This pipeline creates multiple useful business features in a single step.
+
+---
+
+# Business Example
+
+An online shopping platform wants to predict customer spending.
+
+The analytics team creates:
+
+- Profit
+- Profit Margin
+- Average Selling Price
+- Customer Age Group
+- Purchase Month
+- Weekend Purchase Indicator
+- Regional Average Spending
+- Customer Lifetime Revenue
+
+These engineered features significantly improve prediction accuracy.
+
+---
+
+# Best Practices
+
+✔ Create features with business value.
+
+✔ Use meaningful feature names.
+
+✔ Normalize or scale numerical variables when required.
+
+✔ Avoid highly correlated or redundant features.
+
+✔ Document every engineered feature.
+
+---
+
+# Common Mistakes
+
+### One-Hot Encoding High-Cardinality Columns
+
+Columns with thousands of unique values (e.g., Customer IDs) create too many new columns.
+
+---
+
+### Data Leakage
+
+Never create features using information from the future.
+
+Example:
+
+Using next month's sales to predict today's sales.
+
+---
+
+### Overengineering
+
+Adding too many unnecessary features can increase model complexity without improving performance.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+- Apply One-Hot Encoding.
+- Use Label Encoding.
+- Create bins from continuous variables.
+- Build interaction features.
+- Generate polynomial features.
+- Create group-based features.
+- Generate rolling features.
+- Build feature engineering pipelines.
+
+> **"Good feature engineering transforms raw data into meaningful business intelligence, allowing machine learning models to learn richer patterns and produce better predictions."**
+
+---
+
+## Next (Day 45 – Final Part)
+
+The final section will cover:
+
+- Enterprise Feature Engineering Architecture
+- Automated Feature Pipelines
+- Feature Selection
+- Production Best Practices
+- Interview Questions (20+)
+- Practice Exercises
+- Cheat Sheet
+- Mini Project
+- Executive Business Insights
+- Complete Day 45 Summary
