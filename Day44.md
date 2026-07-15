@@ -342,3 +342,413 @@ The next section covers:
 - Business rule validation
 - Automated quality reports
 - Enterprise validation techniques
+
+# 8. Constraint Validation
+
+Constraint validation ensures that relationships between columns follow business rules.
+
+Example:
+
+Revenue should equal Quantity × Price.
+
+```python
+invalid = df[
+    df["Revenue"] !=
+    df["Quantity"] * df["Price"]
+]
+```
+
+Another example:
+
+Delivery Date should never be earlier than Order Date.
+
+```python
+invalid = df[
+    df["Delivery Date"] <
+    df["Order Date"]
+]
+```
+
+Applications:
+
+- Banking transactions
+- E-commerce orders
+- Payroll systems
+- Inventory management
+
+---
+
+# 9. Duplicate Detection
+
+Duplicate records often cause incorrect KPIs and inaccurate reports.
+
+Count duplicate rows.
+
+```python
+df.duplicated().sum()
+```
+
+Display duplicate records.
+
+```python
+duplicates = df[
+    df.duplicated(
+        keep=False
+    )
+]
+```
+
+Remove duplicates.
+
+```python
+df = df.drop_duplicates()
+```
+
+---
+
+## Duplicate Based on Selected Columns
+
+Sometimes only certain columns determine uniqueness.
+
+```python
+duplicates = df[
+    df.duplicated(
+        subset=[
+            "Customer ID",
+            "Order Date"
+        ],
+        keep=False
+    )
+]
+```
+
+---
+
+# 10. Uniqueness Validation
+
+Primary keys should always be unique.
+
+Check uniqueness.
+
+```python
+df["Customer ID"].is_unique
+```
+
+Returns:
+
+```text
+True
+```
+
+or
+
+```text
+False
+```
+
+Find duplicate IDs.
+
+```python
+duplicate_ids = df[
+    df["Customer ID"].duplicated(
+        keep=False
+    )
+]
+```
+
+---
+
+# 11. Referential Integrity
+
+Referential integrity ensures that related tables remain consistent.
+
+Example:
+
+### Customers Table
+
+| Customer ID |
+|------------:|
+|101|
+|102|
+|103|
+
+### Orders Table
+
+| Customer ID |
+|------------:|
+|101|
+|102|
+|104|
+
+Customer **104** does not exist.
+
+Detect invalid references.
+
+```python
+invalid = orders[
+    ~orders["Customer ID"].isin(
+        customers["Customer ID"]
+    )
+]
+```
+
+This identifies orphan records.
+
+---
+
+# 12. Regular Expression Validation
+
+Regex validates text patterns.
+
+## Validate Email
+
+```python
+pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
+
+valid = df["Email"].str.match(
+    pattern
+)
+```
+
+---
+
+## Validate Phone Number
+
+Exactly 10 digits.
+
+```python
+pattern = r"^\d{10}$"
+
+valid = df["Phone"].str.match(
+    pattern
+)
+```
+
+---
+
+## Validate PIN Code
+
+Exactly 6 digits.
+
+```python
+pattern = r"^\d{6}$"
+
+valid = df["PIN Code"].str.match(
+    pattern
+)
+```
+
+---
+
+# 13. Business Rule Validation
+
+Business rules vary across industries.
+
+Examples:
+
+### Salary Cannot Be Negative
+
+```python
+invalid = df[
+    df["Salary"] < 0
+]
+```
+
+---
+
+### Attendance Percentage
+
+```python
+invalid = df[
+    ~df["Attendance"].between(
+        0,
+        100
+    )
+]
+```
+
+---
+
+### Stock Quantity
+
+```python
+invalid = df[
+    df["Stock"] < 0
+]
+```
+
+---
+
+# 14. Automated Data Quality Report
+
+Generate an overall quality report.
+
+```python
+quality_report = {
+
+    "Rows":
+    len(df),
+
+    "Missing Values":
+    df.isna().sum().sum(),
+
+    "Duplicate Rows":
+    df.duplicated().sum(),
+
+    "Negative Revenue":
+    (
+        df["Revenue"] < 0
+    ).sum(),
+
+    "Duplicate Customers":
+    (
+        df["Customer ID"]
+        .duplicated()
+        .sum()
+    )
+
+}
+
+report = pd.DataFrame(
+
+    quality_report.items(),
+
+    columns=[
+        "Metric",
+        "Value"
+    ]
+
+)
+
+print(report)
+```
+
+Example Output
+
+| Metric | Value |
+|---------|------:|
+|Rows|50000|
+|Missing Values|18|
+|Duplicate Rows|5|
+|Negative Revenue|2|
+|Duplicate Customers|3|
+
+---
+
+# 15. Enterprise Validation Workflow
+
+```
+Raw Dataset
+      │
+      ▼
+Schema Validation
+      │
+      ▼
+Data Type Validation
+      │
+      ▼
+Missing Value Check
+      │
+      ▼
+Range Validation
+      │
+      ▼
+Constraint Validation
+      │
+      ▼
+Duplicate Detection
+      │
+      ▼
+Referential Integrity
+      │
+      ▼
+Generate QA Report
+      │
+      ▼
+Validated Dataset
+```
+
+---
+
+# Business Example
+
+A banking company validates daily transaction files.
+
+Checks performed:
+
+- Required columns exist.
+- Account numbers are unique.
+- Transaction amount is positive.
+- Customer IDs exist in the master database.
+- Transaction dates are valid.
+- Duplicate transactions are removed.
+- Invalid email and phone formats are flagged.
+
+Only validated records are loaded into the production database.
+
+---
+
+# Best Practices
+
+✔ Validate primary keys.
+
+✔ Check referential integrity before joins.
+
+✔ Validate business rules before reporting.
+
+✔ Automate quality reports.
+
+✔ Log validation failures for auditing.
+
+---
+
+# Common Mistakes
+
+### Ignoring Duplicate Primary Keys
+
+Duplicate IDs can cause incorrect joins and inaccurate reporting.
+
+---
+
+### Skipping Referential Integrity
+
+Missing foreign keys create orphan records and inconsistent analyses.
+
+---
+
+### Hardcoding Validation Logic
+
+Store validation rules in reusable functions or configuration files whenever possible.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+- Perform constraint validation.
+- Detect duplicate records.
+- Validate uniqueness.
+- Check referential integrity.
+- Validate text using regex.
+- Build automated quality reports.
+- Design enterprise validation workflows.
+
+> **"Data quality is built through systematic validation. Automated validation pipelines ensure that every downstream analysis starts with reliable and trustworthy data."**
+
+---
+
+
+
+The final section will cover:
+
+- Enterprise QA architecture
+- Automated validation framework
+- Data quality metrics
+- Production best practices
+- Interview questions (20+)
+- Practice exercises
+- Cheat sheet
+- Mini project
+- Executive business insights
+- Complete Day 44 summary
