@@ -1173,7 +1173,7 @@ Complete the following tasks:
 
 # 30. Summary
 
-Congratulations! 🎉
+Congratulations!
 
 Today you mastered **Advanced Exploratory Data Analysis (EDA) with Pandas**.
 
@@ -1196,7 +1196,7 @@ These skills are fundamental for Data Analytics, Business Intelligence, Data Sci
 
 # 31. What's Next?
 
-## 🐼 Day 47 — Advanced Data Visualization with Pandas & Matplotlib
+## Day 47 — Advanced Data Visualization with Pandas & Matplotlib
 
 Topics include:
 
@@ -1216,10 +1216,9 @@ Effective visualizations help communicate insights clearly and support better bu
 
 ---
 
-# 🎉 Day 46 Complete!
+# Day 46 Complete!
 
 You have successfully completed **Advanced Exploratory Data Analysis (EDA) with Pandas**.
 
 You can now confidently explore unknown datasets, uncover meaningful patterns, generate executive-level insights, and prepare high-quality data for analytics and machine learning.
 
-⭐ **Next → Day 47: Advanced Data Visualization with Pandas & Matplotlib** 📊🐼
