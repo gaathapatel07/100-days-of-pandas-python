@@ -1,12 +1,12 @@
-# 🐼 Day 43 — Advanced Performance Optimization & Memory Management in Pandas
+# Day 43 — Advanced Performance Optimization & Memory Management in Pandas
 
-## 📖 Introduction
+## Introduction
 
 As datasets grow larger, inefficient Pandas code can become slow and memory-intensive. Performance optimization techniques help process millions of rows efficiently while reducing memory consumption.
 
 ---
 
-# 📚 Topics Covered
+# Topics Covered
 
 - Memory Profiling
 - Optimizing Data Types
