@@ -1,6 +1,6 @@
-# 🐼 Day 46 — Advanced Exploratory Data Analysis (EDA) with Pandas
+# Day 46 — Advanced Exploratory Data Analysis (EDA) with Pandas
 
-## 📖 Introduction
+## Introduction
 
 Exploratory Data Analysis (EDA) is the process of analyzing datasets to understand their structure, identify patterns, detect anomalies, discover relationships, and generate business insights before building statistical or machine learning models.
 
@@ -8,7 +8,7 @@ EDA is one of the most important phases of every Data Analytics and Data Science
 
 ---
 
-# 📚 Topics Covered
+# Topics Covered
 
 - What is EDA?
 - Why EDA Matters
@@ -386,7 +386,7 @@ After completing this section, you should understand:
 
 ---
 
-## Next (Day 46 – Part 2)
+
 
 The next section covers:
 
