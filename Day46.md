@@ -398,3 +398,413 @@ The next section covers:
 - Time-based EDA
 - Automated Insight Generation
 - Business KPI Analysis
+
+# 12. GroupBy Analysis
+
+Grouping helps summarize data by categories.
+
+Calculate total sales by region.
+
+```python
+df.groupby("Region")["Sales"].sum()
+```
+
+Average sales by region.
+
+```python
+df.groupby("Region")["Sales"].mean()
+```
+
+Maximum revenue by department.
+
+```python
+df.groupby("Department")["Revenue"].max()
+```
+
+Multiple aggregations.
+
+```python
+df.groupby("Region").agg({
+
+    "Sales": ["sum", "mean", "max"],
+
+    "Profit": ["sum", "mean"]
+
+})
+```
+
+Example Output
+
+| Region | Total Sales | Average Sales |
+|---------|------------:|--------------:|
+|North|250000|5200|
+|South|210000|4900|
+|East|180000|4700|
+|West|300000|5600|
+
+---
+
+# 13. Pivot Tables
+
+Pivot tables summarize large datasets efficiently.
+
+Total revenue by region.
+
+```python
+pd.pivot_table(
+
+    df,
+
+    values="Revenue",
+
+    index="Region",
+
+    aggfunc="sum"
+
+)
+```
+
+Multiple aggregations.
+
+```python
+pd.pivot_table(
+
+    df,
+
+    values="Sales",
+
+    index="Region",
+
+    columns="Category",
+
+    aggfunc="mean"
+
+)
+```
+
+Example Output
+
+| Region | Electronics | Clothing |
+|---------|------------:|----------:|
+|North|5800|4200|
+|South|5300|3900|
+
+---
+
+# 14. Crosstab Analysis
+
+Crosstabs analyze relationships between categorical variables.
+
+```python
+pd.crosstab(
+
+    df["Gender"],
+
+    df["Purchased"]
+
+)
+```
+
+Percentage table.
+
+```python
+pd.crosstab(
+
+    df["Gender"],
+
+    df["Purchased"],
+
+    normalize="index"
+
+) * 100
+```
+
+Example Output
+
+| Gender | Yes | No |
+|---------|----:|---:|
+|Male|62%|38%|
+|Female|57%|43%|
+
+---
+
+# 15. Multi-Level Aggregation
+
+Aggregate using multiple grouping variables.
+
+```python
+df.groupby(
+
+    ["Region", "Category"]
+
+).agg(
+
+    Revenue=("Revenue", "sum"),
+
+    Profit=("Profit", "mean"),
+
+    Orders=("Order ID", "count")
+
+)
+```
+
+This provides deeper insights across multiple business dimensions.
+
+---
+
+# 16. Feature Relationship Analysis
+
+Analyze relationships between variables.
+
+Revenue vs Profit correlation.
+
+```python
+df[
+
+    ["Revenue", "Profit"]
+
+].corr()
+```
+
+Covariance.
+
+```python
+df[
+
+    ["Sales", "Profit"]
+
+].cov()
+```
+
+Strong correlations may indicate important business relationships.
+
+---
+
+# 17. Time-Based EDA
+
+Convert date column.
+
+```python
+df["Order Date"] = pd.to_datetime(
+    df["Order Date"]
+)
+```
+
+Monthly sales.
+
+```python
+monthly_sales = (
+
+    df.groupby(
+
+        df["Order Date"].dt.month
+
+    )["Sales"]
+
+      .sum()
+
+)
+```
+
+Weekday sales.
+
+```python
+weekday_sales = (
+
+    df.groupby(
+
+        df["Order Date"].dt.day_name()
+
+    )["Sales"]
+
+      .mean()
+
+)
+```
+
+Quarterly revenue.
+
+```python
+quarterly = (
+
+    df.groupby(
+
+        df["Order Date"].dt.quarter
+
+    )["Revenue"]
+
+      .sum()
+
+)
+```
+
+These analyses reveal seasonal trends.
+
+---
+
+# 18. Business KPI Analysis
+
+Calculate Total Revenue.
+
+```python
+df["Revenue"].sum()
+```
+
+Average Order Value.
+
+```python
+df["Revenue"].mean()
+```
+
+Highest Revenue.
+
+```python
+df["Revenue"].max()
+```
+
+Total Orders.
+
+```python
+len(df)
+```
+
+Unique Customers.
+
+```python
+df["Customer ID"].nunique()
+```
+
+Revenue per Customer.
+
+```python
+df["Revenue"].sum() / df["Customer ID"].nunique()
+```
+
+---
+
+# 19. Automated Insight Generation
+
+Generate quick summary statistics.
+
+```python
+summary = {
+
+    "Rows": len(df),
+
+    "Columns": len(df.columns),
+
+    "Missing Values": df.isna().sum().sum(),
+
+    "Duplicate Rows": df.duplicated().sum(),
+
+    "Average Revenue": df["Revenue"].mean(),
+
+    "Maximum Revenue": df["Revenue"].max(),
+
+    "Unique Customers": df["Customer ID"].nunique()
+
+}
+
+report = pd.DataFrame(
+
+    summary.items(),
+
+    columns=["Metric", "Value"]
+
+)
+```
+
+Example Output
+
+| Metric | Value |
+|---------|-------|
+|Rows|50000|
+|Columns|12|
+|Missing Values|15|
+|Duplicate Rows|2|
+|Average Revenue|5250|
+|Maximum Revenue|75000|
+|Unique Customers|8400|
+
+---
+
+# 20. Business Example
+
+A supermarket chain performs EDA before launching a marketing campaign.
+
+Analysts discover:
+
+- Weekend sales are 28% higher than weekday sales.
+- Electronics generate the highest average revenue.
+- The West region contributes the highest profit.
+- A small number of customers account for a large share of revenue.
+- Missing values occur mainly in optional customer profile fields.
+
+These insights help management optimize promotions, staffing, and inventory.
+
+---
+
+# Best Practices
+
+✔ Explore every variable before modeling.
+
+✔ Compare categories using GroupBy.
+
+✔ Use Pivot Tables for multidimensional summaries.
+
+✔ Generate KPIs automatically.
+
+✔ Document important business insights.
+
+---
+
+# Common Mistakes
+
+### Ignoring Category-Level Analysis
+
+Different categories often behave differently.
+
+---
+
+### Looking Only at Overall Totals
+
+Analyze data by region, department, product, or customer segment.
+
+---
+
+### Ignoring Time Trends
+
+Many business metrics vary across months, quarters, and weekdays.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+- Perform GroupBy analysis.
+- Build Pivot Tables.
+- Create Crosstabs.
+- Perform multi-level aggregations.
+- Analyze feature relationships.
+- Conduct time-based EDA.
+- Calculate business KPIs.
+- Generate automated insight reports.
+
+> **"EDA transforms raw numbers into business understanding. Every aggregation, comparison, and trend tells a story that supports better decisions."**
+
+---
+
+## Next (Day 46 – Final Part)
+
+The final section will cover:
+
+- Enterprise EDA Workflow
+- Automated EDA Pipelines
+- Production Best Practices
+- Interview Questions (20+)
+- Practice Exercises
+- Cheat Sheet
+- Mini Project
+- Executive Business Insights
+- Complete Day 46 Summary
