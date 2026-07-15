@@ -321,7 +321,7 @@ The next section covers:
 - Polynomial Features
 - Group-Based Features
 - Rolling Features
-- Advanced Feature Engineering# 🐼 Day 45 — Advanced Feature Engineering with Pandas
+- Advanced Feature Engineering# Day 45 — Advanced Feature Engineering with Pandas
 
 ## ntroduction
 
@@ -333,7 +333,7 @@ Feature engineering combines domain knowledge with data transformation technique
 
 ---
 
-# 📚 Topics Covered
+# Topics Covered
 
 - What is Feature Engineering?
 - Why Feature Engineering Matters
@@ -633,7 +633,7 @@ After completing this section, you should understand:
 
 ---
 
-## Next (Day 45 – Part 2)
+
 
 The next section covers:
 
