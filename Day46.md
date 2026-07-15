@@ -808,3 +808,418 @@ The final section will cover:
 - Mini Project
 - Executive Business Insights
 - Complete Day 46 Summary
+
+# 21. Enterprise EDA Workflow
+
+Professional organizations follow a structured Exploratory Data Analysis workflow before building dashboards or machine learning models.
+
+```
+Raw Dataset
+      │
+      ▼
+Data Import
+      │
+      ▼
+Data Cleaning
+      │
+      ▼
+Data Validation
+      │
+      ▼
+Missing Value Analysis
+      │
+      ▼
+Statistical Profiling
+      │
+      ▼
+Univariate Analysis
+      │
+      ▼
+Bivariate Analysis
+      │
+      ▼
+Multivariate Analysis
+      │
+      ▼
+Business KPI Analysis
+      │
+      ▼
+Business Insights
+      │
+      ▼
+Reporting / Machine Learning
+```
+
+A structured workflow ensures consistent, reproducible, and reliable analysis.
+
+---
+
+# 22. Automated EDA Pipeline
+
+Instead of repeating the same analysis for every dataset, create a reusable EDA function.
+
+```python
+def perform_eda(df):
+
+    report = {
+
+        "Rows": len(df),
+
+        "Columns": len(df.columns),
+
+        "Missing Values":
+        df.isna().sum().sum(),
+
+        "Duplicate Rows":
+        df.duplicated().sum(),
+
+        "Memory Usage (MB)":
+        round(
+            df.memory_usage(deep=True).sum()
+            / 1024**2,
+            2
+        )
+
+    }
+
+    return pd.DataFrame(
+
+        report.items(),
+
+        columns=[
+            "Metric",
+            "Value"
+        ]
+
+    )
+```
+
+Run the pipeline.
+
+```python
+eda_report = perform_eda(df)
+
+print(eda_report)
+```
+
+---
+
+# 23. Production Best Practices
+
+### Understand the Business Problem
+
+EDA should answer business questions rather than simply producing statistics.
+
+---
+
+### Explore Every Variable
+
+Review both:
+
+- Numerical variables
+- Categorical variables
+
+Ignoring either may hide valuable insights.
+
+---
+
+### Investigate Outliers
+
+Outliers may indicate:
+
+- Data entry errors
+- Fraud
+- High-value customers
+- Exceptional events
+
+Never remove them without understanding the business context.
+
+---
+
+### Validate Assumptions
+
+Always verify:
+
+- Missing values
+- Data types
+- Duplicate records
+- Invalid categories
+
+before proceeding to modeling.
+
+---
+
+### Document Findings
+
+Maintain a record of:
+
+- Important trends
+- Anomalies
+- Data quality issues
+- Business insights
+
+Documentation improves collaboration.
+
+---
+
+# 24. Enterprise Case Study
+
+## Scenario
+
+You are a **Senior Data Analyst** at a retail company.
+
+Management wants answers to:
+
+- Which region generates the highest revenue?
+- Which products perform best?
+- Which customers spend the most?
+- Are there seasonal sales patterns?
+- Are there unusual transactions?
+
+EDA Process:
+
+### Dataset Overview
+
+```python
+df.info()
+```
+
+---
+
+### Revenue by Region
+
+```python
+df.groupby("Region")["Revenue"].sum()
+```
+
+---
+
+### Monthly Revenue
+
+```python
+df.groupby(
+
+    df["Order Date"].dt.month
+
+)["Revenue"].sum()
+```
+
+---
+
+### Top Customers
+
+```python
+df.groupby(
+
+    "Customer ID"
+
+)["Revenue"]
+
+.sum()
+
+.nlargest(10)
+```
+
+---
+
+### Detect Outliers
+
+```python
+Q1 = df["Revenue"].quantile(0.25)
+
+Q3 = df["Revenue"].quantile(0.75)
+
+IQR = Q3 - Q1
+
+outliers = df[
+    (df["Revenue"] < Q1 - 1.5 * IQR) |
+    (df["Revenue"] > Q3 + 1.5 * IQR)
+]
+```
+
+---
+
+# 25. Business Insights
+
+After performing EDA, the analysts discovered:
+
+- West region generated the highest annual revenue.
+- Electronics contributed the largest share of profit.
+- Weekend sales consistently exceeded weekday sales.
+- Approximately 8% of customers generated over 40% of total revenue.
+- Most missing values occurred in optional customer profile fields.
+- Seasonal demand increased significantly during festive months.
+- A few extremely large transactions represented bulk corporate purchases rather than errors.
+
+These insights guided inventory planning, marketing campaigns, and customer segmentation.
+
+---
+
+# 26. Practice Exercises
+
+## Beginner
+
+1. Display dataset information.
+2. Calculate descriptive statistics.
+3. Count missing values.
+4. Count duplicate rows.
+5. Calculate average sales.
+
+---
+
+## Intermediate
+
+6. Analyze sales by region.
+7. Create a Pivot Table.
+8. Build a Crosstab.
+9. Detect outliers using IQR.
+10. Analyze monthly sales trends.
+
+---
+
+## Advanced
+
+11. Build an automated EDA function.
+12. Generate executive KPIs.
+13. Analyze feature relationships.
+14. Prepare a business insight report.
+15. Design a complete EDA workflow.
+
+---
+
+# 27. Interview Questions
+
+## Beginner
+
+1. What is Exploratory Data Analysis?
+2. Why is EDA important?
+3. What does `describe()` do?
+4. How do you detect missing values?
+5. What are outliers?
+
+---
+
+## Intermediate
+
+6. Explain GroupBy analysis.
+7. What is a Pivot Table?
+8. What is a Crosstab?
+9. How do you analyze correlations?
+10. Explain IQR outlier detection.
+
+---
+
+## Advanced
+
+11. Design an enterprise EDA workflow.
+12. Explain automated EDA pipelines.
+13. How do you generate business insights from EDA?
+14. How would you perform EDA on a dataset with millions of rows?
+15. Compare univariate, bivariate, and multivariate analysis.
+
+---
+
+# 28. Cheat Sheet
+
+| Task | Syntax |
+|------|--------|
+| First Rows | `head()` |
+| Last Rows | `tail()` |
+| Dataset Shape | `shape` |
+| Data Types | `dtypes` |
+| Dataset Info | `info()` |
+| Statistics | `describe()` |
+| Missing Values | `isna().sum()` |
+| Duplicates | `duplicated().sum()` |
+| Correlation | `corr()` |
+| Group Analysis | `groupby()` |
+| Pivot Table | `pivot_table()` |
+| Crosstab | `pd.crosstab()` |
+| Outlier Detection | `quantile()` |
+| Frequency Counts | `value_counts()` |
+
+---
+
+# 29. Mini Project
+
+## Enterprise Exploratory Data Analysis Dashboard
+
+Using any retail, banking, healthcare, HR, finance, telecom, or logistics dataset:
+
+Complete the following tasks:
+
+- Explore dataset structure.
+- Generate descriptive statistics.
+- Analyze numerical variables.
+- Analyze categorical variables.
+- Detect missing values.
+- Detect duplicates.
+- Identify outliers.
+- Perform correlation analysis.
+- Build Pivot Tables and Crosstabs.
+- Generate executive KPIs.
+- Write **five executive-level business insights**.
+- Recommend **three business actions** based on your findings.
+
+### Example Business Insights
+
+- West region consistently generated the highest revenue.
+- Electronics products produced the highest average profit.
+- Revenue peaked during festive seasons.
+- A small percentage of customers generated a large portion of sales.
+- Missing values were concentrated in optional customer information.
+
+---
+
+# 30. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Advanced Exploratory Data Analysis (EDA) with Pandas**.
+
+You learned how to:
+
+- Explore datasets efficiently.
+- Generate descriptive statistics.
+- Analyze numerical and categorical variables.
+- Detect missing values and duplicates.
+- Identify outliers.
+- Measure feature relationships.
+- Perform GroupBy, Pivot Table, and Crosstab analysis.
+- Generate business KPIs.
+- Build automated EDA pipelines.
+- Extract actionable business insights.
+
+These skills are fundamental for Data Analytics, Business Intelligence, Data Science, and Machine Learning because every successful project begins with a deep understanding of the data.
+
+---
+
+# 31. What's Next?
+
+## 🐼 Day 47 — Advanced Data Visualization with Pandas & Matplotlib
+
+Topics include:
+
+- Line Charts
+- Bar Charts
+- Histograms
+- Box Plots
+- Scatter Plots
+- Pie Charts
+- Area Charts
+- Subplots
+- Time Series Visualization
+- Business Dashboard Visualizations
+- Visualization Best Practices
+
+Effective visualizations help communicate insights clearly and support better business decision-making.
+
+---
+
+# 🎉 Day 46 Complete!
+
+You have successfully completed **Advanced Exploratory Data Analysis (EDA) with Pandas**.
+
+You can now confidently explore unknown datasets, uncover meaningful patterns, generate executive-level insights, and prepare high-quality data for analytics and machine learning.
+
+⭐ **Next → Day 47: Advanced Data Visualization with Pandas & Matplotlib** 📊🐼
