@@ -1188,10 +1188,9 @@ String processing is essential for cleaning customer names, product descriptions
 
 ---
 
-# 🎉 Day 48 Complete!
+#  Day 48 Complete!
 
 You have successfully completed **Time Series Analysis with Pandas**.
 
 You can now confidently analyze chronological datasets, identify trends and seasonality, engineer time-based features, and prepare data for forecasting and business decision-making.
 
-⭐ **Next → Day 49: Advanced String Operations with Pandas** 🔤🐼
