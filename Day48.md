@@ -24,7 +24,7 @@ Pandas provides powerful tools to manipulate and analyze time-based data efficie
 - Introduction to Time Series
 - Datetime Data Type
 - Converting Strings to Dates
-- Extracting Date Components
+- Extracting Date  Components
 - Creating Date Ranges
 - Time Indexing
 - Filtering by Date
