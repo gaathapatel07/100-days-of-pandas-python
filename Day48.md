@@ -413,3 +413,387 @@ The next section covers:
 - Time-Series Visualization
 - Business Trend Analysis
 - Forecasting Preparation
+
+# 12. Shift Operations
+
+The `shift()` function moves data forward or backward within a column.
+
+Shift values down by one row.
+
+```python
+df["Previous Day Sales"] = df["Sales"].shift(1)
+```
+
+Shift values up by one row.
+
+```python
+df["Next Day Sales"] = df["Sales"].shift(-1)
+```
+
+Example
+
+| Date | Sales | Previous Day Sales |
+|------|-------:|-------------------:|
+|01-Jan|1200|NaN|
+|02-Jan|1350|1200|
+|03-Jan|1500|1350|
+
+Applications:
+
+- Compare current and previous values
+- Build lag features
+- Detect sudden changes
+
+---
+
+# 13. Lag Features
+
+Lag features store previous observations as new variables.
+
+Previous day's revenue.
+
+```python
+df["Revenue_Lag1"] = df["Revenue"].shift(1)
+```
+
+Previous week's revenue.
+
+```python
+df["Revenue_Lag7"] = df["Revenue"].shift(7)
+```
+
+Previous month's sales.
+
+```python
+df["Sales_Lag30"] = df["Sales"].shift(30)
+```
+
+Lag features are widely used in forecasting models.
+
+---
+
+# 14. Difference Calculations
+
+Calculate the difference between consecutive observations.
+
+```python
+df["Sales Difference"] = df["Sales"].diff()
+```
+
+Difference over seven days.
+
+```python
+df["Weekly Difference"] = df["Sales"].diff(7)
+```
+
+Example
+
+| Day | Sales | Difference |
+|----|-------:|-----------:|
+|1|100|NaN|
+|2|120|20|
+|3|115|-5|
+
+Positive values indicate growth, while negative values indicate decline.
+
+---
+
+# 15. Percentage Change
+
+Calculate growth rate between observations.
+
+```python
+df["Growth Rate"] = df["Sales"].pct_change()
+```
+
+Convert to percentage.
+
+```python
+df["Growth %"] = (
+    df["Sales"]
+      .pct_change()
+      * 100
+)
+```
+
+Example
+
+| Month | Sales | Growth % |
+|-------|-------:|---------:|
+|Jan|1000|NaN|
+|Feb|1200|20|
+|Mar|1500|25|
+
+Useful for financial and business performance analysis.
+
+---
+
+# 16. Time-Based Grouping
+
+Group records using time intervals.
+
+Monthly sales.
+
+```python
+monthly_sales = df.groupby(
+
+    pd.Grouper(freq="M")
+
+)["Sales"].sum()
+```
+
+Quarterly revenue.
+
+```python
+quarterly = df.groupby(
+
+    pd.Grouper(freq="Q")
+
+)["Revenue"].sum()
+```
+
+Yearly profit.
+
+```python
+yearly = df.groupby(
+
+    pd.Grouper(freq="Y")
+
+)["Profit"].sum()
+```
+
+This method is useful when the DataFrame has a datetime index.
+
+---
+
+# 17. Rolling Correlation
+
+Rolling correlation measures how the relationship between two variables changes over time.
+
+30-day rolling correlation.
+
+```python
+rolling_corr = (
+
+    df["Sales"]
+
+    .rolling(30)
+
+    .corr(df["Profit"])
+
+)
+```
+
+Applications:
+
+- Financial markets
+- Demand analysis
+- Revenue vs Profit trends
+
+---
+
+# 18. Time-Series Visualization
+
+Daily sales trend.
+
+```python
+df["Sales"].plot(
+
+    figsize=(10,5),
+
+    title="Daily Sales"
+
+)
+```
+
+Monthly revenue.
+
+```python
+monthly_sales.plot(
+
+    kind="line",
+
+    marker="o"
+
+)
+```
+
+Moving average.
+
+```python
+df["Sales"].rolling(
+
+    30
+
+).mean().plot(
+
+    label="30-Day Average"
+
+)
+
+df["Sales"].plot(
+
+    alpha=0.5,
+
+    label="Daily Sales"
+
+)
+
+plt.legend()
+
+plt.show()
+```
+
+Moving averages help visualize long-term trends by reducing daily fluctuations.
+
+---
+
+# 19. Business Trend Analysis
+
+Questions answered using time-series analysis:
+
+- Is revenue increasing every quarter?
+- Which month has the highest sales?
+- Are weekends more profitable?
+- Which season generates maximum revenue?
+- Are there recurring business cycles?
+
+Example:
+
+Monthly average revenue.
+
+```python
+df.groupby(
+
+    df.index.month
+
+)["Revenue"].mean()
+```
+
+Average weekday sales.
+
+```python
+df.groupby(
+
+    df.index.day_name()
+
+)["Sales"].mean()
+```
+
+Quarter-wise profit.
+
+```python
+df.groupby(
+
+    df.index.quarter
+
+)["Profit"].sum()
+```
+
+---
+
+# 20. Preparing Data for Forecasting
+
+Before forecasting:
+
+- Convert dates to `datetime`
+- Sort observations chronologically
+- Handle missing values
+- Remove duplicate records
+- Create lag features
+- Calculate rolling averages
+- Detect seasonality
+- Engineer date-based features
+
+Example:
+
+```python
+df = df.sort_index()
+
+df["Lag1"] = df["Sales"].shift(1)
+
+df["Rolling7"] = df["Sales"].rolling(7).mean()
+```
+
+The resulting dataset is suitable for forecasting models.
+
+---
+
+# Business Example
+
+An online retailer analyzes three years of transaction data.
+
+The analysis reveals:
+
+- Revenue grows steadily during the fourth quarter each year.
+- Weekend sales consistently exceed weekday sales.
+- A 30-day moving average highlights long-term growth despite daily fluctuations.
+- Lag features improve sales forecasting accuracy.
+- Quarterly grouping reveals seasonal demand patterns that guide inventory planning.
+
+---
+
+# Best Practices
+
+✔ Sort data chronologically before analysis.
+
+✔ Use lag features for forecasting tasks.
+
+✔ Analyze both absolute differences and percentage growth.
+
+✔ Combine rolling statistics with visualizations.
+
+✔ Select grouping frequencies that align with business objectives.
+
+---
+
+# Common Mistakes
+
+### Using Unsorted Dates
+
+Unsorted time-series data produces incorrect lag and rolling calculations.
+
+---
+
+### Ignoring Missing Time Periods
+
+Missing dates can distort trend analysis and forecasting results.
+
+---
+
+### Comparing Different Time Frequencies
+
+Avoid comparing daily data directly with monthly aggregates without proper resampling.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+- Shift observations.
+- Create lag features.
+- Calculate differences.
+- Compute percentage growth.
+- Group data by time intervals.
+- Measure rolling correlations.
+- Visualize time-series trends.
+- Prepare data for forecasting.
+
+> **"Time-series analysis helps organizations move beyond understanding the past to anticipating the future through trends, seasonality, and forecasting-ready data."**
+
+---
+
+## Next (Day 48 – Final Part)
+
+The final section will cover:
+
+- Enterprise Time-Series Workflow
+- Automated Time-Series Pipelines
+- Production Best Practices
+- Interview Questions (20+)
+- Practice Exercises
+- Cheat Sheet
+- Mini Project
+- Executive Business Insights
+- Complete Day 48 Summary
