@@ -1228,10 +1228,9 @@ Time-series analysis is widely used in finance, sales forecasting, weather predi
 
 ---
 
-# 🎉 Day 47 Complete!
+# Day 47 Complete!
 
 You have successfully completed **Advanced Data Visualization with Pandas & Matplotlib**.
 
 You can now create professional charts, dashboards, and executive reports that communicate data-driven insights effectively.
 
-⭐ **Next → Day 48: Time Series Analysis with Pandas** ⏳📊🐼
