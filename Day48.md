@@ -797,3 +797,401 @@ The final section will cover:
 - Mini Project
 - Executive Business Insights
 - Complete Day 48 Summary
+
+# 21. Enterprise Time-Series Workflow
+
+Professional organizations follow a structured workflow for analyzing time-based data to ensure accurate forecasting and reliable business insights.
+
+```
+Raw Time-Series Data
+        │
+        ▼
+Import Dataset
+        │
+        ▼
+Convert to Datetime
+        │
+        ▼
+Set Datetime Index
+        │
+        ▼
+Handle Missing Dates
+        │
+        ▼
+Exploratory Time-Series Analysis
+        │
+        ▼
+Feature Engineering
+(Lag, Rolling, Date Features)
+        │
+        ▼
+Trend & Seasonality Analysis
+        │
+        ▼
+Forecast Preparation
+        │
+        ▼
+Business Insights & Reporting
+```
+
+Following this workflow improves data quality, reproducibility, and forecasting accuracy.
+
+---
+
+# 22. Automated Time-Series Pipeline
+
+Create a reusable function to summarize time-series datasets.
+
+```python
+def time_series_summary(df, column):
+
+    summary = {
+
+        "Start Date": df.index.min(),
+
+        "End Date": df.index.max(),
+
+        "Total Records": len(df),
+
+        "Missing Values": df[column].isna().sum(),
+
+        "Average": df[column].mean(),
+
+        "Maximum": df[column].max(),
+
+        "Minimum": df[column].min()
+
+    }
+
+    return pd.DataFrame(
+
+        summary.items(),
+
+        columns=["Metric", "Value"]
+
+    )
+```
+
+Run the function.
+
+```python
+report = time_series_summary(df, "Sales")
+
+print(report)
+```
+
+Example Output
+
+| Metric | Value |
+|---------|-------|
+|Start Date|2023-01-01|
+|End Date|2025-12-31|
+|Total Records|1095|
+|Missing Values|0|
+|Average|5,240|
+|Maximum|12,350|
+|Minimum|890|
+
+---
+
+# 23. Production Best Practices
+
+### Always Use Datetime Objects
+
+Convert date columns using `pd.to_datetime()` before analysis.
+
+---
+
+### Sort Data Chronologically
+
+```python
+df = df.sort_index()
+```
+
+Correct ordering is essential for rolling calculations and forecasting.
+
+---
+
+### Handle Missing Dates
+
+Fill or interpolate missing periods before analysis.
+
+```python
+df = df.asfreq("D")
+```
+
+---
+
+### Choose Appropriate Frequency
+
+Use frequencies that align with business objectives.
+
+Examples:
+
+- Hourly
+- Daily
+- Weekly
+- Monthly
+- Quarterly
+- Yearly
+
+---
+
+### Engineer Time Features
+
+Useful features include:
+
+- Year
+- Month
+- Quarter
+- Weekday
+- Weekend
+- Holiday Indicator
+
+These features often improve forecasting models.
+
+---
+
+# 24. Enterprise Case Study
+
+## Scenario
+
+A nationwide supermarket chain wants to forecast future sales.
+
+Business questions:
+
+- Which months have the highest demand?
+- Are weekends more profitable?
+- Is revenue growing every quarter?
+- What is the long-term trend?
+- Are there seasonal spikes?
+
+---
+
+### Monthly Revenue
+
+```python
+monthly = df["Revenue"].resample("M").sum()
+```
+
+---
+
+### Quarterly Revenue
+
+```python
+quarterly = df["Revenue"].resample("Q").sum()
+```
+
+---
+
+### 30-Day Moving Average
+
+```python
+moving_avg = df["Revenue"].rolling(30).mean()
+```
+
+---
+
+### Growth Rate
+
+```python
+growth = df["Revenue"].pct_change() * 100
+```
+
+---
+
+### Lag Feature
+
+```python
+df["Revenue_Lag1"] = df["Revenue"].shift(1)
+```
+
+These analyses provide the foundation for accurate sales forecasting.
+
+---
+
+# 25. Executive Business Insights
+
+After completing the analysis, analysts discover:
+
+- Revenue increases steadily throughout the year.
+- Sales consistently peak during festive seasons.
+- Weekend transactions are significantly higher than weekdays.
+- Quarterly revenue shows positive year-over-year growth.
+- Rolling averages reveal sustained long-term growth despite short-term fluctuations.
+- Lag features demonstrate strong dependence on previous sales values.
+- Seasonal demand patterns support better inventory and staffing decisions.
+
+These insights help executives improve forecasting, budgeting, and strategic planning.
+
+---
+
+# 26. Practice Exercises
+
+## Beginner
+
+1. Convert a column to datetime.
+2. Extract month and year.
+3. Set the datetime column as the index.
+4. Filter records for one month.
+5. Create a daily date range.
+
+---
+
+## Intermediate
+
+6. Calculate monthly sales.
+7. Create rolling averages.
+8. Calculate cumulative revenue.
+9. Create lag features.
+10. Compute percentage growth.
+
+---
+
+## Advanced
+
+11. Analyze seasonal trends.
+12. Build an automated time-series report.
+13. Compare quarterly performance.
+14. Prepare forecasting-ready data.
+15. Generate executive business insights.
+
+---
+
+# 27. Interview Questions
+
+## Beginner
+
+1. What is time-series data?
+2. Why should dates be converted to datetime?
+3. What is resampling?
+4. What is a rolling window?
+5. What is a lag feature?
+
+---
+
+## Intermediate
+
+6. Explain `shift()`.
+7. Difference between rolling and expanding windows.
+8. What is percentage change?
+9. How does `pd.Grouper()` work?
+10. Why is sorting important?
+
+---
+
+## Advanced
+
+11. Explain seasonality.
+12. Explain trend analysis.
+13. How would you prepare time-series data for forecasting?
+14. How do rolling averages reduce noise?
+15. Design an enterprise time-series workflow.
+
+---
+
+# 28. Cheat Sheet
+
+| Task | Syntax |
+|------|--------|
+| Convert to Datetime | `pd.to_datetime()` |
+| Date Range | `pd.date_range()` |
+| Set Date Index | `set_index()` |
+| Filter Dates | `loc[]` |
+| Resample | `resample()` |
+| Rolling Mean | `rolling().mean()` |
+| Rolling Sum | `rolling().sum()` |
+| Expanding Mean | `expanding().mean()` |
+| Shift | `shift()` |
+| Difference | `diff()` |
+| Percentage Change | `pct_change()` |
+| Time Grouping | `pd.Grouper()` |
+
+---
+
+# 29. Mini Project
+
+## Retail Sales Time-Series Analysis
+
+Using any retail, banking, finance, healthcare, or telecom dataset:
+
+Perform the following:
+
+- Convert date columns to datetime.
+- Set a datetime index.
+- Analyze monthly sales.
+- Calculate rolling averages.
+- Compute cumulative revenue.
+- Generate lag features.
+- Calculate percentage growth.
+- Identify seasonal trends.
+- Visualize sales over time.
+- Prepare forecasting-ready data.
+
+Finally, write:
+
+- Five executive business insights.
+- Three recommendations for improving future business performance.
+
+### Example Insights
+
+- Sales increase sharply during festive months.
+- Weekends consistently outperform weekdays.
+- Quarterly revenue has grown year over year.
+- Rolling averages reveal a stable upward trend.
+- Previous month's sales strongly influence current sales.
+
+---
+
+# 30. Summary
+
+Congratulations! 🎉
+
+Today you mastered **Time Series Analysis with Pandas**.
+
+You learned how to:
+
+- Work with datetime objects.
+- Extract date-based features.
+- Create date ranges.
+- Index data using dates.
+- Filter time-based records.
+- Resample data.
+- Calculate rolling and expanding statistics.
+- Create lag features.
+- Analyze trends and growth.
+- Prepare data for forecasting.
+- Build enterprise-ready time-series workflows.
+
+These techniques are fundamental for forecasting, demand planning, financial analysis, and business intelligence.
+
+---
+
+# 31. What's Next?
+
+## 🐼 Day 49 — Advanced String Operations with Pandas
+
+Topics include:
+
+- String Accessor (`.str`)
+- Case Conversion
+- Trimming & Cleaning Text
+- Splitting & Joining Strings
+- Replacing Text
+- Regular Expressions
+- Pattern Matching
+- Text Extraction
+- Text Feature Engineering
+- Business Applications
+
+String processing is essential for cleaning customer names, product descriptions, email addresses, reviews, and other text-based data before analysis.
+
+---
+
+# 🎉 Day 48 Complete!
+
+You have successfully completed **Time Series Analysis with Pandas**.
+
+You can now confidently analyze chronological datasets, identify trends and seasonality, engineer time-based features, and prepare data for forecasting and business decision-making.
+
+⭐ **Next → Day 49: Advanced String Operations with Pandas** 🔤🐼
