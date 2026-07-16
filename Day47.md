@@ -801,7 +801,6 @@ You have now learned how to:
 
 ---
 
-## Next (Day 47 – Final Part)
 
 The final section will cover:
 
