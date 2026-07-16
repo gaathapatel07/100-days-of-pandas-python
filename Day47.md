@@ -1208,7 +1208,7 @@ These skills are essential for Data Analytics, Business Intelligence, and Data S
 
 # 31. What's Next?
 
-## 🐼 Day 48 — Time Series Analysis with Pandas
+## Day 48 — Time Series Analysis with Pandas
 
 Topics include:
 
