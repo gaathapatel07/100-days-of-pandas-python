@@ -1,6 +1,6 @@
-# 🐼 Day 47 — Advanced Data Visualization with Pandas & Matplotlib
+# Day 47 — Advanced Data Visualization with Pandas & Matplotlib
 
-## 📖 Introduction
+## Introduction
 
 Data visualization is the graphical representation of data that helps analysts understand patterns, trends, relationships, and outliers quickly.
 
@@ -17,7 +17,7 @@ Visualization is an essential skill in:
 
 ---
 
-# 📚 Topics Covered
+# Topics Covered
 
 - Introduction to Data Visualization
 - Why Visualization Matters
@@ -410,7 +410,7 @@ After completing this section, you should understand:
 
 ---
 
-## Next (Day 47 – Part 2)
+
 
 The next section covers:
 
