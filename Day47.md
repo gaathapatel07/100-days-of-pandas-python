@@ -422,3 +422,395 @@ The next section covers:
 - Business Dashboard Visualizations
 - Advanced Chart Customization
 - Visualization Best Practices
+
+# 12. Subplots
+
+Subplots allow multiple charts to be displayed in a single figure.
+
+```python
+df[["Sales", "Profit"]].plot(
+
+    subplots=True,
+
+    figsize=(10,6)
+
+)
+
+plt.show()
+```
+
+Applications:
+
+- KPI dashboards
+- Comparing multiple metrics
+- Financial reports
+
+---
+
+# 13. Correlation Heatmaps
+
+Correlation heatmaps help visualize relationships between numerical variables.
+
+First calculate the correlation matrix.
+
+```python
+corr = df.corr(numeric_only=True)
+
+print(corr)
+```
+
+Using Matplotlib:
+
+```python
+plt.figure(figsize=(8,6))
+
+plt.imshow(corr, cmap="coolwarm")
+
+plt.colorbar()
+
+plt.xticks(
+
+    range(len(corr.columns)),
+
+    corr.columns,
+
+    rotation=90
+
+)
+
+plt.yticks(
+
+    range(len(corr.columns)),
+
+    corr.columns
+
+)
+
+plt.title("Correlation Matrix")
+
+plt.show()
+```
+
+Interpretation:
+
+- Dark Red → Strong Positive Correlation
+- Dark Blue → Strong Negative Correlation
+- Light Colors → Weak Correlation
+
+---
+
+# 14. Time-Series Visualization
+
+Visualize trends over time.
+
+```python
+df["Order Date"] = pd.to_datetime(
+    df["Order Date"]
+)
+
+df.plot(
+
+    x="Order Date",
+
+    y="Revenue",
+
+    kind="line",
+
+    figsize=(10,5)
+
+)
+
+plt.show()
+```
+
+Monthly trend.
+
+```python
+monthly = (
+
+    df.groupby(
+
+        df["Order Date"].dt.month
+
+    )["Revenue"]
+
+      .sum()
+
+)
+
+monthly.plot()
+
+plt.show()
+```
+
+Applications:
+
+- Sales forecasting
+- Stock prices
+- Website traffic
+- Energy consumption
+
+---
+
+# 15. Grouped Bar Charts
+
+Compare multiple variables across categories.
+
+```python
+pivot = pd.pivot_table(
+
+    df,
+
+    values="Revenue",
+
+    index="Region",
+
+    columns="Category",
+
+    aggfunc="sum"
+
+)
+
+pivot.plot(
+
+    kind="bar"
+
+)
+
+plt.show()
+```
+
+Applications:
+
+- Revenue by region and category
+- Department performance
+- Quarterly comparisons
+
+---
+
+# 16. Stacked Bar Charts
+
+Display cumulative contributions.
+
+```python
+pivot.plot(
+
+    kind="bar",
+
+    stacked=True
+
+)
+
+plt.show()
+```
+
+Applications:
+
+- Product contribution
+- Expense breakdown
+- Revenue composition
+
+---
+
+# 17. Business Dashboard Visualizations
+
+Typical executive dashboard includes:
+
+- Monthly Revenue Trend
+- Revenue by Region
+- Top Products
+- Customer Distribution
+- Profit Trend
+- Sales by Category
+
+Example:
+
+```python
+fig, ax = plt.subplots(
+
+    2,
+
+    2,
+
+    figsize=(12,8)
+
+)
+```
+
+Each subplot can display one KPI chart.
+
+---
+
+# 18. Advanced Chart Customization
+
+Change line style.
+
+```python
+df.plot(
+
+    y="Sales",
+
+    linestyle="--"
+
+)
+
+plt.show()
+```
+
+Change marker.
+
+```python
+df.plot(
+
+    y="Sales",
+
+    marker="o"
+
+)
+
+plt.show()
+```
+
+Transparency.
+
+```python
+df.plot(
+
+    y="Sales",
+
+    alpha=0.7
+
+)
+
+plt.show()
+```
+
+Legend location.
+
+```python
+plt.legend(
+
+    loc="upper left"
+
+)
+```
+
+Save chart.
+
+```python
+plt.savefig(
+
+    "sales_chart.png",
+
+    dpi=300,
+
+    bbox_inches="tight"
+
+)
+```
+
+---
+
+# 19. Choosing the Right Chart
+
+| Business Question | Recommended Chart |
+|-------------------|-------------------|
+| Trend over time | Line Chart |
+| Compare categories | Bar Chart |
+| Distribution | Histogram |
+| Detect outliers | Box Plot |
+| Relationship | Scatter Plot |
+| Percentage contribution | Pie Chart |
+| Cumulative values | Area Chart |
+| Correlation | Heatmap |
+| Multiple KPIs | Subplots |
+| Category composition | Stacked Bar Chart |
+
+---
+
+# 20. Business Example
+
+A retail company prepares an executive dashboard.
+
+Charts include:
+
+- Monthly sales trend
+- Revenue by region
+- Profit by category
+- Customer age distribution
+- Revenue vs Profit
+- Quarterly revenue comparison
+- Product contribution
+- Correlation heatmap
+
+Executives quickly identify:
+
+- Best-performing regions
+- Seasonal trends
+- High-profit products
+- Customer purchasing behavior
+
+---
+
+# Best Practices
+
+✔ Choose the appropriate visualization.
+
+✔ Keep colors consistent.
+
+✔ Label every chart clearly.
+
+✔ Highlight key insights.
+
+✔ Avoid unnecessary chart decorations.
+
+---
+
+# Common Mistakes
+
+### Using the Wrong Chart
+
+For example, using a pie chart for 20 categories reduces readability.
+
+---
+
+### Ignoring Scale
+
+Improper axis scaling can misrepresent trends.
+
+---
+
+### Overcrowding Dashboards
+
+Limit dashboards to the most important KPIs.
+
+---
+
+# Quick Recap
+
+You have now learned how to:
+
+- Create subplots.
+- Build correlation heatmaps.
+- Visualize time-series data.
+- Create grouped and stacked bar charts.
+- Customize charts professionally.
+- Design business dashboards.
+
+> **"A good visualization does more than display data—it communicates insights clearly, enabling faster and better decision-making."**
+
+---
+
+## Next (Day 47 – Final Part)
+
+The final section will cover:
+
+- Enterprise Dashboard Workflow
+- Automated Visualization Pipelines
+- Production Best Practices
+- Interview Questions (20+)
+- Practice Exercises
+- Cheat Sheet
+- Mini Project
+- Executive Business Insights
+- Complete Day 47 Summary
