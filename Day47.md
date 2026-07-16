@@ -1,1 +1,424 @@
+# 🐼 Day 47 — Advanced Data Visualization with Pandas & Matplotlib
 
+## 📖 Introduction
+
+Data visualization is the graphical representation of data that helps analysts understand patterns, trends, relationships, and outliers quickly.
+
+While tables contain raw information, visualizations communicate insights more effectively to stakeholders, managers, and executives.
+
+Visualization is an essential skill in:
+
+- Data Analytics
+- Business Intelligence
+- Data Science
+- Financial Analysis
+- Marketing Analytics
+- Operations Analytics
+
+---
+
+# 📚 Topics Covered
+
+- Introduction to Data Visualization
+- Why Visualization Matters
+- Line Charts
+- Bar Charts
+- Histograms
+- Box Plots
+- Scatter Plots
+- Pie Charts
+- Area Charts
+- Customizing Charts
+
+---
+
+# 1. What is Data Visualization?
+
+Data visualization converts numerical information into graphical representations.
+
+Instead of:
+
+| Month | Sales |
+|--------|-------|
+|Jan|1500|
+|Feb|1700|
+|Mar|1900|
+
+A line chart immediately shows the upward trend.
+
+Visualization helps answer questions such as:
+
+- Are sales increasing?
+- Which region performs best?
+- Are there seasonal trends?
+- Which products generate the highest revenue?
+
+---
+
+# 2. Why Data Visualization Matters
+
+Imagine an executive reviewing 50,000 rows of sales data.
+
+A simple dashboard can instantly show:
+
+- Revenue trends
+- Top-performing products
+- Regional sales
+- Customer growth
+
+Visualizations make complex data easier to understand.
+
+---
+
+# 3. Learning Objectives
+
+By the end of this lesson, you will be able to:
+
+- Create common business charts.
+- Customize visualizations.
+- Choose appropriate chart types.
+- Identify trends and outliers.
+- Communicate insights visually.
+
+---
+
+# 4. Line Charts
+
+Line charts display trends over time.
+
+```python
+import matplotlib.pyplot as plt
+
+df.plot(
+
+    x="Month",
+
+    y="Sales",
+
+    kind="line"
+
+)
+
+plt.show()
+```
+
+Applications:
+
+- Monthly sales
+- Stock prices
+- Website traffic
+- Temperature trends
+
+---
+
+## Multiple Lines
+
+```python
+df.plot(
+
+    x="Month",
+
+    y=["Sales", "Profit"],
+
+    kind="line"
+
+)
+
+plt.show()
+```
+
+Useful for comparing metrics.
+
+---
+
+# 5. Bar Charts
+
+Bar charts compare categories.
+
+```python
+df.plot(
+
+    x="Region",
+
+    y="Revenue",
+
+    kind="bar"
+
+)
+
+plt.show()
+```
+
+Applications:
+
+- Revenue by region
+- Sales by category
+- Employee performance
+- Department expenses
+
+---
+
+## Horizontal Bar Chart
+
+```python
+df.plot(
+
+    x="Region",
+
+    y="Revenue",
+
+    kind="barh"
+
+)
+
+plt.show()
+```
+
+---
+
+# 6. Histograms
+
+Histograms display numerical distributions.
+
+```python
+df["Sales"].plot(
+
+    kind="hist",
+
+    bins=20
+
+)
+
+plt.show()
+```
+
+Applications:
+
+- Customer age distribution
+- Salary distribution
+- Product prices
+
+---
+
+# 7. Box Plots
+
+Box plots identify outliers.
+
+```python
+df.plot(
+
+    column="Sales",
+
+    kind="box"
+
+)
+
+plt.show()
+```
+
+Shows:
+
+- Median
+- Quartiles
+- Outliers
+
+Widely used during EDA.
+
+---
+
+# 8. Scatter Plots
+
+Scatter plots visualize relationships between two numerical variables.
+
+```python
+df.plot(
+
+    x="Revenue",
+
+    y="Profit",
+
+    kind="scatter"
+
+)
+
+plt.show()
+```
+
+Applications:
+
+- Revenue vs Profit
+- Height vs Weight
+- Advertising vs Sales
+
+---
+
+# 9. Pie Charts
+
+Pie charts show proportions.
+
+```python
+df.set_index("Region")["Revenue"].plot(
+
+    kind="pie",
+
+    autopct="%1.1f%%"
+
+)
+
+plt.ylabel("")
+
+plt.show()
+```
+
+Best for:
+
+- Market share
+- Budget allocation
+- Revenue contribution
+
+Use pie charts only when there are a small number of categories.
+
+---
+
+# 10. Area Charts
+
+Area charts show cumulative trends.
+
+```python
+df.plot(
+
+    x="Month",
+
+    y="Sales",
+
+    kind="area"
+
+)
+
+plt.show()
+```
+
+Applications:
+
+- Cumulative revenue
+- Population growth
+- Website visitors
+
+---
+
+# 11. Customizing Charts
+
+Add title.
+
+```python
+plt.title("Monthly Sales")
+```
+
+Label axes.
+
+```python
+plt.xlabel("Month")
+
+plt.ylabel("Revenue")
+```
+
+Add grid.
+
+```python
+plt.grid(True)
+```
+
+Adjust figure size.
+
+```python
+plt.figure(figsize=(10,5))
+```
+
+Rotate labels.
+
+```python
+plt.xticks(rotation=45)
+```
+
+---
+
+# Business Example
+
+A retail company creates visualizations for executives.
+
+Charts include:
+
+- Monthly revenue trend
+- Sales by region
+- Product category revenue
+- Customer age distribution
+- Profit vs Revenue
+- Market share by region
+
+These charts help executives make informed business decisions.
+
+---
+
+# Best Practices
+
+✔ Choose the right chart type.
+
+✔ Label axes clearly.
+
+✔ Add informative titles.
+
+✔ Avoid unnecessary clutter.
+
+✔ Keep visualizations simple and readable.
+
+---
+
+# Common Mistakes
+
+### Using Pie Charts for Too Many Categories
+
+Pie charts become difficult to interpret with many slices.
+
+---
+
+### Missing Labels
+
+Always include axis labels and chart titles.
+
+---
+
+### Overloading Charts
+
+Avoid displaying too many variables in a single chart.
+
+---
+
+# Key Takeaways
+
+After completing this section, you should understand:
+
+- Line charts
+- Bar charts
+- Histograms
+- Box plots
+- Scatter plots
+- Pie charts
+- Area charts
+- Basic chart customization
+
+> **"Effective visualizations transform raw data into compelling stories that support faster and better business decisions."**
+
+---
+
+## Next (Day 47 – Part 2)
+
+The next section covers:
+
+- Subplots
+- Correlation Heatmaps
+- Time-Series Visualization
+- Grouped Charts
+- Stacked Charts
+- Business Dashboard Visualizations
+- Advanced Chart Customization
+- Visualization Best Practices
