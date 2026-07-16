@@ -1,6 +1,6 @@
-# 🐼 Day 48 — Time Series Analysis with Pandas
+# Day 48 — Time Series Analysis with Pandas
 
-## 📖 Introduction
+## Introduction
 
 Time Series Analysis is the process of analyzing data collected over time to identify trends, seasonal patterns, cycles, and future behavior.
 
@@ -19,7 +19,7 @@ Pandas provides powerful tools to manipulate and analyze time-based data efficie
 
 ---
 
-# 📚 Topics Covered
+# Topics Covered
 
 - Introduction to Time Series
 - Datetime Data Type
