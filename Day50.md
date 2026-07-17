@@ -1,6 +1,6 @@
-# 🐼 Day 50 — Advanced Pandas Performance Optimization
+# Day 50 — Advanced Pandas Performance Optimization
 
-## 📖 Introduction
+## Introduction
 
 Pandas is one of the most powerful data analysis libraries, but as datasets grow from thousands to millions of rows, inefficient code can become slow and memory-intensive.
 
@@ -10,7 +10,7 @@ Data Analysts, Data Scientists, and Machine Learning Engineers frequently optimi
 
 ---
 
-# 📚 Topics Covered
+# Topics Covered
 
 - Why Performance Optimization Matters
 - Measuring Performance
