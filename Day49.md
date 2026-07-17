@@ -1,6 +1,6 @@
-# 🐼 Day 49 — Advanced String Operations with Pandas
+# Day 49 — Advanced String Operations with Pandas
 
-## 📖 Introduction
+## Introduction
 
 Real-world datasets rarely contain perfectly formatted text. Customer names may have inconsistent capitalization, email addresses may contain extra spaces, product descriptions may include unwanted symbols, and reviews often require cleaning before analysis.
 
@@ -17,7 +17,7 @@ String operations are essential for:
 
 ---
 
-# 📚 Topics Covered
+# Topics Covered
 
 - Introduction to String Operations
 - The `.str` Accessor
@@ -684,7 +684,7 @@ Write:
 
 # 29. Summary
 
-Congratulations! 🎉
+Congratulations! 
 
 Today you mastered **Advanced String Operations with Pandas**.
 
@@ -723,10 +723,10 @@ Optimizing Pandas code is crucial when working with datasets containing millions
 
 ---
 
-# 🎉 Day 49 Complete!
+# Day 49 Complete!
 
 You have successfully completed **Advanced String Operations with Pandas**.
 
 You can now confidently clean, validate, transform, and engineer text data for analytics and machine learning.
 
-⭐ **Next → Day 50: Advanced Pandas Performance Optimization** 🚀🐼
+
